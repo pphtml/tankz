@@ -1,0 +1,9 @@
+otaceni na vektor
+prejezd z bodu do bodu
+smycka
+css3 pohyb
+css3 zmena pohybu
+vez
+teren - prekazky
+pathfinder
+strelba
