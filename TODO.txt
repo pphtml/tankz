@@ -7,3 +7,4 @@ vez
 teren - prekazky
 pathfinder
 strelba
+loader obrazku - zizala
