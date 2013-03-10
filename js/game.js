@@ -30,9 +30,9 @@ window.onload = function() {
 //		return [x,y];
 //	}
 
-	function onMouseDown(event) {
-		var coords = (event.offsetX !== undefined && event.offsetY !== undefined) ?
-				{ x: event.offsetX, y: event.offsetY } : { x: event.layerX, y: event.layerY };
+	function onMouseDown(e) {
+		var coords = {x: e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - canvas.offsetLeft, 
+		  y: e.clientY + document.body.scrollTop + document.documentElement.scrollTop - canvas.offsetTop}; 
 		
 		console.info(coords);
 	}
