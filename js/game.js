@@ -30,7 +30,7 @@ window.onload = function() {
 //		return [x,y];
 //	}
 
-	function onMouseDown(e) {
+	function onMouseDown(event) {
 		var coords = (event.offsetX !== undefined && event.offsetY !== undefined) ?
 				{ x: event.offsetX, y: event.offsetY } : { x: event.layerX, y: event.layerY };
 		
