@@ -8,3 +8,4 @@ teren - prekazky
 pathfinder
 strelba
 loader obrazku - zizala
+vyber jednotky

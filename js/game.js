@@ -5,10 +5,8 @@
 
 // A. WINDOW LOAD function.                      
 
-window.onload = function()
-{
+window.onload = function() {
 	BaseAsset.prototype.atlas_data = SpriteSheetClass.parseAtlasDefinition(sprite_data);
-	//var parsed = JSON.parse(sprite_data);
 	spritesImage = loadImage("img/tanks.png");
 
 	function loadImage(url) {
@@ -20,6 +18,25 @@ window.onload = function()
 	
 	canvas  = document.getElementById("canvasArea"); 
 	context = canvas.getContext("2d");
+	canvas.addEventListener("mousedown", onMouseDown, false);  
+
+//	function getCursorPosition(canvas, event) {
+//		var x, y;
+//
+//		canoffset = canvas.offset();
+//		x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - Math.floor(canoffset.left);
+//		y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop - Math.floor(canoffset.top) + 1;
+//
+//		return [x,y];
+//	}
+
+	function onMouseDown(e) {
+		var coords = (event.offsetX !== undefined && event.offsetY !== undefined) ?
+				{ x: event.offsetX, y: event.offsetY } : { x: event.layerX, y: event.layerY };
+		
+		console.info(coords);
+	}
+
 
 	function imageLoaded() {
 		BaseAsset.prototype.atlas_image = spritesImage;
@@ -34,8 +51,6 @@ window.onload = function()
 		context.stroke();
 
 		var myTank = new Tank();
-		//myTank.x = 300;
-		//myTank.y = 200;
 		myTank.x = 300;
 		myTank.y = 200;
 		myTank.rotation = 45;
