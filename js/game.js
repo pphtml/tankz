@@ -7,9 +7,7 @@
 
 window.onload = function()
 {
-	var data = SpriteSheetClass.parseAtlasDefinition(sprite_data);
-	console.info(data);
-	BaseAsset.prototype.atlas_data = data;
+	BaseAsset.prototype.atlas_data = SpriteSheetClass.parseAtlasDefinition(sprite_data);
 	//var parsed = JSON.parse(sprite_data);
 	spritesImage = loadImage("img/tanks.png");
 
@@ -25,40 +23,23 @@ window.onload = function()
 
 	function imageLoaded() {
 		BaseAsset.prototype.atlas_image = spritesImage;
-		console.info(data);
 		//context.drawImage(spritesImage, 0, 0);
+		
+		context.moveTo(300.5,0);
+		context.lineTo(300.5,700);
+		context.stroke();
+
+		context.moveTo(0,200.5);
+		context.lineTo(2000,200.5);
+		context.stroke();
+
 		var myTank = new Tank();
 		//myTank.x = 300;
 		//myTank.y = 200;
+		myTank.x = 300;
+		myTank.y = 200;
+		myTank.rotation = 45;
+
 		myTank.draw(context);
-//		console.info('data ' + myTank.atlas_data);
-//		console.info('image ' + myTank.atlas_image);
-//		console.info(myTank.atlas_data["tank_00.png"]);
 	}
-	
-	
-	
-   // A1. CANVAS definition standard variables.            
-
-
-
-
-
-
-
-      // A2. LAYOUT of first rectangle.
-      var xPos  = 20;     var yPos   = 20;
-
-      var width = 100;    var height = 50;
-
-      // A3. DISPLAY rectangles.
-      context.fillStyle   = "hotpink";
-      context.fillRect      (xPos,     yPos,    width,    height); 
-      context.lineWidth   = 4;
-      context.strokeStyle = "royalblue";
-      context.strokeRect    (xPos+130, yPos,    width,    height);
-      context.fillStyle   = "darkorange";
-      context.fillRect      (xPos+260, yPos,    width,    height);
-      context.clearRect     (xPos+285, yPos+10, width-50, height-20);               
-
 };
