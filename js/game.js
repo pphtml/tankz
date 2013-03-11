@@ -6,7 +6,7 @@
 // A. WINDOW LOAD function.                      
 
 window.onload = function() {
-	var selected_assets = []
+	var selected_assets = [];
 	
 	if (document.addEventListener) {
         document.addEventListener('contextmenu', function(e) {
@@ -62,8 +62,6 @@ window.onload = function() {
 		  y: e.clientY + document.body.scrollTop + document.documentElement.scrollTop - canvas.offsetTop}; 
 		
 		var angle = compute_angle(coords.x - 300, 200 - coords.y);
-		console.info(angle);
-		console.info(selected_assets);
 		canvas.width = canvas.width;
 		for (key in selected_assets) {
 			var asset = selected_assets[key];

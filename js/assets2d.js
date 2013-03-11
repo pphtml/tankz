@@ -12,7 +12,7 @@ var TankAsset = function() {
 		if (!img) {
 			console.error('Missing sprite ' + name);
 		} else {
-			console.info(img);
+			//console.info(img);
 			ctx.drawImage(this.atlas_image, img.x, img.y, img.w, img.h, tank.x + img.cx, tank.y + img.cy, img.w, img.h);
 		}
 	};
