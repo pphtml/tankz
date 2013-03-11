@@ -1,256 +1,256 @@
 var sprite_data = '{"frames": {\
 	\
-	"tank_00.png":\
+	"tank00.png":\
 	{\
-		"frame": {"x":2,"y":2,"w":110,"h":91},\
+		"frame": {"x":0,"y":0,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_01.png":\
+	"tank01.png":\
 	{\
-		"frame": {"x":114,"y":2,"w":110,"h":91},\
+		"frame": {"x":112,"y":0,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_02.png":\
+	"tank02.png":\
 	{\
-		"frame": {"x":226,"y":2,"w":110,"h":91},\
+		"frame": {"x":224,"y":0,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_03.png":\
+	"tank03.png":\
 	{\
-		"frame": {"x":338,"y":2,"w":110,"h":91},\
+		"frame": {"x":336,"y":0,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_04.png":\
+	"tank04.png":\
 	{\
-		"frame": {"x":2,"y":95,"w":110,"h":91},\
+		"frame": {"x":0,"y":93,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_05.png":\
+	"tank05.png":\
 	{\
-		"frame": {"x":114,"y":95,"w":110,"h":91},\
+		"frame": {"x":112,"y":93,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_06.png":\
+	"tank06.png":\
 	{\
-		"frame": {"x":226,"y":95,"w":110,"h":91},\
+		"frame": {"x":224,"y":93,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_07.png":\
+	"tank07.png":\
 	{\
-		"frame": {"x":338,"y":95,"w":110,"h":91},\
+		"frame": {"x":336,"y":93,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_08.png":\
+	"tank08.png":\
 	{\
-		"frame": {"x":2,"y":188,"w":110,"h":91},\
+		"frame": {"x":0,"y":186,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_09.png":\
+	"tank09.png":\
 	{\
-		"frame": {"x":114,"y":188,"w":110,"h":91},\
+		"frame": {"x":112,"y":186,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_10.png":\
+	"tank10.png":\
 	{\
-		"frame": {"x":226,"y":188,"w":110,"h":91},\
+		"frame": {"x":224,"y":186,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_11.png":\
+	"tank11.png":\
 	{\
-		"frame": {"x":338,"y":188,"w":110,"h":91},\
+		"frame": {"x":336,"y":186,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_12.png":\
+	"tank12.png":\
 	{\
-		"frame": {"x":2,"y":281,"w":110,"h":91},\
+		"frame": {"x":0,"y":279,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_13.png":\
+	"tank13.png":\
 	{\
-		"frame": {"x":114,"y":281,"w":110,"h":91},\
+		"frame": {"x":112,"y":279,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_14.png":\
+	"tank14.png":\
 	{\
-		"frame": {"x":226,"y":281,"w":110,"h":91},\
+		"frame": {"x":224,"y":279,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_15.png":\
+	"tank15.png":\
 	{\
-		"frame": {"x":338,"y":281,"w":110,"h":91},\
+		"frame": {"x":336,"y":279,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_16.png":\
+	"tank16.png":\
 	{\
-		"frame": {"x":2,"y":374,"w":110,"h":91},\
+		"frame": {"x":0,"y":372,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_17.png":\
+	"tank17.png":\
 	{\
-		"frame": {"x":114,"y":374,"w":110,"h":91},\
+		"frame": {"x":112,"y":372,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_18.png":\
+	"tank18.png":\
 	{\
-		"frame": {"x":226,"y":374,"w":110,"h":91},\
+		"frame": {"x":224,"y":372,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_19.png":\
+	"tank19.png":\
 	{\
-		"frame": {"x":338,"y":374,"w":110,"h":91},\
+		"frame": {"x":336,"y":372,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_20.png":\
+	"tank20.png":\
 	{\
-		"frame": {"x":2,"y":467,"w":110,"h":91},\
+		"frame": {"x":0,"y":465,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_21.png":\
+	"tank21.png":\
 	{\
-		"frame": {"x":114,"y":467,"w":110,"h":91},\
+		"frame": {"x":112,"y":465,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_22.png":\
+	"tank22.png":\
 	{\
-		"frame": {"x":226,"y":467,"w":110,"h":91},\
+		"frame": {"x":224,"y":465,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_23.png":\
+	"tank23.png":\
 	{\
-		"frame": {"x":338,"y":467,"w":110,"h":91},\
+		"frame": {"x":336,"y":465,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_24.png":\
+	"tank24.png":\
 	{\
-		"frame": {"x":2,"y":560,"w":110,"h":91},\
+		"frame": {"x":0,"y":558,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_25.png":\
+	"tank25.png":\
 	{\
-		"frame": {"x":114,"y":560,"w":110,"h":91},\
+		"frame": {"x":112,"y":558,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_26.png":\
+	"tank26.png":\
 	{\
-		"frame": {"x":226,"y":560,"w":110,"h":91},\
+		"frame": {"x":224,"y":558,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_27.png":\
+	"tank27.png":\
 	{\
-		"frame": {"x":338,"y":560,"w":110,"h":91},\
+		"frame": {"x":336,"y":558,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_28.png":\
+	"tank28.png":\
 	{\
-		"frame": {"x":2,"y":653,"w":110,"h":91},\
+		"frame": {"x":0,"y":651,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_29.png":\
+	"tank29.png":\
 	{\
-		"frame": {"x":114,"y":653,"w":110,"h":91},\
+		"frame": {"x":112,"y":651,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_30.png":\
+	"tank30.png":\
 	{\
-		"frame": {"x":226,"y":653,"w":110,"h":91},\
+		"frame": {"x":224,"y":651,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
 		"sourceSize": {"w":110,"h":91}\
 	},\
-	"tank_31.png":\
+	"tank31.png":\
 	{\
-		"frame": {"x":338,"y":653,"w":110,"h":91},\
+		"frame": {"x":336,"y":651,"w":110,"h":91},\
 		"rotated": false,\
 		"trimmed": false,\
 		"spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -263,7 +263,7 @@ var sprite_data = '{"frames": {\
 		"format": "RGBA8888",\
 		"size": {"w":512,"h":1024},\
 		"scale": "1",\
-		"smartupdate": "$TexturePacker:SmartUpdate:bbda99f5f4f77f3c2ad554400156a9e0$"\
+		"smartupdate": "$TexturePacker:SmartUpdate:c68c078830d72e022af15fa220790bb3$"\
 	}\
 	}';
 

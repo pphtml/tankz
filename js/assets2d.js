@@ -7,7 +7,7 @@ var BaseAsset = function() {
 var TankAsset = function() {
 	this.draw = function(ctx, tank) {
 		var spriteIndex = tank.spriteIndex(); 
-		var name = 'tank_' + (spriteIndex < 10 ? '0' : '') + spriteIndex + '.png';
+		var name = 'tank' + (spriteIndex < 10 ? '0' : '') + spriteIndex + '.png';
 		var img = this.atlas_data[name];
 		if (!img) {
 			console.error('Missing sprite ' + name);

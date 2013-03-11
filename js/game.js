@@ -6,6 +6,33 @@
 // A. WINDOW LOAD function.                      
 
 window.onload = function() {
+	var selected_assets = []
+	
+	if (document.addEventListener) {
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        }, false);
+    } else {
+        document.attachEvent('oncontextmenu', function() {
+            window.event.returnValue = false;
+        });
+    }
+	
+	function compute_angle(dx, dy) {
+	    if (dx == 0) {
+	        return dy >= 0 ? 90.0 : 270.0;
+	    }
+	    var tanx = parseFloat(dy) / dx;
+	    var atanx = Math.atan(tanx); 
+	    var anglex = atanx * 180.0 / Math.PI;
+	    if (dx < 0.0) {
+	        anglex = 180.0 + anglex;
+	    } else if (dy < 0) {
+	        anglex = 360.0 + anglex;
+	    }
+	    return anglex;
+	}
+	
 	BaseAsset.prototype.atlas_data = SpriteSheetClass.parseAtlasDefinition(sprite_data);
 	spritesImage = loadImage("img/tanks.png");
 
@@ -34,7 +61,15 @@ window.onload = function() {
 		var coords = {x: e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - canvas.offsetLeft, 
 		  y: e.clientY + document.body.scrollTop + document.documentElement.scrollTop - canvas.offsetTop}; 
 		
-		console.info(coords);
+		var angle = compute_angle(coords.x - 300, 200 - coords.y);
+		console.info(angle);
+		console.info(selected_assets);
+		canvas.width = canvas.width;
+		for (key in selected_assets) {
+			var asset = selected_assets[key];
+			asset.rotation = angle;
+			asset.draw(context);
+		} 
 	}
 
 
@@ -54,6 +89,7 @@ window.onload = function() {
 		myTank.x = 300;
 		myTank.y = 200;
 		myTank.rotation = 45;
+		selected_assets.push(myTank);
 
 		myTank.draw(context);
 	}
