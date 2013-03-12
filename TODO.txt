@@ -1,4 +1,5 @@
 otaceni na vektor
+antialis u firefoxu?
 prejezd z bodu do bodu
 smycka
 css3 pohyb

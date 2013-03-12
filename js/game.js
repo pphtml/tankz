@@ -1,11 +1,25 @@
-// SUMMARY: Draws rectangles on a canvas.
+function testPath() {
+	btn_test_path  = document.getElementById("btn_test_path");
+	btn_test_path.onclick = function() {
+		var graph = new Graph([
+		                       [1,1,1,1],
+		                       [0,1,1,0],
+		                       [0,0,1,1]
+		                   ]);
+       var start = graph.nodes[0][0];
+       var end = graph.nodes[1][2];
+       var result = astar.search(graph.nodes, start, end);
+       // result is an array containing the shortest path
 
-
-
-
-// A. WINDOW LOAD function.                      
+       var resultWithDiagonals = astar.search(graph.nodes, start, end, true);
+       console.info(result);
+       console.info(resultWithDiagonals);
+	};
+}; 
 
 window.onload = function() {
+	testPath();
+	
 	var selected_assets = [];
 	
 	if (document.addEventListener) {
@@ -63,6 +77,7 @@ window.onload = function() {
 		
 		var angle = compute_angle(coords.x - 300, 200 - coords.y);
 		canvas.width = canvas.width;
+		drawGrid(context);
 		for (key in selected_assets) {
 			var asset = selected_assets[key];
 			asset.rotation = angle;
@@ -89,6 +104,23 @@ window.onload = function() {
 		myTank.rotation = 45;
 		selected_assets.push(myTank);
 
+		drawGrid(context);
 		myTank.draw(context);
+	}
+	
+	function drawGrid(context) {
+		for (var x = 0; x <= 50; x++) {
+			var cx = 0.5 + x * 20;
+			context.moveTo(cx, 0);
+			context.lineTo(cx, canvas.height);
+			context.stroke();
+		}
+
+		for (var y = 0; y <= 36; y++) {
+			var cy = 0.5 + y * 20;
+			context.moveTo(0, cy);
+			context.lineTo(canvas.width, cy);
+			context.stroke();
+		}
 	}
 };
