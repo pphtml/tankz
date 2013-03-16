@@ -17,22 +17,8 @@ function testPath() {
 	};
 }; 
 
-window.onload = function() {
-	testPath();
-	
-	var selected_assets = [];
-	
-	if (document.addEventListener) {
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        }, false);
-    } else {
-        document.attachEvent('oncontextmenu', function() {
-            window.event.returnValue = false;
-        });
-    }
-	
-	function compute_angle(dx, dy) {
+var angleUnit = new (function() {
+	this.compute_angle = function (dx, dy) {
 	    if (dx == 0) {
 	        return dy >= 0 ? 90.0 : 270.0;
 	    }
@@ -45,70 +31,45 @@ window.onload = function() {
 	        anglex = 360.0 + anglex;
 	    }
 	    return anglex;
-	}
-	
-	BaseAsset.prototype.atlas_data = SpriteSheetClass.parseAtlasDefinition(sprite_data);
-	spritesImage = loadImage("img/tanks.png");
+	};
+})();
 
-	function loadImage(url) {
-		image = new Image();
-		image.addEventListener("load", imageLoaded, false);
-		image.src = url;
-		return image;
-	}
-	
-	canvas  = document.getElementById("canvasArea"); 
-	context = canvas.getContext("2d");
-	canvas.addEventListener("mousedown", onMouseDown, false);  
+var Game = function() {
+	var selected_assets = [];
+	var canvas = null;
+	var context = null;
 
-//	function getCursorPosition(canvas, event) {
-//		var x, y;
-//
-//		canoffset = canvas.offset();
-//		x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - Math.floor(canoffset.left);
-//		y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop - Math.floor(canoffset.top) + 1;
-//
-//		return [x,y];
-//	}
-
-	function onMouseDown(e) {
-		var coords = {x: e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - canvas.offsetLeft, 
-		  y: e.clientY + document.body.scrollTop + document.documentElement.scrollTop - canvas.offsetTop}; 
+	this.init = function() {
+		canvas  = document.getElementById("canvasArea"); 
+		context = canvas.getContext("2d");
+		canvas.addEventListener("mousedown", onMouseDown, false);  
 		
-		var angle = compute_angle(coords.x - 300, 200 - coords.y);
-		canvas.width = canvas.width;
-		drawGrid(context);
-		for (key in selected_assets) {
-			var asset = selected_assets[key];
-			asset.rotation = angle;
-			asset.draw(context);
-		} 
-	}
-
-
-	function imageLoaded() {
-		BaseAsset.prototype.atlas_image = spritesImage;
-		//context.drawImage(spritesImage, 0, 0);
-		
-		context.moveTo(300.5,0);
-		context.lineTo(300.5,700);
-		context.stroke();
-
-		context.moveTo(0,200.5);
-		context.lineTo(2000,200.5);
-		context.stroke();
-
+		spawnUnits();
+		drawScene();
+	};
+	
+	var spawnUnits = function() {
 		var myTank = new Tank();
 		myTank.x = 300;
 		myTank.y = 200;
 		myTank.rotation = 45;
 		selected_assets.push(myTank);
+	};
 
-		drawGrid(context);
-		myTank.draw(context);
-	}
+	var drawUnits = function() {
+		for (key in selected_assets) { // todo prekreslit vsechny
+			var asset = selected_assets[key];
+			asset.draw(context);
+		} 
+	};
 	
-	function drawGrid(context) {
+	var drawScene = function() {
+		canvas.width = canvas.width; 
+		drawGrid();
+		drawUnits();
+	};
+	
+	var drawGrid = function() {
 		for (var x = 0; x <= 50; x++) {
 			var cx = 0.5 + x * 20;
 			context.moveTo(cx, 0);
@@ -122,5 +83,53 @@ window.onload = function() {
 			context.lineTo(canvas.width, cy);
 			context.stroke();
 		}
+	};
+	
+	var onMouseDown = function(e) {
+		var coords = {x: e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - canvas.offsetLeft, 
+		  y: e.clientY + document.body.scrollTop + document.documentElement.scrollTop - canvas.offsetTop}; 
+		
+		var angle = angleUnit.compute_angle(coords.x - 300, 200 - coords.y);
+		
+		for (key in selected_assets) { // todo prekreslit vsechny
+			var asset = selected_assets[key];
+			asset.rotation = angle;
+		} 
+		
+		drawScene(); // TODO vyhodit, bude reseno tickerem
+	};
+};
+var game = new Game();
+
+function browserInit() {
+	testPath(); // todo vyhodit
+
+	if (document.addEventListener) {
+		document.addEventListener('contextmenu', function(e) {
+			e.preventDefault();
+		}, false);
+	} else {
+		document.attachEvent('oncontextmenu', function() {
+			window.event.returnValue = false;
+		});
 	}
+
+	BaseAsset.prototype.atlas_data = SpriteSheetClass.parseAtlasDefinition(sprite_data);
+	spritesImage = loadImage("img/tanks.png");
+	
+	function loadImage(url) {
+		image = new Image();
+		image.addEventListener("load", imageLoaded, false);
+		image.src = url;
+		return image;
+	}
+	
+	function imageLoaded() {
+		BaseAsset.prototype.atlas_image = spritesImage;
+		game.init();
+	}
+};
+
+window.onload = function() {
+	browserInit();
 };

@@ -1,6 +1,7 @@
-otaceni na vektor
-antialis u firefoxu?
-prejezd z bodu do bodu
+zabaleni gridu do tridy
+spawnovani tanku na grid
+animace cesty z pole do pole
+
 smycka
 css3 pohyb
 css3 zmena pohybu
@@ -10,3 +11,5 @@ pathfinder
 strelba
 loader obrazku - zizala
 vyber jednotky
+
+antialis u firefoxu?
