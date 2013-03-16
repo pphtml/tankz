@@ -1,8 +1,7 @@
-zabaleni gridu do tridy
-spawnovani tanku na grid
 animace cesty z pole do pole
 
 smycka
+y offset
 css3 pohyb
 css3 zmena pohybu
 vez

@@ -34,24 +34,55 @@ var angleUnit = new (function() {
 	};
 })();
 
+var Grid = function(width, height, pixelsPerTile) {
+	this.width = width;
+	this.height = height;
+	this.pixelsPerTile = pixelsPerTile;
+	
+	this.draw = function(context, canvas) {
+		for (var x = 0; x <= this.width; x++) {
+			var cx = 0.5 + x * this.pixelsPerTile;
+			context.moveTo(cx, 0);
+			context.lineTo(cx, canvas.height);
+			context.stroke();
+		}
+
+		for (var y = 0; y <= this.height; y++) {
+			var cy = 0.5 + y * this.pixelsPerTile;
+			context.moveTo(0, cy);
+			context.lineTo(canvas.width, cy);
+			context.stroke();
+		}
+	};
+	
+	this.spawn = function(gridX, gridY, unit) {
+		var x = (0.5 + gridX) * this.pixelsPerTile; 
+		var y = (0.5 + gridY) * this.pixelsPerTile;
+		unit.x = x;
+		unit.y = y;
+		return unit;
+	};
+};
+
 var Game = function() {
 	var selected_assets = [];
 	var canvas = null;
 	var context = null;
+	var grid = null;
+	var pixelsPerTile = 20;
 
 	this.init = function() {
 		canvas  = document.getElementById("canvasArea"); 
 		context = canvas.getContext("2d");
 		canvas.addEventListener("mousedown", onMouseDown, false);  
 		
+		grid = new Grid(50, 36, pixelsPerTile); // todo dat jenom na jedno misto
 		spawnUnits();
 		drawScene();
 	};
 	
 	var spawnUnits = function() {
-		var myTank = new Tank();
-		myTank.x = 300;
-		myTank.y = 200;
+		var myTank = grid.spawn(20, 2, new Tank());
 		myTank.rotation = 45;
 		selected_assets.push(myTank);
 	};
@@ -65,35 +96,18 @@ var Game = function() {
 	
 	var drawScene = function() {
 		canvas.width = canvas.width; 
-		drawGrid();
+		grid.draw(context, canvas);
 		drawUnits();
-	};
-	
-	var drawGrid = function() {
-		for (var x = 0; x <= 50; x++) {
-			var cx = 0.5 + x * 20;
-			context.moveTo(cx, 0);
-			context.lineTo(cx, canvas.height);
-			context.stroke();
-		}
-
-		for (var y = 0; y <= 36; y++) {
-			var cy = 0.5 + y * 20;
-			context.moveTo(0, cy);
-			context.lineTo(canvas.width, cy);
-			context.stroke();
-		}
-	};
+	};	
 	
 	var onMouseDown = function(e) {
 		var coords = {x: e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - canvas.offsetLeft, 
 		  y: e.clientY + document.body.scrollTop + document.documentElement.scrollTop - canvas.offsetTop}; 
-		
-		var angle = angleUnit.compute_angle(coords.x - 300, 200 - coords.y);
-		
+				
 		for (key in selected_assets) { // todo prekreslit vsechny
-			var asset = selected_assets[key];
-			asset.rotation = angle;
+			var unit = selected_assets[key];
+			var angle = angleUnit.compute_angle(coords.x - unit.x, unit.y - coords.y);
+			unit.rotation = angle;
 		} 
 		
 		drawScene(); // TODO vyhodit, bude reseno tickerem
