@@ -1,22 +1,3 @@
-function testPath() {
-	btn_test_path  = document.getElementById("btn_test_path");
-	btn_test_path.onclick = function() {
-		var graph = new Graph([
-		                       [1,1,1,1],
-		                       [0,1,1,0],
-		                       [0,0,1,1]
-		                   ]);
-       var start = graph.nodes[0][0];
-       var end = graph.nodes[1][2];
-       var result = astar.search(graph.nodes, start, end);
-       // result is an array containing the shortest path
-
-       var resultWithDiagonals = astar.search(graph.nodes, start, end, true);
-       console.info(result);
-       console.info(resultWithDiagonals);
-	};
-}; 
-
 var angleUnit = new (function() {
 	this.compute_angle = function (dx, dy) {
 	    if (dx == 0) {
@@ -38,6 +19,25 @@ var Grid = function(width, height, pixelsPerTile) {
 	this.width = width;
 	this.height = height;
 	this.pixelsPerTile = pixelsPerTile;
+	this.graph = (function() {
+//		var rows = new Array();
+//		for (var y = 0; y < height; y++) {
+//			var cells = new Array();
+//			for (var x = 0; x < width; x++) {
+//				cells.push(1); // 1 pruchozi
+//			}
+//			rows.push(cells);
+//		}
+		var cells = new Array();
+		for (var x = 0; x < width; x++) {
+			var row = new Array();
+			for (var y = 0; y < height; y++) {
+				row.push(1); // 1 pruchozi
+			}
+			cells.push(row);
+		}
+		return new Graph(cells);
+	})();
 	
 	this.draw = function(context, canvas) {
 		for (var x = 0; x <= this.width; x++) {
@@ -55,12 +55,27 @@ var Grid = function(width, height, pixelsPerTile) {
 		}
 	};
 	
-	this.spawn = function(gridX, gridY, unit) {
+	this.pixelCoords = function(gridX, gridY) {
 		var x = (0.5 + gridX) * this.pixelsPerTile; 
 		var y = (0.5 + gridY) * this.pixelsPerTile;
-		unit.x = x;
-		unit.y = y;
+		return {x: x, y: y};
+	};
+	
+	this.spawn = function(gridX, gridY, unit) {
+		//var x = (0.5 + gridX) * this.pixelsPerTile; 
+		//var y = (0.5 + gridY) * this.pixelsPerTile;
+		var pixelCoords = this.pixelCoords(gridX, gridY);
+		unit.x = pixelCoords.x;
+		unit.y = pixelCoords.y;
+		unit.gridX = gridX;
+		unit.gridY = gridY;
 		return unit;
+	};
+	
+	this.locateCoords = function(x, y) {
+		var gridX = parseInt(x / this.pixelsPerTile);
+		var gridY = parseInt(y / this.pixelsPerTile);
+		return {x: gridX, y: gridY};
 	};
 };
 
@@ -70,6 +85,7 @@ var Game = function() {
 	var context = null;
 	var grid = null;
 	var pixelsPerTile = 20;
+	var dctx = null;
 
 	this.init = function() {
 		canvas  = document.getElementById("canvasArea"); 
@@ -77,6 +93,7 @@ var Game = function() {
 		canvas.addEventListener("mousedown", onMouseDown, false);  
 		
 		grid = new Grid(50, 36, pixelsPerTile); // todo dat jenom na jedno misto
+		dctx = {ctx: context, canvas: canvas, grid: grid};
 		spawnUnits();
 		drawScene();
 	};
@@ -90,7 +107,7 @@ var Game = function() {
 	var drawUnits = function() {
 		for (key in selected_assets) { // todo prekreslit vsechny
 			var asset = selected_assets[key];
-			asset.draw(context);
+			asset.draw(dctx);
 		} 
 	};
 	
@@ -103,21 +120,22 @@ var Game = function() {
 	var onMouseDown = function(e) {
 		var coords = {x: e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - canvas.offsetLeft, 
 		  y: e.clientY + document.body.scrollTop + document.documentElement.scrollTop - canvas.offsetTop}; 
-				
+
+		var gridCoords = grid.locateCoords(coords.x, coords.y);
 		for (key in selected_assets) { // todo prekreslit vsechny
 			var unit = selected_assets[key];
-			var angle = angleUnit.compute_angle(coords.x - unit.x, unit.y - coords.y);
-			unit.rotation = angle;
+			unit.moveTo(gridCoords.x, gridCoords.y, grid.graph);
+			
+//			var angle = angleUnit.compute_angle(coords.x - unit.x, unit.y - coords.y);
+//			unit.rotation = angle;
 		} 
-		
+//		
 		drawScene(); // TODO vyhodit, bude reseno tickerem
 	};
 };
 var game = new Game();
 
 function browserInit() {
-	testPath(); // todo vyhodit
-
 	if (document.addEventListener) {
 		document.addEventListener('contextmenu', function(e) {
 			e.preventDefault();

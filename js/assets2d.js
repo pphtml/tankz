@@ -5,7 +5,7 @@ var BaseAsset = function() {
 //BaseAsset.prototype.atlas_image = spritesImage;
 
 var TankAsset = function() {
-	this.draw = function(ctx, tank) {
+	this.draw = function(dctx, tank) {
 		var spriteIndex = tank.spriteIndex(); 
 		var name = 'tank' + (spriteIndex < 10 ? '0' : '') + spriteIndex + '.png';
 		var img = this.atlas_data[name];
@@ -13,18 +13,46 @@ var TankAsset = function() {
 			console.error('Missing sprite ' + name);
 		} else {
 			//console.info(img);
-			ctx.drawImage(this.atlas_image, img.x, img.y, img.w, img.h, tank.x + img.cx, tank.y + img.cy, img.w, img.h);
+			dctx.ctx.drawImage(this.atlas_image, img.x, img.y, img.w, img.h, tank.x + img.cx, tank.y + img.cy, img.w, img.h);
+		}
+		
+		if (typeof tank.path != 'undefined') {
+			//console.info("xxxxxxxxxxxxxxxx " + dctx.grid);
+			for(var i = 0, count = tank.path.length; i < count; i++) {
+			    var node = tank.path[i];
+			    //console.info(node.x, node.y);
+			    var pixelCoords = dctx.grid.pixelCoords(node.x, node.y);
+			    var context = dctx.ctx;
+			    context.beginPath();
+			    context.arc(pixelCoords.x, pixelCoords.y, 4, 0 , 2 * Math.PI, false);
+			    context.fillStyle = 'green';
+			    context.fill();
+			    context.lineWidth = 1;
+			    context.strokeStyle = '#003300';
+			    context.stroke();
+			}
 		}
 	};
 };
 TankAsset.prototype = new BaseAsset();
 var tank_asset = new TankAsset();
 
+var GenericUnit = function() {
+	
+};
+
+GenericUnit.prototype.moveTo = function(gridX, gridY, graph) {
+    var start = graph.nodes[this.gridX][this.gridY];
+    var end = graph.nodes[gridX][gridY];
+    var path = astar.search(graph.nodes, start, end, true);
+    this.path = path;
+};
+
 var Tank = function() {
 	this.asset = tank_asset;
 	
-	this.draw = function(ctx) { 
-		this.asset.draw(ctx, this);
+	this.draw = function(dctx) { 
+		this.asset.draw(dctx, this);
 	};
 	
 	this.spriteIndex = function() {
@@ -33,5 +61,6 @@ var Tank = function() {
 		return result;
 	};
 };
+Tank.prototype = new GenericUnit();
 
 
