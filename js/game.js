@@ -1,5 +1,5 @@
 var angleUnit = new (function() {
-	this.compute_angle = function (dx, dy) {
+	this.compute = function (dx, dy) {
 	    if (dx == 0) {
 	        return dy >= 0 ? 90.0 : 270.0;
 	    }
@@ -81,11 +81,14 @@ var Grid = function(width, height, pixelsPerTile) {
 
 var Game = function() {
 	var selected_assets = [];
+	var allAssets = [];
 	var canvas = null;
 	var context = null;
 	var grid = null;
 	var pixelsPerTile = 20;
 	var dctx = null;
+	var intervalId = null;
+	var fps = 2;
 
 	this.init = function() {
 		canvas  = document.getElementById("canvasArea"); 
@@ -93,15 +96,16 @@ var Game = function() {
 		canvas.addEventListener("mousedown", onMouseDown, false);  
 		
 		grid = new Grid(50, 36, pixelsPerTile); // todo dat jenom na jedno misto
-		dctx = {ctx: context, canvas: canvas, grid: grid};
+		dctx = {ctx: context, canvas: canvas, grid: grid, angle: angleUnit};
 		spawnUnits();
-		drawScene();
+		intervalId = setInterval(this.run, 1000 / fps);
 	};
 	
 	var spawnUnits = function() {
 		var myTank = grid.spawn(20, 2, new Tank());
 		myTank.rotation = 45;
-		selected_assets.push(myTank);
+		selected_assets.push(myTank); // todo vyhodit
+		allAssets.push(myTank);
 	};
 
 	var drawUnits = function() {
@@ -111,7 +115,7 @@ var Game = function() {
 		} 
 	};
 	
-	var drawScene = function() {
+	this.drawScene = function() {
 		canvas.width = canvas.width; 
 		grid.draw(context, canvas);
 		drawUnits();
@@ -129,8 +133,37 @@ var Game = function() {
 //			var angle = angleUnit.compute_angle(coords.x - unit.x, unit.y - coords.y);
 //			unit.rotation = angle;
 		} 
-//		
-		drawScene(); // TODO vyhodit, bude reseno tickerem
+	};
+	
+	var outer = this; // todo vycistit
+	this.run = (function() {
+		  //var loops = 0, skipTicks = 1000 / outer.fps,
+	      //maxFrameSkip = 10,
+	      //nextGameTick = (new Date).getTime();
+		  outer.lastTick = (new Date).getTime();
+	  
+		  return function() {
+		    //loops = 0;
+		    
+		    //while ((new Date).getTime() > nextGameTick && loops < maxFrameSkip) {
+		      outer.tick();
+		      //nextGameTick += skipTicks;
+		      //loops++;
+		    //}
+		    
+		    outer.drawScene();
+		  };
+		})();
+	
+	this.tick = function() {
+		var now = (new Date).getTime();
+		var timeDelta = now - this.lastTick;
+		this.lastTick = now;
+		console.info(timeDelta);
+		
+		for(var i = 0, count = allAssets.length; i < count; i++) {
+			allAssets[i].tick(timeDelta, dctx);
+		}
 	};
 };
 var game = new Game();

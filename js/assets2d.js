@@ -60,6 +60,23 @@ var Tank = function() {
 		result = result % 32;
 		return result;
 	};
+	
+	this.tick = function(timeDelta, dctx) { // todo premistit do generic unit
+		if (typeof this.path != 'undefined' && this.path.length > 0) {
+			var node = this.path.splice(0, 1)[0];
+			var pixelCoords = dctx.grid.pixelCoords(node.x, node.y);
+			// todo pocitat jenom pri prechodu na novou bunku
+			var angle = dctx.angle.compute(pixelCoords.x - this.x, this.y - pixelCoords.y);
+			this.rotation = angle;
+
+			
+			// todo kontrolovat obsazenost bunky
+			this.x = pixelCoords.x;
+			this.y = pixelCoords.y;
+			this.gridX = node.x;
+			this.gridY = node.y;
+		}
+	};
 };
 Tank.prototype = new GenericUnit();
 
