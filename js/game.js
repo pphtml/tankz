@@ -40,17 +40,20 @@ var Grid = function(width, height, pixelsPerTile) {
 	})();
 	
 	this.draw = function(context, canvas) {
+		var height = canvas.height;
+		var width = canvas.width;
+		
 		for (var x = 0; x <= this.width; x++) {
 			var cx = 0.5 + x * this.pixelsPerTile;
 			context.moveTo(cx, 0);
-			context.lineTo(cx, canvas.height);
+			context.lineTo(cx, height);
 			context.stroke();
 		}
 
 		for (var y = 0; y <= this.height; y++) {
 			var cy = 0.5 + y * this.pixelsPerTile;
 			context.moveTo(0, cy);
-			context.lineTo(canvas.width, cy);
+			context.lineTo(width, cy);
 			context.stroke();
 		}
 	};
@@ -88,7 +91,7 @@ var Game = function() {
 	var pixelsPerTile = 20;
 	var dctx = null;
 	var intervalId = null;
-	var fps = 2;
+	var fps = 5;
 
 	this.init = function() {
 		canvas  = document.getElementById("canvasArea"); 
@@ -116,9 +119,12 @@ var Game = function() {
 	};
 	
 	this.drawScene = function() {
+		var start = (new Date()).getTime();
 		canvas.width = canvas.width; 
-		grid.draw(context, canvas);
+		//grid.draw(context, canvas);
 		drawUnits();
+		var end = (new Date()).getTime();
+		//console.info('drawScene took ' + (end - start));
 	};	
 	
 	var onMouseDown = function(e) {
@@ -159,7 +165,7 @@ var Game = function() {
 		var now = (new Date).getTime();
 		var timeDelta = now - this.lastTick;
 		this.lastTick = now;
-		console.info(timeDelta);
+		//console.info(timeDelta);
 		
 		for(var i = 0, count = allAssets.length; i < count; i++) {
 			allAssets[i].tick(timeDelta, dctx);

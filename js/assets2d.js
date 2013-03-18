@@ -5,6 +5,7 @@ var BaseAsset = function() {
 //BaseAsset.prototype.atlas_image = spritesImage;
 
 var TankAsset = function() {
+	this.yOffset = -6;
 	this.draw = function(dctx, tank) {
 		var spriteIndex = tank.spriteIndex(); 
 		var name = 'tank' + (spriteIndex < 10 ? '0' : '') + spriteIndex + '.png';
@@ -13,7 +14,7 @@ var TankAsset = function() {
 			console.error('Missing sprite ' + name);
 		} else {
 			//console.info(img);
-			dctx.ctx.drawImage(this.atlas_image, img.x, img.y, img.w, img.h, tank.x + img.cx, tank.y + img.cy, img.w, img.h);
+			dctx.ctx.drawImage(this.atlas_image, img.x, img.y, img.w, img.h, tank.x + img.cx, tank.y + img.cy + this.yOffset, img.w, img.h);
 		}
 		
 		if (typeof tank.path != 'undefined') {
