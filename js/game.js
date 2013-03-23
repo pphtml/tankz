@@ -59,27 +59,27 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
 		}
 	};
 	
-	this.pixelCoords = function(gridX, gridY) {
+	this.locatePixelCoords = function(gridX, gridY) {
 		var x = (0.5 + gridX) * this.pixelsPerTileX; 
 		var y = (0.5 + gridY) * this.pixelsPerTileY;
 		return {x: x, y: y};
 	};
 	
+	this.locateGridCoords = function(x, y) {
+		var gridX = parseInt(x / this.pixelsPerTileX);
+		var gridY = parseInt(y / this.pixelsPerTileY);
+		return {x: gridX, y: gridY};
+	};
+
 	this.spawn = function(gridX, gridY, unit) {
 		//var x = (0.5 + gridX) * this.pixelsPerTile; 
 		//var y = (0.5 + gridY) * this.pixelsPerTile;
-		var pixelCoords = this.pixelCoords(gridX, gridY);
+		var pixelCoords = this.locatePixelCoords(gridX, gridY);
 		unit.x = pixelCoords.x;
 		unit.y = pixelCoords.y;
 		unit.gridX = gridX;
 		unit.gridY = gridY;
 		return unit;
-	};
-	
-	this.locateCoords = function(x, y) {
-		var gridX = parseInt(x / this.pixelsPerTileX);
-		var gridY = parseInt(y / this.pixelsPerTileY);
-		return {x: gridX, y: gridY};
 	};
 };
 
@@ -92,8 +92,6 @@ var Game = function() {
 	var pixelsPerTileX = 20;
 	var pixelsPerTileY = 18;
 	var dctx = null;
-	var intervalId = null;
-	var fps = 1;
 	
 	var initializeStaticCanvas = function() {
 		staticCanvas = document.getElementById("canvasStatic");
@@ -103,12 +101,20 @@ var Game = function() {
 
 	var outer = this;
 
+	window.requestAnimFrame = (function(callback) {
+	    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+	    function(callback) {
+	      console.info("setting callback");
+	      window.setTimeout(callback, 1000 / 60);
+	    };
+	  })();
+
 	this.animate = function() {
 		this.tick();
 		this.drawScene();
         requestAnimFrame(function() {
             outer.animate();
-          });
+        });
 	};
 	
 	this.init = function() {
@@ -120,19 +126,10 @@ var Game = function() {
 		dctx = {ctx: context, canvas: canvas, grid: grid, angle: angleUnit};
 		spawnUnits();
 		initializeStaticCanvas();
-		//intervalId = setInterval(this.run, 1000 / fps);
 		
-		window.requestAnimFrame = (function(callback) {
-		    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
-		    function(callback) {
-		    	console.info('zzz ' + fps);
-		      window.setTimeout(callback, 1000 / fps);
-		    };
-		  })();
-
         requestAnimFrame(function() {
             outer.animate();
-          });
+        });
 	};
 	
 	var spawnUnits = function() {
@@ -157,11 +154,20 @@ var Game = function() {
 		//console.info('drawScene took ' + (end - start));
 	};	
 	
+	var getMousePos = function (evt) {
+        var rect = canvas.getBoundingClientRect();
+        return {
+            x: evt.clientX - rect.left,
+            y: evt.clientY - rect.top
+        };
+    };
+	
 	var onMouseDown = function(e) {
-		var coords = {x: e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - canvas.offsetLeft, 
-		  y: e.clientY + document.body.scrollTop + document.documentElement.scrollTop - canvas.offsetTop}; 
-
-		var gridCoords = grid.locateCoords(coords.x, coords.y);
+//		var coords = {x: e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - canvas.offsetLeft, 
+//		  y: e.clientY + document.body.scrollTop + document.documentElement.scrollTop - canvas.offsetTop}; 
+		var coords = getMousePos(e);
+		
+		var gridCoords = grid.locateGridCoords(coords.x, coords.y);
 		for (key in selected_assets) { // todo prekreslit vsechny
 			var unit = selected_assets[key];
 			unit.moveTo(gridCoords.x, gridCoords.y, grid.graph);
@@ -170,26 +176,6 @@ var Game = function() {
 //			unit.rotation = angle;
 		} 
 	};
-	
-//	var outer = this; // todo vycistit
-//	this.run = (function() {
-//		  //var loops = 0, skipTicks = 1000 / outer.fps,
-//	      //maxFrameSkip = 10,
-//	      //nextGameTick = (new Date).getTime();
-//		  outer.lastTick = (new Date).getTime();
-//	  
-//		  return function() {
-//		    //loops = 0;
-//		    
-//		    //while ((new Date).getTime() > nextGameTick && loops < maxFrameSkip) {
-//		      outer.tick();
-//		      //nextGameTick += skipTicks;
-//		      //loops++;
-//		    //}
-//		    
-//		    outer.drawScene();
-//		  };
-//		})();
 	
 	this.tick = function() {
 		var now = (new Date).getTime();
