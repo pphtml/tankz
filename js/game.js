@@ -15,10 +15,11 @@ var angleUnit = new (function() {
 	};
 })();
 
-var Grid = function(width, height, pixelsPerTile) {
+var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
 	this.width = width;
 	this.height = height;
-	this.pixelsPerTile = pixelsPerTile;
+	this.pixelsPerTileX = pixelsPerTileX;
+	this.pixelsPerTileY = pixelsPerTileY;
 	this.graph = (function() {
 //		var rows = new Array();
 //		for (var y = 0; y < height; y++) {
@@ -44,14 +45,14 @@ var Grid = function(width, height, pixelsPerTile) {
 		var width = canvas.width;
 		
 		for (var x = 0; x <= this.width; x++) {
-			var cx = 0.5 + x * this.pixelsPerTile;
+			var cx = 0.5 + x * this.pixelsPerTileX;
 			context.moveTo(cx, 0);
 			context.lineTo(cx, height);
 			context.stroke();
 		}
 
 		for (var y = 0; y <= this.height; y++) {
-			var cy = 0.5 + y * this.pixelsPerTile;
+			var cy = 0.5 + y * this.pixelsPerTileY;
 			context.moveTo(0, cy);
 			context.lineTo(width, cy);
 			context.stroke();
@@ -59,8 +60,8 @@ var Grid = function(width, height, pixelsPerTile) {
 	};
 	
 	this.pixelCoords = function(gridX, gridY) {
-		var x = (0.5 + gridX) * this.pixelsPerTile; 
-		var y = (0.5 + gridY) * this.pixelsPerTile;
+		var x = (0.5 + gridX) * this.pixelsPerTileX; 
+		var y = (0.5 + gridY) * this.pixelsPerTileY;
 		return {x: x, y: y};
 	};
 	
@@ -76,8 +77,8 @@ var Grid = function(width, height, pixelsPerTile) {
 	};
 	
 	this.locateCoords = function(x, y) {
-		var gridX = parseInt(x / this.pixelsPerTile);
-		var gridY = parseInt(y / this.pixelsPerTile);
+		var gridX = parseInt(x / this.pixelsPerTileX);
+		var gridY = parseInt(y / this.pixelsPerTileY);
 		return {x: gridX, y: gridY};
 	};
 };
@@ -88,20 +89,50 @@ var Game = function() {
 	var canvas = null;
 	var context = null;
 	var grid = null;
-	var pixelsPerTile = 20;
+	var pixelsPerTileX = 20;
+	var pixelsPerTileY = 18;
 	var dctx = null;
 	var intervalId = null;
-	var fps = 5;
+	var fps = 1;
+	
+	var initializeStaticCanvas = function() {
+		staticCanvas = document.getElementById("canvasStatic");
+		var context = staticCanvas.getContext("2d");
+		grid.draw(context, staticCanvas);
+	};
 
+	var outer = this;
+
+	this.animate = function() {
+		this.tick();
+		this.drawScene();
+        requestAnimFrame(function() {
+            outer.animate();
+          });
+	};
+	
 	this.init = function() {
-		canvas  = document.getElementById("canvasArea"); 
+		canvas = document.getElementById("canvasArea");
 		context = canvas.getContext("2d");
 		canvas.addEventListener("mousedown", onMouseDown, false);  
 		
-		grid = new Grid(50, 36, pixelsPerTile); // todo dat jenom na jedno misto
+		grid = new Grid(50, 36, pixelsPerTileX, pixelsPerTileY); // todo dat jenom na jedno misto
 		dctx = {ctx: context, canvas: canvas, grid: grid, angle: angleUnit};
 		spawnUnits();
-		intervalId = setInterval(this.run, 1000 / fps);
+		initializeStaticCanvas();
+		//intervalId = setInterval(this.run, 1000 / fps);
+		
+		window.requestAnimFrame = (function(callback) {
+		    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+		    function(callback) {
+		    	console.info('zzz ' + fps);
+		      window.setTimeout(callback, 1000 / fps);
+		    };
+		  })();
+
+        requestAnimFrame(function() {
+            outer.animate();
+          });
 	};
 	
 	var spawnUnits = function() {
@@ -119,11 +150,10 @@ var Game = function() {
 	};
 	
 	this.drawScene = function() {
-		var start = (new Date()).getTime();
-		canvas.width = canvas.width; 
-		//grid.draw(context, canvas);
+		//var start = (new Date()).getTime();
+		context.clearRect(0, 0, canvas.width, canvas.height);
 		drawUnits();
-		var end = (new Date()).getTime();
+		//var end = (new Date()).getTime();
 		//console.info('drawScene took ' + (end - start));
 	};	
 	
@@ -141,25 +171,25 @@ var Game = function() {
 		} 
 	};
 	
-	var outer = this; // todo vycistit
-	this.run = (function() {
-		  //var loops = 0, skipTicks = 1000 / outer.fps,
-	      //maxFrameSkip = 10,
-	      //nextGameTick = (new Date).getTime();
-		  outer.lastTick = (new Date).getTime();
-	  
-		  return function() {
-		    //loops = 0;
-		    
-		    //while ((new Date).getTime() > nextGameTick && loops < maxFrameSkip) {
-		      outer.tick();
-		      //nextGameTick += skipTicks;
-		      //loops++;
-		    //}
-		    
-		    outer.drawScene();
-		  };
-		})();
+//	var outer = this; // todo vycistit
+//	this.run = (function() {
+//		  //var loops = 0, skipTicks = 1000 / outer.fps,
+//	      //maxFrameSkip = 10,
+//	      //nextGameTick = (new Date).getTime();
+//		  outer.lastTick = (new Date).getTime();
+//	  
+//		  return function() {
+//		    //loops = 0;
+//		    
+//		    //while ((new Date).getTime() > nextGameTick && loops < maxFrameSkip) {
+//		      outer.tick();
+//		      //nextGameTick += skipTicks;
+//		      //loops++;
+//		    //}
+//		    
+//		    outer.drawScene();
+//		  };
+//		})();
 	
 	this.tick = function() {
 		var now = (new Date).getTime();

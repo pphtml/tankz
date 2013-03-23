@@ -11,12 +11,15 @@
 <body>
 	<div
 		style="width: 1001px; height: 721px; margin: 0 auto; padding: 5px; background-color: #f8f8f8;">
-		<canvas id="canvasArea" width="1001" height="721"
-			style="border: 0px solid black">
-   Your browser doesn't support HTML5 Canvas :(
-   </canvas>
+		<canvas id="canvasArea" width="1001" height="721" style="position: absolute; z-index: 2;">Your browser doesn't support HTML5 Canvas :(</canvas>
+		<canvas id="canvasStatic" width="1001" height="721" style="position: absolute; z-index: 1;"></canvas>
 	</div>
-	
-<!-- 	<button id="btn_test_path" type="button">test path</button> -->
+
+<!-- 	<div id="canvasContainer"> -->
+<!-- 		<canvas style="position: absolute;" width="800" height="600"></canvas> -->
+<!-- 		<canvas style="position: absolute;" width="800" height="600"></canvas> -->
+<!-- 	</div> -->
+
+	<!-- 	<button id="btn_test_path" type="button">test path</button> -->
 </body>
 </html>
