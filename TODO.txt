@@ -1,13 +1,9 @@
-animace cesty z pole do pole
-
-smycka
-css3 pohyb
-css3 zmena pohybu
 vez
+presunout pohyb z tanku do generic unit
 teren - prekazky
 pathfinder obchazeni prekazek
 strelba
 loader obrazku - zizala
 vyber jednotky
 
-antialis u firefoxu?
+antialias u firefoxu?

@@ -6,6 +6,7 @@ var BaseAsset = function() {
 
 var TankAsset = function() {
 	this.yOffset = -6;
+	var scale = 0.6;
 	this.draw = function(dctx, tank) {
 		var spriteIndex = tank.spriteIndex(); 
 		var name = 'tank' + (spriteIndex < 10 ? '0' : '') + spriteIndex + '.png';
@@ -14,7 +15,9 @@ var TankAsset = function() {
 			console.error('Missing sprite ' + name);
 		} else {
 			//console.info(img);
-			dctx.ctx.drawImage(this.atlas_image, img.x, img.y, img.w, img.h, tank.x + img.cx, tank.y + img.cy + this.yOffset, img.w, img.h);
+			dctx.ctx.drawImage(this.atlas_image, img.x, img.y, img.w, img.h,
+					parseInt(tank.x + scale * img.cx), parseInt(tank.y + scale * (img.cy + this.yOffset)),
+					scale * img.w, scale * img.h);
 		}
 		
 		if (typeof tank.path != 'undefined') {
@@ -25,7 +28,7 @@ var TankAsset = function() {
 			    var pixelCoords = dctx.grid.locatePixelCoords(node.x, node.y);
 			    var context = dctx.ctx;
 			    context.beginPath();
-			    context.arc(pixelCoords.x, pixelCoords.y, 4, 0 , 2 * Math.PI, false);
+			    context.arc(pixelCoords.x, pixelCoords.y, 2, 0 , 2 * Math.PI, false);
 			    context.fillStyle = 'green';
 			    context.fill();
 			    context.lineWidth = 1;
@@ -50,15 +53,19 @@ GenericUnit.prototype.moveTo = function(gridX, gridY, graph) {
     delete this.movegrid;
 };
 
+var ZERO = 0.0;
+var DIAG = 1.0 / Math.sqrt(2);
+var FULL = 1.0;
+
 GenericUnit.prototype.directions = {
-	0: [1.0, 0.0],
-	45: [0.7, -0.7],
-	90: [0.0, -1.0],
-	135: [-0.7, -0.7],
-	180: [-1.0, 0.0],
-	225: [-0.7, 0.7],
-	270: [0.0, 1.0],
-	315: [0.7, 0.7]
+	0: [FULL, ZERO],
+	45: [DIAG, -DIAG],
+	90: [ZERO, -FULL],
+	135: [-DIAG, -DIAG],
+	180: [-FULL, ZERO],
+	225: [-DIAG, DIAG],
+	270: [ZERO, FULL],
+	315: [DIAG, DIAG]
 };
 
 var Tank = function() {
