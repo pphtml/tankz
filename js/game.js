@@ -62,7 +62,7 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
 	this.locatePixelCoords = function(gridX, gridY) {
 		var x = (0.5 + gridX) * this.pixelsPerTileX; 
 		var y = (0.5 + gridY) * this.pixelsPerTileY;
-		return {x: x, y: y};
+		return {x: parseFloat(x), y: parseFloat(y)}; // todo vyhodit parsovani
 	};
 	
 	this.locateGridCoords = function(x, y) {
@@ -110,11 +110,33 @@ var Game = function() {
 	  })();
 
 	this.animate = function() {
-		this.tick();
-		this.drawScene();
+		if (this.tick()) {
+			// redraw only when at least something moved
+			this.drawScene();
+		}
         requestAnimFrame(function() {
             outer.animate();
         });
+	};
+	
+	var getMousePos = function (evt) {
+        var rect = canvas.getBoundingClientRect();
+        return { x: evt.clientX - rect.left, y: evt.clientY - rect.top };
+    };
+	
+	var onMouseDown = function(e) {
+//		var coords = {x: e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - canvas.offsetLeft, 
+//		  y: e.clientY + document.body.scrollTop + document.documentElement.scrollTop - canvas.offsetTop}; 
+		var coords = getMousePos(e);
+		
+		var gridCoords = grid.locateGridCoords(coords.x, coords.y);
+		for (key in selected_assets) { // todo prekreslit vsechny
+			var unit = selected_assets[key];
+			unit.moveTo(gridCoords.x, gridCoords.y, grid.graph);
+			
+//			var angle = angleUnit.compute_angle(coords.x - unit.x, unit.y - coords.y);
+//			unit.rotation = angle;
+		} 
 	};
 	
 	this.init = function() {
@@ -126,6 +148,7 @@ var Game = function() {
 		dctx = {ctx: context, canvas: canvas, grid: grid, angle: angleUnit};
 		spawnUnits();
 		initializeStaticCanvas();
+		this.drawScene();
 		
         requestAnimFrame(function() {
             outer.animate();
@@ -135,6 +158,10 @@ var Game = function() {
 	var spawnUnits = function() {
 		var myTank = grid.spawn(20, 2, new Tank());
 		myTank.rotation = 45;
+//		if (myTank.x % 1 === 0) {
+//			console.error("X coordinate is not a float");
+//		}
+
 		selected_assets.push(myTank); // todo vyhodit
 		allAssets.push(myTank);
 	};
@@ -154,38 +181,18 @@ var Game = function() {
 		//console.info('drawScene took ' + (end - start));
 	};	
 	
-	var getMousePos = function (evt) {
-        var rect = canvas.getBoundingClientRect();
-        return {
-            x: evt.clientX - rect.left,
-            y: evt.clientY - rect.top
-        };
-    };
-	
-	var onMouseDown = function(e) {
-//		var coords = {x: e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - canvas.offsetLeft, 
-//		  y: e.clientY + document.body.scrollTop + document.documentElement.scrollTop - canvas.offsetTop}; 
-		var coords = getMousePos(e);
-		
-		var gridCoords = grid.locateGridCoords(coords.x, coords.y);
-		for (key in selected_assets) { // todo prekreslit vsechny
-			var unit = selected_assets[key];
-			unit.moveTo(gridCoords.x, gridCoords.y, grid.graph);
-			
-//			var angle = angleUnit.compute_angle(coords.x - unit.x, unit.y - coords.y);
-//			unit.rotation = angle;
-		} 
-	};
-	
 	this.tick = function() {
 		var now = (new Date).getTime();
-		var timeDelta = now - this.lastTick;
+		var timeDelta = parseFloat(now - this.lastTick) / 1000;
 		this.lastTick = now;
 		//console.info(timeDelta);
+		var moved = false;
 		
 		for(var i = 0, count = allAssets.length; i < count; i++) {
-			allAssets[i].tick(timeDelta, dctx);
+			moved = moved || allAssets[i].tick(timeDelta, dctx);
 		}
+		
+		return moved;
 	};
 };
 var game = new Game();

@@ -47,6 +47,7 @@ GenericUnit.prototype.moveTo = function(gridX, gridY, graph) {
     var end = graph.nodes[gridX][gridY];
     var path = astar.search(graph.nodes, start, end, true);
     this.path = path;
+    delete this.movegrid;
 };
 
 GenericUnit.prototype.directions = {
@@ -62,6 +63,7 @@ GenericUnit.prototype.directions = {
 
 var Tank = function() {
 	this.asset = tank_asset;
+	this.gridSpeed = 10.0; // grid/s
 	
 	this.draw = function(dctx) { 
 		this.asset.draw(dctx, this);
@@ -73,35 +75,56 @@ var Tank = function() {
 		return result;
 	};
 	
-	this.computeMovementDeltas = function(dctx) {
-		var dpx = parseFloat(dctx.grid.pixelsPerTileX) / 20;
-		var dpy = parseFloat(dctx.grid.pixelsPerTileY) / 20;
+	this.computeMovementDeltas = function(timeDelta, dctx) {
+		var speedFactor = this.gridSpeed * timeDelta;
+		var dpx = parseFloat(dctx.grid.pixelsPerTileX) * speedFactor;
+		var dpy = parseFloat(dctx.grid.pixelsPerTileY) * speedFactor;
 		var dirFactors = this.directions[this.rotation];
 		if (dirFactors == null) {
 			console.error("Unknown direction " + this.rotation);
 		}
 		return {x: dpx * dirFactors[0], y: dpy * dirFactors[1]};
 	};
-	
-	this.tick = function(timeDelta, dctx) { // todo premistit do generic unit
+
+	this.innerGridTick = function(timeDelta, dctx) {
+//		if (!(this.x % 1 === 0)) {
+//			console.error("X coordinate is a float");
+//		}
+		var moved = false;
+		var finished = false;
+		var remainingDelta = 0.0;
 		if (typeof this.movegrid != 'undefined') {
-			this.x += this.movegrid.dx;
-			this.y += this.movegrid.dy;
-			if (this.movegrid.reached(this.x, this.y)) {
+			moved = true;
+			var deltas = this.computeMovementDeltas(timeDelta, dctx);
+//			this.x = parseFloat(this.x) + deltas.x; 
+//			this.y = parseFloat(this.y) + deltas.y;
+			this.x += deltas.x; 
+			this.y += deltas.y;
+			var residuum = this.movegrid.deltaResiduum(this.x, this.y, deltas.x, deltas.y);
+			if (residuum > 0.0) {
+				console.info("residuum found " + residuum + " from " + timeDelta);
 				this.x = this.movegrid.targetX;
 				this.y = this.movegrid.targetY;
-				delete this.movegrid;
-				delete this.path;
+				finished = true;
+				remainingDelta = residuum;
 			}
 			var gridCoords = dctx.grid.locateGridCoords(this.x, this.y);
 			this.gridX = gridCoords.x; 
 			this.gridY = gridCoords.y;
-		} else if (typeof this.path != 'undefined' && this.path.length > 0) {
+		}
+		return { moved: moved, finished: finished, delta: remainingDelta };
+	};
+	
+	this.tick = function(timeDelta, dctx) { // todo premistit do generic unit
+		var moved = false;
+		
+		if (typeof this.movegrid == 'undefined' && typeof this.path != 'undefined' && this.path.length > 0) {
 			var node = this.path.splice(0, 1)[0];
 			var pixelCoords = dctx.grid.locatePixelCoords(node.x, node.y);
 			// todo pocitat jenom pri prechodu na novou bunku
 			var angle = dctx.angle.compute(node.x - this.gridX, this.gridY - node.y);
 			//var angle = dctx.angle.compute(pixelCoords.x - this.x, this.y - pixelCoords.y);
+			//console.info("changing rotation to " + angle);
 			this.rotation = angle;
 
 			// todo kontrolovat obsazenost bunky
@@ -111,20 +134,41 @@ var Tank = function() {
 //			this.gridY = node.y;
 //			var addingX = pixelCoords.x > this.x ? 1 : pixelCoords.x < this.x ? -1 : 0;
 //			var addingY = pixelCoords.y > this.y ? 1 : pixelCoords.y < this.y ? -1 : 0;
-			var deltas = this.computeMovementDeltas(dctx);
 			this.movegrid = {
-				//addingX: addingX,
-				//addingY: addingY,
-				dx: deltas.x,
-				dy: deltas.y,
-				reached: function(x, y) { return (this.dx > 0 && x >= this.targetX) ||
-					(this.dx < 0 && x <= this.targetX) ||
-					(this.dy > 0 && y >= this.targetY) ||
-					(this.dy < 0 && y <= this.targetY); },
+				addingX: pixelCoords.x > this.x ? 1 : pixelCoords.x < this.x ? -1 : 0,
+				addingY: pixelCoords.y > this.y ? 1 : pixelCoords.y < this.y ? -1 : 0,
+//				dx: deltas.x,
+//				dy: deltas.y,
+//				reached: function(x, y) { return (this.addingX > 0 && x >= this.targetX) ||
+//					(this.addingX < 0 && x <= this.targetX) ||
+//					(this.addingY > 0 && y >= this.targetY) ||
+//					(this.addingY < 0 && y <= this.targetY); },
+				deltaResiduum: function(x, y, dx, dy) {
+					var result = 0.0;
+					if ((this.addingX > 0 && x >= this.targetX) || (this.addingX < 0 && x <= this.targetX)) {
+						result = dx * (x - this.targetX);
+					} else if ((this.addingY > 0 && y >= this.targetY) || (this.addingY < 0 && y <= this.targetY)) {
+						result = dy * (y - this.targetY);
+					}
+					return result;
+				},
 				targetX: pixelCoords.x,
 				targetY: pixelCoords.y
 			};
 		}
+
+		var innerTickResult = this.innerGridTick(timeDelta, dctx);
+		if (innerTickResult.finished) {
+			delete this.movegrid;
+		}
+
+		moved = moved || innerTickResult.moved;
+		
+		if (innerTickResult.remainingDelta > 0.0) {
+			console.info("blbe animovany :(");
+		}
+		
+		return moved;
 	};
 };
 Tank.prototype = new GenericUnit();
