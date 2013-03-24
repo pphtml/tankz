@@ -40,6 +40,10 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
 		return new Graph(cells);
 	})();
 	
+	this.computeGridHeight = function() {
+		return this.height * this.pixelsPerTileY;
+	};
+	
 	this.draw = function(context, canvas) {
 		var height = canvas.height;
 		var width = canvas.width;
@@ -139,12 +143,27 @@ var Game = function() {
 		} 
 	};
 	
+	var spawnUnits = function() {
+		var myTank = grid.spawn(20, 2, new Tank());
+		myTank.rotation = 45;
+//		if (myTank.x % 1 === 0) {
+//			console.error("X coordinate is not a float");
+//		}
+		
+		selected_assets.push(myTank); // todo vyhodit
+		allAssets.push(myTank);
+	};
+	
 	this.init = function() {
 		canvas = document.getElementById("canvasArea");
 		context = canvas.getContext("2d");
 		canvas.addEventListener("mousedown", onMouseDown, false);  
 		
 		grid = new Grid(50, 36, pixelsPerTileX, pixelsPerTileY); // todo dat jenom na jedno misto
+		var height = grid.computeGridHeight() + 1;
+		canvas.height = height;
+		document.getElementById("canvasStatic").height = height;
+		document.getElementById("container").style.height = height + "px";		
 		dctx = {ctx: context, canvas: canvas, grid: grid, angle: angleUnit};
 		spawnUnits();
 		initializeStaticCanvas();
@@ -155,17 +174,6 @@ var Game = function() {
         });
 	};
 	
-	var spawnUnits = function() {
-		var myTank = grid.spawn(20, 2, new Tank());
-		myTank.rotation = 45;
-//		if (myTank.x % 1 === 0) {
-//			console.error("X coordinate is not a float");
-//		}
-
-		selected_assets.push(myTank); // todo vyhodit
-		allAssets.push(myTank);
-	};
-
 	var drawUnits = function() {
 		for (key in selected_assets) { // todo prekreslit vsechny
 			var asset = selected_assets[key];

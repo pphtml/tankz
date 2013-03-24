@@ -86,6 +86,17 @@ var Tank = function() {
 		return {x: dpx * dirFactors[0], y: dpy * dirFactors[1]};
 	};
 
+//	this.computeTimeDelta = function(x, y) {
+//		var speedFactor = this.gridSpeed * timeDelta;
+//		var dpx = parseFloat(dctx.grid.pixelsPerTileX) * speedFactor;
+//		var dpy = parseFloat(dctx.grid.pixelsPerTileY) * speedFactor;
+//		var dirFactors = this.directions[this.rotation];
+//		if (dirFactors == null) {
+//			console.error("Unknown direction " + this.rotation);
+//		}
+//		return {x: dpx * dirFactors[0], y: dpy * dirFactors[1]};
+//	};
+//
 	this.innerGridTick = function(timeDelta, dctx) {
 //		if (!(this.x % 1 === 0)) {
 //			console.error("X coordinate is a float");
@@ -100,9 +111,9 @@ var Tank = function() {
 //			this.y = parseFloat(this.y) + deltas.y;
 			this.x += deltas.x; 
 			this.y += deltas.y;
-			var residuum = this.movegrid.deltaResiduum(this.x, this.y, deltas.x, deltas.y);
+			var residuum = this.movegrid.deltaResiduum(this.x, this.y, deltas.x, deltas.y, timeDelta);
 			if (residuum > 0.0) {
-				console.info("residuum found " + residuum + " from " + timeDelta);
+				//console.info("residuum found " + residuum + " from " + timeDelta);
 				this.x = this.movegrid.targetX;
 				this.y = this.movegrid.targetY;
 				finished = true;
@@ -112,60 +123,58 @@ var Tank = function() {
 			this.gridX = gridCoords.x; 
 			this.gridY = gridCoords.y;
 		}
-		return { moved: moved, finished: finished, delta: remainingDelta };
+		return { moved: moved, finished: finished, remainingDelta: remainingDelta };
 	};
 	
 	this.tick = function(timeDelta, dctx) { // todo premistit do generic unit
 		var moved = false;
 		
-		if (typeof this.movegrid == 'undefined' && typeof this.path != 'undefined' && this.path.length > 0) {
-			var node = this.path.splice(0, 1)[0];
-			var pixelCoords = dctx.grid.locatePixelCoords(node.x, node.y);
-			// todo pocitat jenom pri prechodu na novou bunku
-			var angle = dctx.angle.compute(node.x - this.gridX, this.gridY - node.y);
-			//var angle = dctx.angle.compute(pixelCoords.x - this.x, this.y - pixelCoords.y);
-			//console.info("changing rotation to " + angle);
-			this.rotation = angle;
-
-			// todo kontrolovat obsazenost bunky
-//			this.x = pixelCoords.x;
-//			this.y = pixelCoords.y;
-//			this.gridX = node.x;
-//			this.gridY = node.y;
-//			var addingX = pixelCoords.x > this.x ? 1 : pixelCoords.x < this.x ? -1 : 0;
-//			var addingY = pixelCoords.y > this.y ? 1 : pixelCoords.y < this.y ? -1 : 0;
-			this.movegrid = {
-				addingX: pixelCoords.x > this.x ? 1 : pixelCoords.x < this.x ? -1 : 0,
-				addingY: pixelCoords.y > this.y ? 1 : pixelCoords.y < this.y ? -1 : 0,
-//				dx: deltas.x,
-//				dy: deltas.y,
-//				reached: function(x, y) { return (this.addingX > 0 && x >= this.targetX) ||
-//					(this.addingX < 0 && x <= this.targetX) ||
-//					(this.addingY > 0 && y >= this.targetY) ||
-//					(this.addingY < 0 && y <= this.targetY); },
-				deltaResiduum: function(x, y, dx, dy) {
-					var result = 0.0;
-					if ((this.addingX > 0 && x >= this.targetX) || (this.addingX < 0 && x <= this.targetX)) {
-						result = dx * (x - this.targetX);
-					} else if ((this.addingY > 0 && y >= this.targetY) || (this.addingY < 0 && y <= this.targetY)) {
-						result = dy * (y - this.targetY);
-					}
-					return result;
-				},
-				targetX: pixelCoords.x,
-				targetY: pixelCoords.y
-			};
-		}
-
-		var innerTickResult = this.innerGridTick(timeDelta, dctx);
-		if (innerTickResult.finished) {
-			delete this.movegrid;
-		}
-
-		moved = moved || innerTickResult.moved;
-		
-		if (innerTickResult.remainingDelta > 0.0) {
-			console.info("blbe animovany :(");
+		while (timeDelta > 0.0) {
+			if (typeof this.movegrid == 'undefined' && typeof this.path != 'undefined' && this.path.length > 0) {
+				var node = this.path.splice(0, 1)[0];
+				var pixelCoords = dctx.grid.locatePixelCoords(node.x, node.y);
+				// todo pocitat jenom pri prechodu na novou bunku
+				var angle = dctx.angle.compute(node.x - this.gridX, this.gridY - node.y);
+				//var angle = dctx.angle.compute(pixelCoords.x - this.x, this.y - pixelCoords.y);
+				//console.info("changing rotation to " + angle);
+				this.rotation = angle;
+	
+				// todo kontrolovat obsazenost bunky
+	//			this.x = pixelCoords.x;
+	//			this.y = pixelCoords.y;
+	//			this.gridX = node.x;
+	//			this.gridY = node.y;
+				this.movegrid = {
+					addingX: pixelCoords.x > this.x ? 1 : pixelCoords.x < this.x ? -1 : 0,
+					addingY: pixelCoords.y > this.y ? 1 : pixelCoords.y < this.y ? -1 : 0,
+	//				dx: deltas.x,
+	//				dy: deltas.y,
+	//				reached: function(x, y) { return (this.addingX > 0 && x >= this.targetX) ||
+	//					(this.addingX < 0 && x <= this.targetX) ||
+	//					(this.addingY > 0 && y >= this.targetY) ||
+	//					(this.addingY < 0 && y <= this.targetY); },
+					deltaResiduum: function(x, y, dx, dy, delta) {
+						var result = 0.0;
+						if ((this.addingX > 0 && x >= this.targetX) || (this.addingX < 0 && x <= this.targetX)) {
+							result = (x - this.targetX) / dx * delta;
+						} else if ((this.addingY > 0 && y >= this.targetY) || (this.addingY < 0 && y <= this.targetY)) {
+							result = (y - this.targetY) / dy * delta;
+						}
+						return result;
+					},
+					targetX: pixelCoords.x,
+					targetY: pixelCoords.y
+				};
+			}
+	
+			var innerTickResult = this.innerGridTick(timeDelta, dctx);
+			if (innerTickResult.finished) {
+				delete this.movegrid;
+			}
+	
+			moved = moved || innerTickResult.moved;
+			
+			timeDelta = innerTickResult.remainingDelta;
 		}
 		
 		return moved;
