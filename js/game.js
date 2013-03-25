@@ -38,10 +38,15 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
             cells.push(row);
         }
         
-        for (var i = 10; i < 36; i++) {
+        for (var i = 16; i < 36; i++) {
             cells[12][i] = 0;
-            cells[50-12][35-i] = 0;
+            cells[49-12][35-i] = 0;
         }
+        for (var i = 4; i < 30; i++) {
+            cells[i][7] = 0;
+            cells[49-i][35-7] = 0;
+        }
+
         return new Graph(cells);
     })();
     

@@ -1,4 +1,3 @@
-teren - prekazky
 vez
 vlastni grafika z blenderu
 presunout pohyb z tanku do generic unit
