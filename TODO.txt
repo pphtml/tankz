@@ -1,7 +1,9 @@
-vez
-presunout pohyb z tanku do generic unit
 teren - prekazky
-pathfinder obchazeni prekazek
+vez
+vlastni grafika z blenderu
+presunout pohyb z tanku do generic unit
+ovladani WASD
+pathfinder obchazeni prekazek - kolem rohu
 strelba
 loader obrazku - zizala
 vyber jednotky
