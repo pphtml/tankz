@@ -1,10 +1,10 @@
-vez
 vlastni grafika z blenderu
+vylepsit diagonalni heuristiku
 presunout pohyb z tanku do generic unit
 ovladani WASD
 pathfinder obchazeni prekazek - kolem rohu
 strelba
 loader obrazku - zizala
 vyber jednotky
-
 antialias u firefoxu?
+vez

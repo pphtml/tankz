@@ -23,6 +23,10 @@ var astar = {
             return node.f; 
         });
     },
+    computeCost: function(fromNode, toNode) {
+        var m = this.manhattan(fromNode, toNode);
+        return m === 2 ? 1.41 : m;
+    },
     search: function(grid, start, end, diagonal, heuristic) {
         astar.init(grid);
         heuristic = heuristic || astar.manhattan;
@@ -64,7 +68,7 @@ var astar = {
 
                 // The g score is the shortest distance from start to current node.
                 // We need to check if the path we have arrived at this neighbor is the shortest one we have seen yet.
-                var gScore = currentNode.g + neighbor.cost;
+                var gScore = currentNode.g + this.computeCost(currentNode, neighbor);
                 var beenVisited = neighbor.visited;
 
                 if(!beenVisited || gScore < neighbor.g) {
