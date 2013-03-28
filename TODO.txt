@@ -8,3 +8,5 @@ loader obrazku - zizala
 vyber jednotky
 antialias u firefoxu?
 vez
+
+this._context = new webkitAudioContext();
