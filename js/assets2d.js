@@ -4,26 +4,56 @@ var BaseAsset = function() {
 //BaseAsset.prototype.atlas_data = data;
 //BaseAsset.prototype.atlas_image = spritesImage;
 
+BaseAsset.prototype.onMouseDown = function(e, pixelCoords, unit, dctx) {
+    console.info(pixelCoords);
+    var img = this.getSpriteImage(unit);
+    //console.info(img);
+    var pos = this.computePosRect(unit, img);
+    console.info(pos);
+    var inside = pixelCoords.x >= pos.x && pixelCoords.x <= pos.x + pos.w &&
+        pixelCoords.y >= pos.y && pixelCoords.y <= pos.y + pos.h;
+//    console.info(inside);
+    if (inside) {
+        var posRect = this.computePosRect(unit, img);
+        inside = dctx.imageAlphaTester.test(img, pixelCoords, posRect);
+    }
+    // todo kontrolovat kliknuti na !alpha
+    return inside;
+};
+
 var TankAsset = function() {
     this.yOffset = -6;
-    var scale = 0.6;
-    this.draw = function(dctx, tank) {
-        var spriteIndex = tank.spriteIndex(); 
+    this.scale = 0.6;
+    
+    this.getSpriteImage = function(unit) {
+        var spriteIndex = unit.spriteIndex(); 
         var name = 'tank' + (spriteIndex < 10 ? '0' : '') + spriteIndex + '.png';
         var img = this.atlas_data[name];
         if (!img) {
-            console.error('Missing sprite ' + name);
-        } else {
-            //console.info(img);
-            dctx.ctx.drawImage(this.atlas_image, img.x, img.y, img.w, img.h,
-                    parseInt(tank.x + scale * img.cx), parseInt(tank.y + scale * (img.cy + this.yOffset)),
-                    scale * img.w, scale * img.h);
+            throw ('Missing sprite ' + name);
         }
+        return img;
+    };
+
+    this.computePosRect = function(unit, img) {
+        return { x: parseInt(unit.x + this.scale * img.cx),
+            y: parseInt(unit.y + this.scale * (img.cy + this.yOffset)),
+            w: this.scale * img.w,
+            h: this.scale * img.h
+        };
+    };
+
+    this.draw = function(dctx, unit) {
+        var img = this.getSpriteImage(unit);
+        //console.info(img);
+        var pos = this.computePosRect(unit, img);
+        dctx.ctx.drawImage(this.atlas_image, img.x, img.y, img.w, img.h,
+            pos.x, pos.y, pos.w, pos.h);
         
-        if (typeof tank.path != 'undefined') {
+        if (typeof unit.path != 'undefined') {
             //console.info("xxxxxxxxxxxxxxxx " + dctx.grid);
-            for(var i = 0, count = tank.path.length; i < count; i++) {
-                var node = tank.path[i];
+            for(var i = 0, count = unit.path.length; i < count; i++) {
+                var node = unit.path[i];
                 //console.info(node.x, node.y);
                 var pixelCoords = dctx.grid.locatePixelCoords(node.x, node.y);
                 var context = dctx.ctx;
@@ -42,7 +72,6 @@ TankAsset.prototype = new BaseAsset();
 var tank_asset = new TankAsset();
 
 var GenericUnit = function() {
-    
 };
 
 GenericUnit.prototype.moveTo = function(gridX, gridY, graph) {
@@ -51,6 +80,11 @@ GenericUnit.prototype.moveTo = function(gridX, gridY, graph) {
     var path = astar.search(graph.nodes, start, end, true);
     this.path = path;
     delete this.movegrid;
+};
+
+GenericUnit.prototype.onMouseDown = function(e, pixelCoords, dctx) {
+    //console.info(pixelCoords);
+    return this.asset.onMouseDown(e, pixelCoords, this, dctx);
 };
 
 var ZERO = 0.0;

@@ -113,8 +113,8 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
 };
 
 var Game = function() {
-    var selected_assets = [];
     var allAssets = [];
+    var selectedAssets = [];
     var canvas = null;
     var context = null;
     var grid = null;
@@ -154,18 +154,19 @@ var Game = function() {
     };
     
     var onMouseDown = function(e) {
-//        var coords = {x: e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - canvas.offsetLeft, 
-//          y: e.clientY + document.body.scrollTop + document.documentElement.scrollTop - canvas.offsetTop}; 
         var coords = getMousePos(e);
-        
-        var gridCoords = grid.locateGridCoords(coords.x, coords.y);
-        for (key in selected_assets) { // todo prekreslit vsechny
-            var unit = selected_assets[key];
-            unit.moveTo(gridCoords.x, gridCoords.y, grid.graph);
-            
-//            var angle = angleUnit.compute_angle(coords.x - unit.x, unit.y - coords.y);
-//            unit.rotation = angle;
-        } 
+
+        // handle clicks on units
+        var unitClicked = false;
+        for (var i = 0, count = allAssets.length; i < count; i++) {
+            var unit = allAssets[i];
+            unitClicked = unitClicked || unit.onMouseDown(e, coords, dctx);
+        }
+        //        var gridCoords = grid.locateGridCoords(coords.x, coords.y);
+//        for (var i = 0, count = allAssets.length; i < count; i++) {
+//            var unit = allAssets[i];
+//            unit.moveTo(gridCoords.x, gridCoords.y, grid.graph);
+//        } 
     };
     
     var spawnUnits = function() {
@@ -175,7 +176,6 @@ var Game = function() {
 //            console.error("X coordinate is not a float");
 //        }
         
-        selected_assets.push(myTank); // todo vyhodit
         allAssets.push(myTank);
     };
     
@@ -188,8 +188,21 @@ var Game = function() {
         var height = grid.computeGridHeight() + 1;
         canvas.height = height;
         document.getElementById("canvasStatic").height = height;
-        document.getElementById("container").style.height = height + "px";        
-        dctx = {ctx: context, canvas: canvas, grid: grid, angle: angleUnit};
+        document.getElementById("container").style.height = height + "px";
+        var imageAlphaTester = new (function() {
+            var staticCanvas = document.getElementById("canvasTest");
+            var context = staticCanvas.getContext("2d");
+            
+            this.test = function(img, pixelCoords, posRect) {
+                staticCanvas.width = staticCanvas.width;
+                context.drawImage(BaseAsset.prototype.atlas_image, img.x, img.y, img.w, img.h,
+                        0, 0, posRect.w, posRect.h);
+                return false;
+            };
+        })();
+
+        dctx = {ctx: context, canvas: canvas, grid: grid, angle: angleUnit,
+                imageAlphaTester: imageAlphaTester};
         spawnUnits();
         initializeStaticCanvas();
         this.drawScene();
@@ -200,8 +213,8 @@ var Game = function() {
     };
     
     var drawUnits = function() {
-        for (key in selected_assets) { // todo prekreslit vsechny
-            var asset = selected_assets[key];
+        for(var i = 0, count = allAssets.length; i < count; i++) {
+            var asset = allAssets[i];
             asset.draw(dctx);
         } 
     };
