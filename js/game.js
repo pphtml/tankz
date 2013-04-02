@@ -223,20 +223,25 @@ var Game = function() {
             var context = staticCanvas.getContext("2d");
             
             this.test = function(img, pixelCoords, posRect) {
-                staticCanvas.width = staticCanvas.width;
-                context.drawImage(BaseAsset.prototype.atlas_image, img.x, img.y, img.w, img.h,
-                        0, 0, posRect.w, posRect.h);
-                var x = pixelCoords.x - posRect.x;
-                var y = pixelCoords.y - posRect.y;
-                //var x = 58;
-                //var y = 30;
-                //console.info(x, y);
-                //var data = staticCanvas.toDataURL();
-                var canvasColor = context.getImageData(x, y, 1,1); // rgba e [0,255]
-                var pixels = canvasColor.data;
-                var inside = pixels[3] > 128;
-                //console.info(inside);
-                return inside;
+                var imgSrc = BaseAsset.prototype.atlas_image;
+                if (imgSrc.src.length > 4 && imgSrc.src.substring(0, 4) === "file") {
+                    return true; // TODO prepsat funkcionalne
+                } else {
+                    staticCanvas.width = staticCanvas.width;
+                    context.drawImage(BaseAsset.prototype.atlas_image, img.x, img.y, img.w, img.h,
+                            0, 0, posRect.w, posRect.h);
+                    var x = pixelCoords.x - posRect.x;
+                    var y = pixelCoords.y - posRect.y;
+                    //var x = 58;
+                    //var y = 30;
+                    //console.info(x, y);
+                    //var data = staticCanvas.toDataURL();
+                    var canvasColor = context.getImageData(x, y, 1,1); // rgba e [0,255]
+                    var pixels = canvasColor.data;
+                    var inside = pixels[3] > 128;
+                    //console.info(inside);
+                    return inside;
+                }
             };
         })();
 
