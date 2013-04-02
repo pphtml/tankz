@@ -1,12 +1,14 @@
 vlastni grafika z blenderu
-vylepsit diagonalni heuristiku
+automaticky deselect
+fallback pro CORS
+zrusit scaling
+zmensit testovaci canvas na 1x1
 presunout pohyb z tanku do generic unit
 ovladani WASD
-pathfinder obchazeni prekazek - kolem rohu
 strelba
 loader obrazku - zizala
 vyber jednotky
-antialias u firefoxu?
+kontrola vykreslovani na int,int souradnice
 vez
 
 this._context = new webkitAudioContext();

@@ -1,3 +1,45 @@
+//Object.prototype.equals = function(x) {
+//    var p;
+//    for (p in this) {
+//        if (typeof (x[p]) == 'undefined') {
+//            return false;
+//        }
+//    }
+//
+//    for (p in this) {
+//        if (this[p]) {
+//            switch (typeof (this[p])) {
+//            case 'object':
+//                if (!this[p].equals(x[p])) {
+//                    return false;
+//                }
+//                break;
+//            case 'function':
+//                if (typeof (x[p]) == 'undefined'
+//                        || (p != 'equals' && this[p].toString() != x[p]
+//                                .toString()))
+//                    return false;
+//                break;
+//            default:
+//                if (this[p] != x[p]) {
+//                    return false;
+//                }
+//            }
+//        } else {
+//            if (x[p])
+//                return false;
+//        }
+//    }
+//
+//    for (p in x) {
+//        if (typeof (this[p]) == 'undefined') {
+//            return false;
+//        }
+//    }
+//
+//    return true;
+//};
+
 var BaseAsset = function() {
             
 };
@@ -5,11 +47,11 @@ var BaseAsset = function() {
 //BaseAsset.prototype.atlas_image = spritesImage;
 
 BaseAsset.prototype.onMouseDown = function(e, pixelCoords, unit, dctx) {
-    console.info(pixelCoords);
+    //console.info(pixelCoords);
     var img = this.getSpriteImage(unit);
     //console.info(img);
     var pos = this.computePosRect(unit, img);
-    console.info(pos);
+    //console.info(pos);
     var inside = pixelCoords.x >= pos.x && pixelCoords.x <= pos.x + pos.w &&
         pixelCoords.y >= pos.y && pixelCoords.y <= pos.y + pos.h;
 //    console.info(inside);
@@ -17,8 +59,43 @@ BaseAsset.prototype.onMouseDown = function(e, pixelCoords, unit, dctx) {
         var posRect = this.computePosRect(unit, img);
         inside = dctx.imageAlphaTester.test(img, pixelCoords, posRect);
     }
-    // todo kontrolovat kliknuti na !alpha
     return inside;
+};
+
+BaseAsset.prototype.drawLifeBar = function() {
+    var x = this.drawingX;
+    var y = this.drawingY - 2*game.lifeBarHeight;
+    game.foregroundContext.fillStyle = (this.lifeCode == "healthy")?game.healthBarHealthyFillColor:game.healthBarDamagedFillColor;          
+    game.foregroundContext.fillRect(x,y,this.pixelWidth*this.life/this.hitPoints,game.lifeBarHeight)
+    game.foregroundContext.strokeStyle = game.healthBarBorderColor;
+    game.foregroundContext.lineWidth = 1;
+    game.foregroundContext.strokeRect(x,y,this.pixelWidth,game.lifeBarHeight)
+};
+
+BaseAsset.prototype.drawSelection = function(dctx, rect){
+//    var x = this.drawingX + this.pixelOffsetX;
+//    var y = this.drawingY + this.pixelOffsetY;
+//    game.foregroundContext.strokeStyle = game.selectionBorderColor;
+//    game.foregroundContext.lineWidth = 1;
+//    game.foregroundContext.beginPath();
+//    game.foregroundContext.arc(x,y,this.radius,0,Math.PI*2,false);
+//    game.foregroundContext.fillStyle = game.selectionFillColor;
+//    game.foregroundContext.fill();
+//    game.foregroundContext.stroke();
+    var context = dctx.ctx;
+    context.beginPath();
+//    var x = 0.5 + parseInt(rect.x);
+//    var y = 0.5 + parseInt(rect.y);
+    var x = parseInt(rect.x);
+    var y = parseInt(rect.y);
+    var w = parseInt(rect.w);
+    var h = parseInt(rect.h);
+    context.rect(x, y, w, h);
+    context.fillStyle = "rgba(0, 255, 0, 0.1)";
+    context.fill();
+    context.lineWidth = 2;
+    context.strokeStyle = 'green';
+    context.stroke();
 };
 
 var TankAsset = function() {
@@ -49,6 +126,11 @@ var TankAsset = function() {
         var pos = this.computePosRect(unit, img);
         dctx.ctx.drawImage(this.atlas_image, img.x, img.y, img.w, img.h,
             pos.x, pos.y, pos.w, pos.h);
+        
+        if (dctx.selected) {
+            //console.info("kreslim selected");
+            this.drawSelection(dctx, pos);
+        }
         
         if (typeof unit.path != 'undefined') {
             //console.info("xxxxxxxxxxxxxxxx " + dctx.grid);

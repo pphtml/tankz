@@ -16,6 +16,7 @@ var angleUnit = new (function() {
 })();
 
 var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
+    var spawnUnitId = 1;
     this.width = width;
     this.height = height;
     this.pixelsPerTileX = pixelsPerTileX;
@@ -108,19 +109,21 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
         unit.y = pixelCoords.y;
         unit.gridX = gridX;
         unit.gridY = gridY;
+        unit.id = spawnUnitId++;
         return unit;
     };
 };
 
 var Game = function() {
     var allAssets = [];
-    var selectedAssets = [];
+    var selectedAssets = {};
     var canvas = null;
     var context = null;
     var grid = null;
     var pixelsPerTileX = 20;
     var pixelsPerTileY = 18;
     var dctx = null;
+    var dirty = false;
     
     var initializeStaticCanvas = function() {
         staticCanvas = document.getElementById("canvasStatic");
@@ -139,10 +142,11 @@ var Game = function() {
       })();
 
     this.animate = function() {
-        if (this.tick()) {
+        if (this.tick() || dirty) {
             // redraw only when at least something moved
             this.drawScene();
         }
+        dirty = false;
         requestAnimFrame(function() {
             outer.animate();
         });
@@ -161,6 +165,30 @@ var Game = function() {
         for (var i = 0, count = allAssets.length; i < count; i++) {
             var unit = allAssets[i];
             unitClicked = unitClicked || unit.onMouseDown(e, coords, dctx);
+            //console.info(unitClicked);
+            if (unitClicked) {
+                // unit clicked
+                if (true) { // TODO kontrola na vlastni jednotku
+                    selectedAssets[unit.id] = unit;
+                    dirty = true;
+//                    if (!(unit in selectedAssets)) {
+//                        selectedAssets.push(unit);
+//                        dirty = true;
+//                    }
+                }
+            } else {
+                // free space clicked
+                var gridCoords = grid.locateGridCoords(coords.x, coords.y);
+                for (var id in selectedAssets) {
+                    //var id = selectedAssets[i];
+                    var unit = selectedAssets[id];
+                    unit.moveTo(gridCoords.x, gridCoords.y, grid.graph);
+                } 
+//                for (var zzz in selectedAssets) {
+//                    console.info("ffffffffff");
+//                    zzz.moveTo(gridCoords.x, gridCoords.y, grid.graph);
+//                } 
+            }
         }
         //        var gridCoords = grid.locateGridCoords(coords.x, coords.y);
 //        for (var i = 0, count = allAssets.length; i < count; i++) {
@@ -172,11 +200,12 @@ var Game = function() {
     var spawnUnits = function() {
         var myTank = grid.spawn(20, 2, new Tank());
         myTank.rotation = 45;
-//        if (myTank.x % 1 === 0) {
-//            console.error("X coordinate is not a float");
-//        }
-        
         allAssets.push(myTank);
+        
+        myTank = grid.spawn(30, 2, new Tank());
+        myTank.rotation = 45;
+        allAssets.push(myTank);
+
     };
     
     this.init = function() {
@@ -197,7 +226,17 @@ var Game = function() {
                 staticCanvas.width = staticCanvas.width;
                 context.drawImage(BaseAsset.prototype.atlas_image, img.x, img.y, img.w, img.h,
                         0, 0, posRect.w, posRect.h);
-                return false;
+                var x = pixelCoords.x - posRect.x;
+                var y = pixelCoords.y - posRect.y;
+                //var x = 58;
+                //var y = 30;
+                //console.info(x, y);
+                //var data = staticCanvas.toDataURL();
+                var canvasColor = context.getImageData(x, y, 1,1); // rgba e [0,255]
+                var pixels = canvasColor.data;
+                var inside = pixels[3] > 128;
+                //console.info(inside);
+                return inside;
             };
         })();
 
@@ -215,6 +254,8 @@ var Game = function() {
     var drawUnits = function() {
         for(var i = 0, count = allAssets.length; i < count; i++) {
             var asset = allAssets[i];
+            var selected = asset.id in selectedAssets;
+            dctx.selected = selected;
             asset.draw(dctx);
         } 
     };
