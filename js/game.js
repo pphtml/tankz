@@ -224,7 +224,8 @@ var Game = function() {
             
             this.test = function(img, pixelCoords, posRect) {
                 var imgSrc = BaseAsset.prototype.atlas_image;
-                if (imgSrc.src.length > 4 && imgSrc.src.substring(0, 4) === "file") {
+                if ((imgSrc.src.length > 4 && imgSrc.src.substring(0, 4) === "file") ||
+                        imgSrc.src.indexOf("/raw.github.com/") > -1) {
                     return true; // TODO prepsat funkcionalne
                 } else {
                     staticCanvas.width = staticCanvas.width;
