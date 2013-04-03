@@ -170,6 +170,7 @@ var Game = function() {
                 // unit clicked
                 if (true) { // TODO kontrola na vlastni jednotku
                     selectedAssets[unit.id] = unit;
+                    unit.selected = true;
                     dirty = true;
 //                    if (!(unit in selectedAssets)) {
 //                        selectedAssets.push(unit);
@@ -261,7 +262,7 @@ var Game = function() {
         for(var i = 0, count = allAssets.length; i < count; i++) {
             var asset = allAssets[i];
             var selected = asset.id in selectedAssets;
-            dctx.selected = selected;
+            asset.selected = selected;
             asset.draw(dctx);
         } 
     };
