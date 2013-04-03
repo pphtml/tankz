@@ -1,5 +1,6 @@
 vlastni grafika z blenderu
 automaticky deselect
+zamezeni presunu na obsazenou bunku
 fallback pro CORS
 zrusit scaling
 zmensit testovaci canvas na 1x1

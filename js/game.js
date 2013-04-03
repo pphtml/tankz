@@ -157,45 +157,59 @@ var Game = function() {
         return { x: evt.clientX - rect.left, y: evt.clientY - rect.top };
     };
     
+    var ButtonEnum = {
+        LEFT: 0,
+        MIDDLE: 1,
+        RIGHT: 2
+    };
+    
     var onMouseDown = function(e) {
         var coords = getMousePos(e);
 
+        if (e.button === ButtonEnum.LEFT && !e.ctrlKey) {
+            selectedAssets = {};
+            dirty = true;
+        }
+        
         // handle clicks on units
-        var unitClicked = false;
+        var clickedUnit = null;
         for (var i = 0, count = allAssets.length; i < count; i++) {
             var unit = allAssets[i];
-            unitClicked = unitClicked || unit.onMouseDown(e, coords, dctx);
-            //console.info(unitClicked);
-            if (unitClicked) {
-                // unit clicked
+            var clicked = unit.onMouseDown(e, coords, dctx);
+            if (clicked) {
+                clickedUnit = unit;
+            }
+        }
+        
+        if (clickedUnit != null) {
+            // unit clicked
+            switch (e.button) {
+            case ButtonEnum.LEFT:
                 if (true) { // TODO kontrola na vlastni jednotku
-                    selectedAssets[unit.id] = unit;
-                    unit.selected = true;
+                    //unit.selected = true;
+                    selectedAssets[clickedUnit.id] = clickedUnit;
                     dirty = true;
-//                    if (!(unit in selectedAssets)) {
-//                        selectedAssets.push(unit);
-//                        dirty = true;
-//                    }
                 }
-            } else {
-                // free space clicked
+                break;
+            case ButtonEnum.RIGHT:
+                // TODO utok
+                break;
+            }
+
+        } else {
+            // free space clicked
+            switch (e.button) {
+            case ButtonEnum.LEFT:
+                break;
+            case ButtonEnum.RIGHT:
                 var gridCoords = grid.locateGridCoords(coords.x, coords.y);
                 for (var id in selectedAssets) {
-                    //var id = selectedAssets[i];
                     var unit = selectedAssets[id];
                     unit.moveTo(gridCoords.x, gridCoords.y, grid.graph);
                 } 
-//                for (var zzz in selectedAssets) {
-//                    console.info("ffffffffff");
-//                    zzz.moveTo(gridCoords.x, gridCoords.y, grid.graph);
-//                } 
+                break;
             }
         }
-        //        var gridCoords = grid.locateGridCoords(coords.x, coords.y);
-//        for (var i = 0, count = allAssets.length; i < count; i++) {
-//            var unit = allAssets[i];
-//            unit.moveTo(gridCoords.x, gridCoords.y, grid.graph);
-//        } 
     };
     
     var spawnUnits = function() {
@@ -283,7 +297,7 @@ var Game = function() {
         var moved = false;
         
         for(var i = 0, count = allAssets.length; i < count; i++) {
-            moved = moved || allAssets[i].tick(timeDelta, dctx);
+            moved = moved | allAssets[i].tick(timeDelta, dctx);
         }
         
         return moved;
