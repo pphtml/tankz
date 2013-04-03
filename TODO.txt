@@ -1,14 +1,13 @@
+vykreslit life bar
 vlastni grafika z blenderu
-automaticky deselect
 zamezeni presunu na obsazenou bunku
-fallback pro CORS
+vyber vice jednotek
 zrusit scaling
 zmensit testovaci canvas na 1x1
 presunout pohyb z tanku do generic unit
 ovladani WASD
 strelba
 loader obrazku - zizala
-vyber jednotky
 kontrola vykreslovani na int,int souradnice
 vez
 
