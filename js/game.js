@@ -55,35 +55,39 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
         return this.height * this.pixelsPerTileY;
     };
 
-    this.draw = function(context, canvas) {
+    this.draw = function(ctx, canvas) {
+//        ctx.translate(0, canvas.height / 2);
+//        ctx.scale(1, 0.5);
+//        ctx.rotate(-Math.PI / 4);
+//        
         var height = canvas.height;
         var width = canvas.width;
 
         for ( var x = 0; x <= this.width; x++) {
             var cx = 0.5 + x * this.pixelsPerTileX;
-            context.moveTo(cx, 0);
-            context.lineTo(cx, height);
-            context.stroke();
+            ctx.moveTo(cx, 0);
+            ctx.lineTo(cx, height);
+            ctx.stroke();
         }
 
         for ( var y = 0; y <= this.height; y++) {
             var cy = 0.5 + y * this.pixelsPerTileY;
-            context.moveTo(0, cy);
-            context.lineTo(width, cy);
-            context.stroke();
+            ctx.moveTo(0, cy);
+            ctx.lineTo(width, cy);
+            ctx.stroke();
         }
         
         for (var y = 0; y < this.height; y++) {
             for (var x = 0; x < this.width; x++) {
                 var node = this.graph.nodes[x][y];
                 if (node.type == 0) {
-                    context.beginPath();
+                    ctx.beginPath();
                     var xPos = x * pixelsPerTileX;
                     var yPos = y * pixelsPerTileY;
-                    context.rect(xPos, yPos, pixelsPerTileX, pixelsPerTileY);
-                    context.fillStyle = 'black';
-                    context.fill();
-                    context.stroke();
+                    ctx.rect(xPos, yPos, pixelsPerTileX, pixelsPerTileY);
+                    ctx.fillStyle = 'black';
+                    ctx.fill();
+                    ctx.stroke();
                 }
             }
         }
@@ -114,6 +118,12 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
     };
 };
 
+var applyIsofication = function(ctx, canvas) {
+    ctx.translate(0, canvas.height / 2);
+    ctx.scale(1, 0.5);
+    ctx.rotate(-Math.PI / 4);
+};
+
 var Game = function() {
     var allAssets = [];
     var selectedAssets = {};
@@ -121,13 +131,14 @@ var Game = function() {
     var context = null;
     var grid = null;
     var pixelsPerTileX = 20;
-    var pixelsPerTileY = 18;
+    var pixelsPerTileY = 20;
     var dctx = null;
     var dirty = false;
     
     var initializeStaticCanvas = function() {
         staticCanvas = document.getElementById("canvasStatic");
         var context = staticCanvas.getContext("2d");
+        applyIsofication(context, staticCanvas);
         grid.draw(context, staticCanvas);
     };
 
@@ -282,9 +293,14 @@ var Game = function() {
     };
     
     this.drawScene = function() {
+//        applyIsofication(context, canvas);
+        context.save();
+        applyIsofication(context, canvas);
+
         //var start = (new Date()).getTime();
         context.clearRect(0, 0, canvas.width, canvas.height);
         drawUnits();
+        context.restore();
         //var end = (new Date()).getTime();
         //console.info('drawScene took ' + (end - start));
     };    

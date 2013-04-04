@@ -1,10 +1,12 @@
 vykreslit life bar
+isometricke vykreslovani
+preklad kliku z iso zpet
 vlastni grafika z blenderu
+odladeni 3d jednotek v isu
 zamezeni presunu na obsazenou bunku
 vyber vice jednotek
 zrusit scaling
 zmensit testovaci canvas na 1x1
-presunout pohyb z tanku do generic unit
 ovladani WASD
 strelba
 loader obrazku - zizala
