@@ -124,6 +124,18 @@ var applyIsofication = function(ctx, canvas) {
     ctx.rotate(-Math.PI / 4);
 };
 
+var isoUnit = new (function() {
+    this.toIso = function(x, y) {
+//        var tilePositionX = (row - col) * tile.height;
+//        tilePositionX += (canvas.width / 2) - (tile.width / 2);
+//        var tilePositionY = (row + col) * (tile.height / 2);
+//        c.drawImage(tile, Math.round(tilePositionX), Math.round(tilePositionY), tile.width, tile.height);
+        var isoX = y - x;
+        var isoY = (y + x) / 2;
+        return {x: isoX, y: isoY};
+    };
+})();
+
 var Game = function() {
     var allAssets = [];
     var selectedAssets = {};
@@ -273,7 +285,7 @@ var Game = function() {
         })();
 
         dctx = {ctx: context, canvas: canvas, grid: grid, angle: angleUnit,
-                imageAlphaTester: imageAlphaTester};
+                imageAlphaTester: imageAlphaTester, iso: isoUnit};
         spawnUnits();
         initializeStaticCanvas();
         this.drawScene();
