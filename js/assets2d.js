@@ -8,23 +8,40 @@ BaseAsset.prototype.onMouseDown = function(e, pixelCoords, unit, dctx) {
     //console.info(pixelCoords);
     var img = this.getSpriteImage(unit);
     //console.info(img);
-    var pos = this.computePosRect(unit, img);
+    var pos = this.computePosRectDraw(unit, img);
     //console.info(pos);
     var inside = pixelCoords.x >= pos.x && pixelCoords.x <= pos.x + pos.w &&
         pixelCoords.y >= pos.y && pixelCoords.y <= pos.y + pos.h;
 //    console.info(inside);
-    if (inside) {
-        var posRect = this.computePosRect(unit, img);
-        inside = dctx.imageAlphaTester.test(img, pixelCoords, posRect);
-    }
+//    if (inside) {
+//        var posRect = this.computePosRect(unit, img);
+//        inside = dctx.imageAlphaTester.test(img, pixelCoords, posRect);
+//    }
     return inside;
 };
 
+//BaseAsset.prototype.computePosRect = function(unit, img) {
+//    return { x: parseInt(unit.x + this.scale * img.cx),
+//        y: parseInt(unit.y + this.scale * (img.cy + this.yOffset)),
+//        w: this.scale * img.w,
+//        h: this.scale * img.h
+//    };
+//};
+
 BaseAsset.prototype.computePosRect = function(unit, img) {
-    return { x: parseInt(unit.x + this.scale * img.cx),
-        y: parseInt(unit.y + this.scale * (img.cy + this.yOffset)),
-        w: this.scale * img.w,
-        h: this.scale * img.h
+    return { x: unit.x,
+        y: unit.y,
+        w: this.scaleW * img.w,
+        h: this.scaleH * img.h
+    };
+};
+
+BaseAsset.prototype.computePosRectDraw = function(unit, img) {
+    var pos = this.computePosRect(unit, img);
+    return { x: pos.x - pos.w/2,
+        y: pos.y - pos.h/2,
+        w: pos.w,
+        h: pos.h
     };
 };
 
@@ -32,11 +49,13 @@ BaseAsset.prototype.draw = function(dctx, unit) {
     var img = this.getSpriteImage(unit);
     //console.info(img);
     var pos = this.computePosRect(unit, img);
-    dctx.ctx.drawImage(this.atlas_image, img.x, img.y, img.w, img.h,
-        pos.x, pos.y, pos.w, pos.h);
+    dctx.ctx.drawImageEx(this.atlas_image, img.x, img.y, img.w, img.h,
+          pos.x, pos.y, pos.w, pos.h);
+//    dctx.ctx.drawImage(this.atlas_image, img.x, img.y, img.w, img.h,
+//        pos.x, pos.y, pos.w, pos.h);
     
     if (unit.selected) {
-        this.drawSelection(dctx, pos);
+        this.drawSelection(dctx, this.computePosRectDraw(unit, img));
     }
     
     if (typeof unit.path != 'undefined') {
@@ -93,8 +112,9 @@ BaseAsset.prototype.drawSelection = function(dctx, rect){
 };
 
 var TankAsset = function() {
-    this.yOffset = -6;
-    this.scale = 0.6;
+    //this.yOffset = -6;
+    this.scaleW = 0.6;
+    this.scaleH = 0.45;
     
     this.getSpriteImage = function(unit) {
         return this.getIndexedImage('tank', unit.spriteIndex());
@@ -240,10 +260,10 @@ GenericUnit.prototype.directions = {
 
 var Tank = function() {
     this.asset = tank_asset;
-    this.gridSpeed = 10.0; // grid/s
+    this.gridSpeed = 5.0; // grid/s
     
     this.spriteIndex = function() {
-        var result = Math.floor((this.rotation + 5.625) / 11.25);
+        var result = Math.floor((45.0 + this.rotation + 5.625) / 11.25);
         result = result % 32;
         return result;
     };    

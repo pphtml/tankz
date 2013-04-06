@@ -1,17 +1,20 @@
 var angleUnit = new (function() {
     this.compute = function (dx, dy) {
+        var angle = null;
         if (dx == 0) {
-            return dy >= 0 ? 90.0 : 270.0;
+            angle = dy >= 0 ? 90.0 : 270.0;
+        } else {
+            var tanx = parseFloat(dy) / dx;
+            var atanx = Math.atan(tanx); 
+            var angle = atanx * 180.0 / Math.PI;
+            if (dx < 0.0) {
+                angle = 180.0 + angle;
+            } else if (dy < 0) {
+                angle = 360.0 + angle;
+            }
         }
-        var tanx = parseFloat(dy) / dx;
-        var atanx = Math.atan(tanx); 
-        var anglex = atanx * 180.0 / Math.PI;
-        if (dx < 0.0) {
-            anglex = 180.0 + anglex;
-        } else if (dy < 0) {
-            anglex = 360.0 + anglex;
-        }
-        return anglex;
+        //angle += 45; // because of isometric projection
+        return angle % 360;
     };
 })();
 
@@ -55,13 +58,13 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
         return this.height * this.pixelsPerTileY;
     };
 
-    this.draw = function(ctx, canvas) {
+    this.draw = function(ctx, sceneContext) {
 //        ctx.translate(0, canvas.height / 2);
 //        ctx.scale(1, 0.5);
 //        ctx.rotate(-Math.PI / 4);
 //        
-        var height = canvas.height;
-        var width = canvas.width;
+        var height = sceneContext.height;
+        var width = sceneContext.width;
 
         for ( var x = 0; x <= this.width; x++) {
             var cx = 0.5 + x * this.pixelsPerTileX;
@@ -118,23 +121,60 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
     };
 };
 
-var applyIsofication = function(ctx, canvas) {
-    ctx.translate(0, canvas.height / 2);
-    ctx.scale(1, 0.5);
-    ctx.rotate(-Math.PI / 4);
+//var applyIsofication = function(ctx, canvas) {
+//    ctx.translate(0, canvas.height / 2);
+//    ctx.scale(1, 0.5);
+//    ctx.rotate(-Math.PI / 4);
+//};
+
+var dispCtx = {
+    tx: 0,
+    ty: 360
 };
 
 var isoUnit = new (function() {
     this.toIso = function(x, y) {
-//        var tilePositionX = (row - col) * tile.height;
-//        tilePositionX += (canvas.width / 2) - (tile.width / 2);
-//        var tilePositionY = (row + col) * (tile.height / 2);
-//        c.drawImage(tile, Math.round(tilePositionX), Math.round(tilePositionY), tile.width, tile.height);
-        var isoX = y - x;
-        var isoY = (y + x) / 2;
+        var isoX = dispCtx.tx + x + y;
+        var isoY = dispCtx.ty + (y - x) / 2;
         return {x: isoX, y: isoY};
     };
+    
+    this.fromIso = function (isoX, isoY) {
+        var x = (isoX - dispCtx.tx) / 2 + dispCtx.ty - isoY;
+        var y = isoX - dispCtx.tx - x;
+        return {x: x, y: y};
+    };
 })();
+
+var IsofiedContext = function(context) {
+    this.context = context;
+    this.moveTo = function(x, y) {var pos = isoUnit.toIso(x, y); this.context.moveTo(pos.x, pos.y);};
+    this.lineTo = function(x, y) {var pos = isoUnit.toIso(x, y); this.context.lineTo(pos.x, pos.y);};
+    this.stroke = function() {this.context.stroke();};
+    this.beginPath = function() {this.context.beginPath();};
+    this.rect = function(x, y, w, h) {
+        var vert0 = isoUnit.toIso(x, y);
+        var vert1 = isoUnit.toIso(x + w, y);
+        var vert2 = isoUnit.toIso(x + w, y + h);
+        var vert3 = isoUnit.toIso(x, y + h);
+        this.context.moveTo(vert0.x, vert0.y);
+        this.context.lineTo(vert1.x, vert1.y);
+        this.context.lineTo(vert2.x, vert2.y);
+        this.context.lineTo(vert3.x, vert3.y);
+        this.context.closePath();
+    };
+    this.__defineGetter__("fillStyle", function() { return this.context.fillStyle; });
+    this.__defineSetter__("fillStyle", function(style) { this.context.fillStyle = style; });
+    this.fill = function() {this.context.fill();};
+    this.drawImageEx = function(img, imgX, imgY, imgW, imgH, x, y, w, h) {
+        var pos = isoUnit.toIso(x, y); 
+        this.context.drawImage(img, imgX, imgY, imgW, imgH, pos.x - w/2, pos.y - h/2, w, h);
+    };
+    this.arc = function(x, y, r, sa, ea, ccw) {
+        var pos = isoUnit.toIso(x, y); 
+        this.context.arc(pos.x, pos.y, r, sa, ea, ccw);
+    };
+};
 
 var Game = function() {
     var allAssets = [];
@@ -150,8 +190,10 @@ var Game = function() {
     var initializeStaticCanvas = function() {
         staticCanvas = document.getElementById("canvasStatic");
         var context = staticCanvas.getContext("2d");
-        applyIsofication(context, staticCanvas);
-        grid.draw(context, staticCanvas);
+        //applyIsofication(context, staticCanvas);
+        var sceneContext = {width: staticCanvas.width, height: staticCanvas.height};
+        var isoContext = new IsofiedContext(context);
+        grid.draw(isoContext, sceneContext);
     };
 
     var outer = this;
@@ -188,6 +230,7 @@ var Game = function() {
     
     var onMouseDown = function(e) {
         var coords = getMousePos(e);
+        coords = isoUnit.fromIso(coords.x, coords.y);
 
         if (e.button === ButtonEnum.LEFT && !e.ctrlKey) {
             selectedAssets = {};
@@ -256,36 +299,36 @@ var Game = function() {
         canvas.height = height;
         document.getElementById("canvasStatic").height = height;
         document.getElementById("container").style.height = height + "px";
-        var imageAlphaTester = new (function() {
-            var staticCanvas = document.getElementById("canvasTest");
-            var context = staticCanvas.getContext("2d");
-            
-            this.test = function(img, pixelCoords, posRect) {
-                var imgSrc = BaseAsset.prototype.atlas_image;
-                if ((imgSrc.src.length > 4 && imgSrc.src.substring(0, 4) === "file") ||
-                        imgSrc.src.indexOf("/raw.github.com/") > -1) {
-                    return true; // TODO prepsat funkcionalne
-                } else {
-                    staticCanvas.width = staticCanvas.width;
-                    context.drawImage(BaseAsset.prototype.atlas_image, img.x, img.y, img.w, img.h,
-                            0, 0, posRect.w, posRect.h);
-                    var x = pixelCoords.x - posRect.x;
-                    var y = pixelCoords.y - posRect.y;
-                    //var x = 58;
-                    //var y = 30;
-                    //console.info(x, y);
-                    //var data = staticCanvas.toDataURL();
-                    var canvasColor = context.getImageData(x, y, 1,1); // rgba e [0,255]
-                    var pixels = canvasColor.data;
-                    var inside = pixels[3] > 128;
-                    //console.info(inside);
-                    return inside;
-                }
-            };
-        })();
+//        var imageAlphaTester = new (function() {
+//            var staticCanvas = document.getElementById("canvasTest");
+//            var context = staticCanvas.getContext("2d");
+//            
+//            this.test = function(img, pixelCoords, posRect) {
+//                var imgSrc = BaseAsset.prototype.atlas_image;
+//                if ((imgSrc.src.length > 4 && imgSrc.src.substring(0, 4) === "file") ||
+//                        imgSrc.src.indexOf("/raw.github.com/") > -1) {
+//                    return true; // TODO prepsat funkcionalne
+//                } else {
+//                    staticCanvas.width = staticCanvas.width;
+//                    context.drawImage(BaseAsset.prototype.atlas_image, img.x, img.y, img.w, img.h,
+//                            0, 0, posRect.w, posRect.h);
+//                    var x = pixelCoords.x - posRect.x;
+//                    var y = pixelCoords.y - posRect.y;
+//                    //var x = 58;
+//                    //var y = 30;
+//                    //console.info(x, y);
+//                    //var data = staticCanvas.toDataURL();
+//                    var canvasColor = context.getImageData(x, y, 1,1); // rgba e [0,255]
+//                    var pixels = canvasColor.data;
+//                    var inside = pixels[3] > 128;
+//                    //console.info(inside);
+//                    return inside;
+//                }
+//            };
+//        })();
 
-        dctx = {ctx: context, canvas: canvas, grid: grid, angle: angleUnit,
-                imageAlphaTester: imageAlphaTester, iso: isoUnit};
+        dctx = {ctx: new IsofiedContext(context), grid: grid, angle: angleUnit,
+                /*imageAlphaTester: imageAlphaTester,*/ iso: isoUnit};
         spawnUnits();
         initializeStaticCanvas();
         this.drawScene();
@@ -307,7 +350,7 @@ var Game = function() {
     this.drawScene = function() {
 //        applyIsofication(context, canvas);
         context.save();
-        applyIsofication(context, canvas);
+//        applyIsofication(context, canvas);
 
         //var start = (new Date()).getTime();
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -358,8 +401,4 @@ function browserInit() {
         BaseAsset.prototype.atlas_image = spritesImage;
         game.init();
     }
-};
-
-window.onload = function() {
-    browserInit();
 };
