@@ -1,13 +1,12 @@
+zamezeni presunu na obsazenou bunku v prubehu
+prepocitani cesty v pripade obsazeny bunky
 obnovit yOffset
-text - instrukce
+zrusit GraphNodeType z graph.js
+text - instrukce do bubliny
 antialiasing
-fixnout raspberry
 vykreslit life bar
-isometricke vykreslovani
-preklad kliku z iso zpet
 vlastni grafika z blenderu
 odladeni 3d jednotek v isu
-zamezeni presunu na obsazenou bunku
 vyber vice jednotek
 ovladani WASD
 strelba

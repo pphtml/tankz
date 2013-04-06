@@ -145,6 +145,7 @@ GenericUnit.prototype.tick = function(timeDelta, dctx) { // todo premistit do ge
     while (timeDelta > 0.0) {
         if (typeof this.movegrid == 'undefined' && typeof this.path != 'undefined' && this.path.length > 0) {
             var node = this.path.splice(0, 1)[0];
+            dctx.grid.moveUnit(this.gridX, this.gridY, node.x, node.y);
             var pixelCoords = dctx.grid.locatePixelCoords(node.x, node.y);
             // todo pocitat jenom pri prechodu na novou bunku
             var angle = dctx.angle.compute(node.x - this.gridX, this.gridY - node.y);

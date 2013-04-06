@@ -41,6 +41,12 @@ Graph.prototype.toString = function() {
     return graphString;
 };
 
+var CellEnum = {
+        WALL: 0,
+        FREE: 1,
+        UNIT: 2
+    };
+
 function GraphNode(x,y,type) {
     this.data = { };
     this.x = x;
@@ -50,16 +56,22 @@ function GraphNode(x,y,type) {
         y: y
     };
     this.type = type;
+    this.free = function() {
+        return this.type == CellEnum.FREE;
+    };
 }
 
 GraphNode.prototype.toString = function() {
     return "[" + this.x + " " + this.y + "]";
 };
 
-GraphNode.prototype.isWall = function() {
-    return this.type == GraphNodeType.WALL;
-};
+//GraphNode.prototype.isWall = function() {
+//    return this.type == GraphNodeType.WALL;
+//};
 
+GraphNode.prototype.free = function() {
+    return this.type == CellEnum.FREE;
+};
 
 function BinaryHeap(scoreFunction){
     this.content = [];

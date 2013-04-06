@@ -37,18 +37,18 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
         for (var x = 0; x < width; x++) {
             var row = new Array();
             for (var y = 0; y < height; y++) {
-                row.push(1); // 1 pruchozi
+                row.push(CellEnum.FREE); // 1 pruchozi
             }
             cells.push(row);
         }
         
         for (var i = 16; i < 36; i++) {
-            cells[12][i] = 0;
-            cells[49-12][35-i] = 0;
+            cells[12][i] = CellEnum.WALL;
+            cells[49-12][35-i] = CellEnum.WALL;
         }
         for (var i = 4; i < 30; i++) {
-            cells[i][7] = 0;
-            cells[49-i][35-7] = 0;
+            cells[i][7] = CellEnum.WALL;
+            cells[49-i][35-7] = CellEnum.WALL;
         }
 
         return new Graph(cells);
@@ -56,6 +56,18 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
     
     this.computeGridHeight = function() {
         return this.height * this.pixelsPerTileY;
+    };
+    
+    this.moveUnit = function(oldX, oldY, newX, newY) {
+        // todo check if old grid was alredy free
+        // todo check if new grid is free
+        var moved = false;
+        if (this.graph.nodes[newX][newY].free()) {
+            this.graph.nodes[oldX][oldY].type = CellEnum.FREE;
+            this.graph.nodes[newX][newY].type = CellEnum.UNIT;
+            moved = true;
+        };
+        return moved;
     };
 
     this.draw = function(ctx, sceneContext) {
@@ -117,6 +129,8 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
         unit.gridX = gridX;
         unit.gridY = gridY;
         unit.id = spawnUnitId++;
+        
+        this.graph.nodes[gridX][gridY].type = CellEnum.UNIT;
         return unit;
     };
 };
