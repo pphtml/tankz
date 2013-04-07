@@ -1,5 +1,7 @@
-zamezeni presunu na obsazenou bunku v prubehu
+timeout pri presunu na obsazenou bunku v prubehu
 prepocitani cesty v pripade obsazeny bunky
+pro pohyb nekolika jednoted na jedno misto naplanovat okolni cile
+z-index vykreslovani pro vic jednotek
 obnovit yOffset
 zrusit GraphNodeType z graph.js
 text - instrukce do bubliny

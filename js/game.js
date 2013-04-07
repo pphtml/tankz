@@ -301,6 +301,14 @@ var Game = function() {
         myTank.rotation = 45;
         allAssets.push(myTank);
 
+        myTank = grid.spawn(20, 15, new Tank());
+        myTank.rotation = 0;
+        allAssets.push(myTank);
+
+        myTank = grid.spawn(30, 15, new Tank());
+        myTank.rotation = 225;
+        allAssets.push(myTank);
+
     };
     
     this.init = function() {

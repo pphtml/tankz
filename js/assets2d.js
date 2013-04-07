@@ -113,8 +113,9 @@ BaseAsset.prototype.drawSelection = function(dctx, rect){
 
 var TankAsset = function() {
     //this.yOffset = -6;
-    this.scaleW = 0.6;
-    this.scaleH = 0.45;
+    var sc = 0.7;
+    this.scaleW = sc * 0.6;
+    this.scaleH = sc * 0.45;
     
     this.getSpriteImage = function(unit) {
         return this.getIndexedImage('tank', unit.spriteIndex());
@@ -144,8 +145,7 @@ GenericUnit.prototype.tick = function(timeDelta, dctx) { // todo premistit do ge
     
     while (timeDelta > 0.0) {
         if (typeof this.movegrid == 'undefined' && typeof this.path != 'undefined' && this.path.length > 0) {
-            var node = this.path.splice(0, 1)[0];
-            dctx.grid.moveUnit(this.gridX, this.gridY, node.x, node.y);
+            var node = this.path[0];
             var pixelCoords = dctx.grid.locatePixelCoords(node.x, node.y);
             // todo pocitat jenom pri prechodu na novou bunku
             var angle = dctx.angle.compute(node.x - this.gridX, this.gridY - node.y);
@@ -153,32 +153,29 @@ GenericUnit.prototype.tick = function(timeDelta, dctx) { // todo premistit do ge
             //console.info("changing rotation to " + angle);
             this.rotation = angle;
 
-            // todo kontrolovat obsazenost bunky
-//            this.x = pixelCoords.x;
-//            this.y = pixelCoords.y;
-//            this.gridX = node.x;
-//            this.gridY = node.y;
-            this.movegrid = {
-                addingX: pixelCoords.x > this.x ? 1 : pixelCoords.x < this.x ? -1 : 0,
-                addingY: pixelCoords.y > this.y ? 1 : pixelCoords.y < this.y ? -1 : 0,
-//                dx: deltas.x,
-//                dy: deltas.y,
-//                reached: function(x, y) { return (this.addingX > 0 && x >= this.targetX) ||
-//                    (this.addingX < 0 && x <= this.targetX) ||
-//                    (this.addingY > 0 && y >= this.targetY) ||
-//                    (this.addingY < 0 && y <= this.targetY); },
-                deltaResiduum: function(x, y, dx, dy, delta) {
-                    var result = 0.0;
-                    if ((this.addingX > 0 && x >= this.targetX) || (this.addingX < 0 && x <= this.targetX)) {
-                        result = (x - this.targetX) / dx * delta;
-                    } else if ((this.addingY > 0 && y >= this.targetY) || (this.addingY < 0 && y <= this.targetY)) {
-                        result = (y - this.targetY) / dy * delta;
-                    }
-                    return result;
-                },
-                targetX: pixelCoords.x,
-                targetY: pixelCoords.y
-            };
+            // kontrola obsazenosti bunky
+            if (!node.free()) {
+                //console.info(node);
+                //console.info("not free");
+            } else {
+                node = this.path.splice(0, 1)[0];
+                dctx.grid.moveUnit(this.gridX, this.gridY, node.x, node.y);
+                this.movegrid = {
+                    addingX: pixelCoords.x > this.x ? 1 : pixelCoords.x < this.x ? -1 : 0,
+                    addingY: pixelCoords.y > this.y ? 1 : pixelCoords.y < this.y ? -1 : 0,
+                    deltaResiduum: function(x, y, dx, dy, delta) {
+                        var result = 0.0;
+                        if ((this.addingX > 0 && x >= this.targetX) || (this.addingX < 0 && x <= this.targetX)) {
+                            result = (x - this.targetX) / dx * delta;
+                        } else if ((this.addingY > 0 && y >= this.targetY) || (this.addingY < 0 && y <= this.targetY)) {
+                            result = (y - this.targetY) / dy * delta;
+                        }
+                        return result;
+                    },
+                    targetX: pixelCoords.x,
+                    targetY: pixelCoords.y
+                };
+            }
         }
 
         var innerTickResult = this.innerGridTick(timeDelta, dctx);
