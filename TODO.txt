@@ -1,8 +1,12 @@
+kontrola na opusteny jednotky v gridu???
 timeout pri presunu na obsazenou bunku v prubehu
 prepocitani cesty v pripade obsazeny bunky
 pro pohyb nekolika jednoted na jedno misto naplanovat okolni cile
+gSprites - udelat objektovy
 z-index vykreslovani pro vic jednotek
 obnovit yOffset
+vycentrovani gridu na stred
+panning gridu
 zrusit GraphNodeType z graph.js
 text - instrukce do bubliny
 antialiasing
