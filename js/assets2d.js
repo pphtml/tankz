@@ -154,12 +154,12 @@ GenericUnit.prototype.tick = function(timeDelta, dctx) { // todo premistit do ge
             this.rotation = angle;
 
             // kontrola obsazenosti bunky
-            if (!node.free()) {
+            if (!(node.free() && dctx.grid.isCellFree(node.x, node.y))) {
                 //console.info(node);
                 //console.info("not free");
             } else {
                 node = this.path.splice(0, 1)[0];
-                dctx.grid.moveUnit(this.gridX, this.gridY, node.x, node.y);
+                dctx.grid.moveUnit(this, this.gridX, this.gridY, node.x, node.y);
                 this.movegrid = {
                     addingX: pixelCoords.x > this.x ? 1 : pixelCoords.x < this.x ? -1 : 0,
                     addingY: pixelCoords.y > this.y ? 1 : pixelCoords.y < this.y ? -1 : 0,

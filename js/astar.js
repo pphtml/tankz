@@ -18,6 +18,10 @@ var astar = {
             }
         }
     },
+    occupiedByUnit: function(x, y) {
+        console.info(x, y);
+        return false;
+    },
     heap: function() {
         return new BinaryHeap(function(node) { 
             return node.f; 
@@ -61,7 +65,7 @@ var astar = {
             for(var i=0, il = neighbors.length; i < il; i++) {
                 var neighbor = neighbors[i];
 
-                if(neighbor.closed || !neighbor.free()) {
+                if(neighbor.closed || !this.free(grid, neighbor.x, neighbor.y)) {
                     // Not a valid node to process, skip to next neighbor.
                     continue;
                 }
@@ -129,27 +133,31 @@ var astar = {
 
         if (diagonals) {
             // Southwest
-            if(grid[x-1] && grid[x][y-1] && grid[x][y-1].free() && grid[x-1][y] && grid[x-1][y].free() && grid[x-1][y-1]) {
+            if(grid[x-1] && grid[x][y-1] && this.free(grid, x, y) && grid[x-1][y] && this.free(grid, x-1, y) && grid[x-1][y-1]) {
                 ret.push(grid[x-1][y-1]);
             }
 
             // Southeast
-            if(grid[x+1] && grid[x][y-1] && grid[x][y-1].free() && grid[x+1][y] && grid[x+1][y].free() && grid[x+1][y-1]) {
+            if(grid[x+1] && grid[x][y-1] && this.free(grid, x-1, y) && grid[x+1][y] && this.free(grid, x+1, y) && grid[x+1][y-1]) {
                 ret.push(grid[x+1][y-1]);
             }
 
             // Northwest
-            if(grid[x-1] && grid[x][y+1] && grid[x][y+1].free() && grid[x-1][y] && grid[x-1][y].free() && grid[x-1][y+1]) {
+            if(grid[x-1] && grid[x][y+1] && this.free(grid, x, y+1) && grid[x-1][y] && this.free(grid, x-1, y) && grid[x-1][y+1]) {
                 ret.push(grid[x-1][y+1]);
             }
 
             // Northeast
-            if(grid[x+1] && grid[x][y+1] && grid[x][y+1].free() && grid[x+1][y] && grid[x+1][y].free() && grid[x+1][y+1]) {
+            if(grid[x+1] && grid[x][y+1] && this.free(grid, x, y+1) && grid[x+1][y] && this.free(grid, x, y+1) && grid[x+1][y+1]) {
                 ret.push(grid[x+1][y+1]);
             }
         }
 
         return ret;
+    },
+    free: function(grid, x, y) {
+        var occupied = this.occupiedByUnit(x, y);
+        return grid[x][y].free() && !occupied;
     }
 };
 

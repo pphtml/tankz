@@ -41,11 +41,11 @@ Graph.prototype.toString = function() {
     return graphString;
 };
 
-var CellEnum = {
-        WALL: 0,
-        FREE: 1,
-        UNIT: 2
-    };
+//var CellEnum = {
+//        WALL: 0,
+//        FREE: 1,
+//        UNIT: 2
+//    };
 
 function GraphNode(x,y,type) {
     this.data = { };
@@ -56,9 +56,9 @@ function GraphNode(x,y,type) {
         y: y
     };
     this.type = type;
-    this.free = function() {
-        return this.type == CellEnum.FREE;
-    };
+//    this.free = function() {
+//        return this.type == GraphNodeType.OPEN;
+//    };
 }
 
 GraphNode.prototype.toString = function() {
@@ -70,7 +70,7 @@ GraphNode.prototype.toString = function() {
 //};
 
 GraphNode.prototype.free = function() {
-    return this.type == CellEnum.FREE;
+    return this.type == GraphNodeType.OPEN;
 };
 
 function BinaryHeap(scoreFunction){

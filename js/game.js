@@ -20,6 +20,7 @@ var angleUnit = new (function() {
 
 var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
     var spawnUnitId = 1;
+    var dictCellToUnit = new BiDiMap();
     this.width = width;
     this.height = height;
     this.pixelsPerTileX = pixelsPerTileX;
@@ -37,18 +38,18 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
         for (var x = 0; x < width; x++) {
             var row = new Array();
             for (var y = 0; y < height; y++) {
-                row.push(CellEnum.FREE); // 1 pruchozi
+                row.push(GraphNodeType.OPEN); // 1 pruchozi
             }
             cells.push(row);
         }
         
         for (var i = 16; i < 36; i++) {
-            cells[12][i] = CellEnum.WALL;
-            cells[49-12][35-i] = CellEnum.WALL;
+            cells[12][i] = GraphNodeType.WALL;
+            cells[49-12][35-i] = GraphNodeType.WALL;
         }
         for (var i = 4; i < 30; i++) {
-            cells[i][7] = CellEnum.WALL;
-            cells[49-i][35-7] = CellEnum.WALL;
+            cells[i][7] = GraphNodeType.WALL;
+            cells[49-i][35-7] = GraphNodeType.WALL;
         }
 
         return new Graph(cells);
@@ -58,13 +59,15 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
         return this.height * this.pixelsPerTileY;
     };
     
-    this.moveUnit = function(oldX, oldY, newX, newY) {
+    this.moveUnit = function(unit, oldX, oldY, newX, newY) {
         // todo check if old grid was alredy free
         // todo check if new grid is free
         var moved = false;
         if (this.graph.nodes[newX][newY].free()) {
-            this.graph.nodes[oldX][oldY].type = CellEnum.FREE;
-            this.graph.nodes[newX][newY].type = CellEnum.UNIT;
+//            this.graph.nodes[oldX][oldY].type = CellEnum.FREE;
+//            this.graph.nodes[newX][newY].type = CellEnum.UNIT;
+            this.removeUnit(unit, oldX, oldY);
+            this.putUnit(unit, newX, newY);
             moved = true;
         };
         return moved;
@@ -130,8 +133,28 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
         unit.gridY = gridY;
         unit.id = spawnUnitId++;
         
-        this.graph.nodes[gridX][gridY].type = CellEnum.UNIT;
+        this.putUnit(unit, gridX, gridY);
         return unit;
+    };
+    
+    this.cellKey = function(x, y) {
+        return x + "," + y;
+    };
+    
+    this.putUnit = function(unit, x, y) {
+        dictCellToUnit.putKeyValue(this.cellKey(x, y), unit.id);
+    };
+    
+    this.removeUnit = function(unit, x, y) {
+        dictCellToUnit.removeValue(unit);
+    };
+    
+    this.isCellFree = function(x, y) {
+//        if (x == 30 && y == 2) {
+//            console.info("jj");
+//            console.info(dictCellToUnit);
+//        }
+        return !dictCellToUnit.containsKey(this.cellKey(x, y));
     };
 };
 
@@ -351,6 +374,10 @@ var Game = function() {
 
         dctx = {ctx: new IsofiedContext(context), grid: grid, angle: angleUnit,
                 /*imageAlphaTester: imageAlphaTester,*/ iso: isoUnit};
+        
+        astar.occupiedByUnit = function(x, y) {
+            return !grid.isCellFree(x, y);
+        };
         spawnUnits();
         initializeStaticCanvas();
         this.drawScene();
