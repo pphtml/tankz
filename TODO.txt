@@ -1,4 +1,3 @@
-kontrola na opusteny jednotky v gridu???
 timeout pri presunu na obsazenou bunku v prubehu
 prepocitani cesty v pripade obsazeny bunky
 pro pohyb nekolika jednoted na jedno misto naplanovat okolni cile

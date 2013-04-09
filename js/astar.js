@@ -133,22 +133,19 @@ var astar = {
 
         if (diagonals) {
             // Southwest
-            if(grid[x-1] && grid[x][y-1] && this.free(grid, x, y) && grid[x-1][y] && this.free(grid, x-1, y) && grid[x-1][y-1]) {
+            if(grid[x-1] && grid[x][y-1] && this.free(grid, x, y-1) && grid[x-1][y] && this.free(grid, x-1, y) && grid[x-1][y-1]) {
                 ret.push(grid[x-1][y-1]);
             }
-
             // Southeast
-            if(grid[x+1] && grid[x][y-1] && this.free(grid, x-1, y) && grid[x+1][y] && this.free(grid, x+1, y) && grid[x+1][y-1]) {
+            if(grid[x+1] && grid[x][y-1] && this.free(grid, x, y-1) && grid[x+1][y] && this.free(grid, x+1, y) && grid[x+1][y-1]) {
                 ret.push(grid[x+1][y-1]);
             }
-
             // Northwest
             if(grid[x-1] && grid[x][y+1] && this.free(grid, x, y+1) && grid[x-1][y] && this.free(grid, x-1, y) && grid[x-1][y+1]) {
                 ret.push(grid[x-1][y+1]);
             }
-
             // Northeast
-            if(grid[x+1] && grid[x][y+1] && this.free(grid, x, y+1) && grid[x+1][y] && this.free(grid, x, y+1) && grid[x+1][y+1]) {
+            if(grid[x+1] && grid[x][y+1] && this.free(grid, x, y+1) && grid[x+1][y] && this.free(grid, x+1, y) && grid[x+1][y+1]) {
                 ret.push(grid[x+1][y+1]);
             }
         }
