@@ -159,16 +159,8 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY, allAssets) {
     
     this.hasMovingUnit = function(x, y) {
         var movingUnitId = dictCellToUnit.getValueForKey(this.cellKey(x, y));
-        var moving = false;
-        for (var i = 0, count = allAssets.length; i < count; i++) {
-            var unit = allAssets[i];
-            if (unit.id == movingUnitId) {
-                if (unit.isMoving()) {
-                    moving = true;
-                    break;
-                }
-            }
-        }
+        var unit = allAssets[movingUnitId];
+        var moving = (unit != null && unit.isMoving());
         return moving;
     };
 };
@@ -229,7 +221,7 @@ var IsofiedContext = function(context) {
 };
 
 var Game = function() {
-    var allAssets = [];
+    var allAssets = {};
     var selectedAssets = {};
     var canvas = null;
     var context = null;
@@ -238,6 +230,10 @@ var Game = function() {
     var pixelsPerTileY = 20;
     var dctx = null;
     var dirty = false;
+    
+    this.addUnit = function(unit) {
+        allAssets[unit.id] = unit;
+    };
     
     var initializeStaticCanvas = function() {
         staticCanvas = document.getElementById("canvasStatic");
@@ -291,8 +287,8 @@ var Game = function() {
         
         // handle clicks on units
         var clickedUnit = null;
-        for (var i = 0, count = allAssets.length; i < count; i++) {
-            var unit = allAssets[i];
+        for (var id in allAssets) {
+            var unit = allAssets[id];
             var clicked = unit.onMouseDown(e, coords, dctx);
             if (clicked) {
                 clickedUnit = unit;
@@ -330,23 +326,22 @@ var Game = function() {
         }
     };
     
-    var spawnUnits = function() {
+    this.spawnUnits = function() {
         var myTank = grid.spawn(20, 2, new Tank());
         myTank.rotation = 45;
-        allAssets.push(myTank);
+        this.addUnit(myTank);
         
         myTank = grid.spawn(30, 2, new Tank());
         myTank.rotation = 45;
-        allAssets.push(myTank);
+        this.addUnit(myTank);
 
         myTank = grid.spawn(20, 15, new Tank());
         myTank.rotation = 0;
-        allAssets.push(myTank);
+        this.addUnit(myTank);
 
         myTank = grid.spawn(30, 15, new Tank());
         myTank.rotation = 225;
-        allAssets.push(myTank);
-
+        this.addUnit(myTank);
     };
     
     this.init = function() {
@@ -393,7 +388,7 @@ var Game = function() {
         astar.occupiedByUnit = function(x, y) {
             return !grid.isCellFree(x, y);
         };
-        spawnUnits();
+        this.spawnUnits();
         initializeStaticCanvas();
         this.drawScene();
         
@@ -403,8 +398,8 @@ var Game = function() {
     };
     
     var drawUnits = function() {
-        for(var i = 0, count = allAssets.length; i < count; i++) {
-            var asset = allAssets[i];
+        for(var id in allAssets) {
+            var asset = allAssets[id];
             var selected = asset.id in selectedAssets;
             asset.selected = selected;
             asset.draw(dctx);
@@ -431,8 +426,8 @@ var Game = function() {
         //console.info(timeDelta);
         var moved = false;
         
-        for(var i = 0, count = allAssets.length; i < count; i++) {
-            moved = moved | allAssets[i].tick(timeDelta, dctx);
+        for(var id in allAssets) {
+            moved = moved | allAssets[id].tick(timeDelta, dctx);
         }
         
         return moved;
