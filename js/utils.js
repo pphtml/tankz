@@ -51,4 +51,12 @@ var BiDiMap = function() {
     this.toString = function() {
         "keys=" + this.keys + ", values=" + this.values;
     };
+    
+    this.getValueForKey = function(key) {
+        return this.keys[key];
+    };
+    
+    this.getKeyForValue = function(value) {
+        return this.values[value];
+    };
 };

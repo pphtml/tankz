@@ -131,8 +131,13 @@ GenericUnit.prototype.moveTo = function(gridX, gridY, graph) {
     var start = graph.nodes[this.gridX][this.gridY];
     var end = graph.nodes[gridX][gridY];
     var path = astar.search(graph.nodes, start, end, true);
-    this.path = path;
     delete this.movegrid;
+    delete this.path;
+    if (path != null) {
+        this.path = path;
+    } else {
+        //console.info("Path not found. Giving up.");
+    }
 };
 
 GenericUnit.prototype.onMouseDown = function(e, pixelCoords, dctx) {
@@ -140,11 +145,25 @@ GenericUnit.prototype.onMouseDown = function(e, pixelCoords, dctx) {
     return this.asset.onMouseDown(e, pixelCoords, this, dctx);
 };
 
+GenericUnit.prototype.isMoving = function() {
+    return typeof this.path != 'undefined' && this.path.length > 0;
+};
+
+GenericUnit.prototype.getMoveDestination = function() {
+    var result = null;
+    if (this.isMoving()) {
+        var lastCellOfPath = this.path[this.path.length - 1];
+        //console.info(lastCellOfPath);
+        result = {x: lastCellOfPath.x, y: lastCellOfPath.y};
+    }
+    return result;
+};
+
 GenericUnit.prototype.tick = function(timeDelta, dctx) { // todo premistit do generic unit
     var moved = false;
     
     while (timeDelta > 0.0) {
-        if (typeof this.movegrid == 'undefined' && typeof this.path != 'undefined' && this.path.length > 0) {
+        if (typeof this.movegrid == 'undefined' && this.isMoving()) {
             var node = this.path[0];
             var pixelCoords = dctx.grid.locatePixelCoords(node.x, node.y);
             // todo pocitat jenom pri prechodu na novou bunku
@@ -155,6 +174,24 @@ GenericUnit.prototype.tick = function(timeDelta, dctx) { // todo premistit do ge
 
             // kontrola obsazenosti bunky
             if (!(node.free() && dctx.grid.isCellFree(node.x, node.y))) {
+                if (dctx.grid.hasMovingUnit(node.x, node.y)) {
+//                    var now = new Date().getTime();
+//                    if (!this.hasOwnProperty('waitingInMove')) {
+//                        console.info("Conflict with another moving unit. Waiting started.");
+//                        //this.waitingInMove = now;
+//                    } else {
+//                        if (this.waitingInMove + 5000 < now) {
+//                            console.info("Timeout expired!");
+//                        }
+//                    }
+                } else {
+                    //console.info("Cell occupied by nonmoving unit.");
+                    var destination = this.getMoveDestination();
+                    if (destination != null) {
+                        this.moveTo(destination.x, destination.y, dctx.grid.graph);
+                    }
+                    //console.info(destination);
+                }
                 //console.info(node);
                 //console.info("not free");
             } else {

@@ -96,8 +96,8 @@ var astar = {
             }
         }
 
-        // No result was found - empty array signifies failure to find path.
-        return [];
+        // No result was found
+        return null;
     },
     manhattan: function(pos0, pos1) {
         // See list of heuristics: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html

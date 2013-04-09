@@ -1,4 +1,5 @@
 timeout pri presunu na obsazenou bunku v prubehu
+allAssets do slovniku
 prepocitani cesty v pripade obsazeny bunky
 pro pohyb nekolika jednoted na jedno misto naplanovat okolni cile
 gSprites - udelat objektovy

@@ -18,7 +18,7 @@ var angleUnit = new (function() {
     };
 })();
 
-var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
+var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY, allAssets) {
     var spawnUnitId = 1;
     var dictCellToUnit = new BiDiMap();
     this.width = width;
@@ -155,6 +155,21 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY) {
 //            console.info(dictCellToUnit);
 //        }
         return !dictCellToUnit.containsKey(this.cellKey(x, y));
+    };
+    
+    this.hasMovingUnit = function(x, y) {
+        var movingUnitId = dictCellToUnit.getValueForKey(this.cellKey(x, y));
+        var moving = false;
+        for (var i = 0, count = allAssets.length; i < count; i++) {
+            var unit = allAssets[i];
+            if (unit.id == movingUnitId) {
+                if (unit.isMoving()) {
+                    moving = true;
+                    break;
+                }
+            }
+        }
+        return moving;
     };
 };
 
@@ -339,7 +354,7 @@ var Game = function() {
         context = canvas.getContext("2d");
         canvas.addEventListener("mousedown", onMouseDown, false);  
         
-        grid = new Grid(50, 36, pixelsPerTileX, pixelsPerTileY); // todo dat jenom na jedno misto
+        grid = new Grid(50, 36, pixelsPerTileX, pixelsPerTileY, allAssets); // todo dat jenom na jedno misto
         var height = grid.computeGridHeight() + 1;
         canvas.height = height;
         document.getElementById("canvasStatic").height = height;
