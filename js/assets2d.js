@@ -50,7 +50,7 @@ BaseAsset.prototype.draw = function(dctx, unit) {
     //console.info(img);
     var pos = this.computePosRect(unit, img);
     dctx.ctx.drawImageEx(this.atlas_image, img.x, img.y, img.w, img.h,
-          pos.x, pos.y, pos.w, pos.h);
+          pos.x, pos.y, pos.w, pos.h, this.yOffset);
 //    dctx.ctx.drawImage(this.atlas_image, img.x, img.y, img.w, img.h,
 //        pos.x, pos.y, pos.w, pos.h);
     
@@ -111,9 +111,22 @@ BaseAsset.prototype.drawSelection = function(dctx, rect){
     context.stroke();
 };
 
+var TurretAsset = function() {
+    this.yOffset = -6;
+    var sc = 1.4; //0.7;
+    this.scaleW = sc * 0.6;
+    this.scaleH = sc * 0.45;
+    
+    this.getSpriteImage = function(unit) {
+        return this.getIndexedImage('turret', unit.spriteIndex());
+    };
+};
+TurretAsset.prototype = new BaseAsset();
+var turretAsset = new TurretAsset();
+
 var TankAsset = function() {
     //this.yOffset = -6;
-    var sc = 0.7;
+    var sc = 1.4; //0.7;
     this.scaleW = sc * 0.6;
     this.scaleH = sc * 0.45;
     
@@ -122,7 +135,7 @@ var TankAsset = function() {
     };
 };
 TankAsset.prototype = new BaseAsset();
-var tank_asset = new TankAsset();
+var tankAsset = new TankAsset();
 
 var GenericUnit = function() {
 };
@@ -294,14 +307,20 @@ GenericUnit.prototype.directions = {
 };
 
 var Tank = function() {
-    this.asset = tank_asset;
+    this.asset = tankAsset;
+    this.turretAsset = turretAsset;
     this.gridSpeed = 5.0; // grid/s
     
     this.spriteIndex = function() {
         var result = Math.floor((45.0 + this.rotation + 5.625) / 11.25);
         result = result % 32;
         return result;
-    };    
+    };
+    
+    this.draw = function(dctx) { 
+        this.asset.draw(dctx, this);
+        this.turretAsset.draw(dctx, this);
+    };
 };
 Tank.prototype = new GenericUnit();
 

@@ -10,7 +10,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank01.png":\
     {\
-        "frame": {"x":112,"y":0,"w":110,"h":91},\
+        "frame": {"x":110,"y":0,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -18,7 +18,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank02.png":\
     {\
-        "frame": {"x":224,"y":0,"w":110,"h":91},\
+        "frame": {"x":220,"y":0,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -26,7 +26,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank03.png":\
     {\
-        "frame": {"x":336,"y":0,"w":110,"h":91},\
+        "frame": {"x":330,"y":0,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -34,7 +34,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank04.png":\
     {\
-        "frame": {"x":0,"y":93,"w":110,"h":91},\
+        "frame": {"x":440,"y":0,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -42,7 +42,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank05.png":\
     {\
-        "frame": {"x":112,"y":93,"w":110,"h":91},\
+        "frame": {"x":550,"y":0,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -50,7 +50,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank06.png":\
     {\
-        "frame": {"x":224,"y":93,"w":110,"h":91},\
+        "frame": {"x":660,"y":0,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -58,7 +58,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank07.png":\
     {\
-        "frame": {"x":336,"y":93,"w":110,"h":91},\
+        "frame": {"x":770,"y":0,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -66,7 +66,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank08.png":\
     {\
-        "frame": {"x":0,"y":186,"w":110,"h":91},\
+        "frame": {"x":880,"y":0,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -74,7 +74,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank09.png":\
     {\
-        "frame": {"x":112,"y":186,"w":110,"h":91},\
+        "frame": {"x":0,"y":91,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -82,7 +82,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank10.png":\
     {\
-        "frame": {"x":224,"y":186,"w":110,"h":91},\
+        "frame": {"x":110,"y":91,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -90,7 +90,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank11.png":\
     {\
-        "frame": {"x":336,"y":186,"w":110,"h":91},\
+        "frame": {"x":220,"y":91,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -98,7 +98,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank12.png":\
     {\
-        "frame": {"x":0,"y":279,"w":110,"h":91},\
+        "frame": {"x":330,"y":91,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -106,7 +106,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank13.png":\
     {\
-        "frame": {"x":112,"y":279,"w":110,"h":91},\
+        "frame": {"x":440,"y":91,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -114,7 +114,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank14.png":\
     {\
-        "frame": {"x":224,"y":279,"w":110,"h":91},\
+        "frame": {"x":550,"y":91,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -122,7 +122,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank15.png":\
     {\
-        "frame": {"x":336,"y":279,"w":110,"h":91},\
+        "frame": {"x":660,"y":91,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -130,7 +130,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank16.png":\
     {\
-        "frame": {"x":0,"y":372,"w":110,"h":91},\
+        "frame": {"x":770,"y":91,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -138,7 +138,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank17.png":\
     {\
-        "frame": {"x":112,"y":372,"w":110,"h":91},\
+        "frame": {"x":880,"y":91,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -146,7 +146,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank18.png":\
     {\
-        "frame": {"x":224,"y":372,"w":110,"h":91},\
+        "frame": {"x":0,"y":182,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -154,7 +154,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank19.png":\
     {\
-        "frame": {"x":336,"y":372,"w":110,"h":91},\
+        "frame": {"x":110,"y":182,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -162,7 +162,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank20.png":\
     {\
-        "frame": {"x":0,"y":465,"w":110,"h":91},\
+        "frame": {"x":220,"y":182,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -170,7 +170,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank21.png":\
     {\
-        "frame": {"x":112,"y":465,"w":110,"h":91},\
+        "frame": {"x":330,"y":182,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -178,7 +178,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank22.png":\
     {\
-        "frame": {"x":224,"y":465,"w":110,"h":91},\
+        "frame": {"x":440,"y":182,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -186,7 +186,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank23.png":\
     {\
-        "frame": {"x":336,"y":465,"w":110,"h":91},\
+        "frame": {"x":550,"y":182,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -194,7 +194,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank24.png":\
     {\
-        "frame": {"x":0,"y":558,"w":110,"h":91},\
+        "frame": {"x":660,"y":182,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -202,7 +202,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank25.png":\
     {\
-        "frame": {"x":112,"y":558,"w":110,"h":91},\
+        "frame": {"x":770,"y":182,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -210,7 +210,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank26.png":\
     {\
-        "frame": {"x":224,"y":558,"w":110,"h":91},\
+        "frame": {"x":880,"y":182,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -218,7 +218,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank27.png":\
     {\
-        "frame": {"x":336,"y":558,"w":110,"h":91},\
+        "frame": {"x":0,"y":273,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -226,7 +226,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank28.png":\
     {\
-        "frame": {"x":0,"y":651,"w":110,"h":91},\
+        "frame": {"x":110,"y":273,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -234,7 +234,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank29.png":\
     {\
-        "frame": {"x":112,"y":651,"w":110,"h":91},\
+        "frame": {"x":220,"y":273,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -242,7 +242,7 @@ var sprite_data = '{"frames": {\
     },\
     "tank30.png":\
     {\
-        "frame": {"x":224,"y":651,"w":110,"h":91},\
+        "frame": {"x":330,"y":273,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
@@ -250,22 +250,278 @@ var sprite_data = '{"frames": {\
     },\
     "tank31.png":\
     {\
-        "frame": {"x":336,"y":651,"w":110,"h":91},\
+        "frame": {"x":440,"y":273,"w":110,"h":91},\
         "rotated": false,\
         "trimmed": false,\
         "spriteSourceSize": {"x":0,"y":0,"w":110,"h":91},\
         "sourceSize": {"w":110,"h":91}\
+    },\
+    "turret00.png":\
+    {\
+        "frame": {"x":550,"y":273,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret01.png":\
+    {\
+        "frame": {"x":710,"y":273,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret02.png":\
+    {\
+        "frame": {"x":0,"y":385,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret03.png":\
+    {\
+        "frame": {"x":160,"y":385,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret04.png":\
+    {\
+        "frame": {"x":320,"y":385,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret05.png":\
+    {\
+        "frame": {"x":480,"y":385,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret06.png":\
+    {\
+        "frame": {"x":640,"y":385,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret07.png":\
+    {\
+        "frame": {"x":800,"y":385,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret08.png":\
+    {\
+        "frame": {"x":0,"y":497,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret09.png":\
+    {\
+        "frame": {"x":160,"y":497,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret10.png":\
+    {\
+        "frame": {"x":320,"y":497,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret11.png":\
+    {\
+        "frame": {"x":480,"y":497,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret12.png":\
+    {\
+        "frame": {"x":640,"y":497,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret13.png":\
+    {\
+        "frame": {"x":800,"y":497,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret14.png":\
+    {\
+        "frame": {"x":0,"y":609,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret15.png":\
+    {\
+        "frame": {"x":160,"y":609,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret16.png":\
+    {\
+        "frame": {"x":320,"y":609,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret17.png":\
+    {\
+        "frame": {"x":480,"y":609,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret18.png":\
+    {\
+        "frame": {"x":640,"y":609,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret19.png":\
+    {\
+        "frame": {"x":800,"y":609,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret20.png":\
+    {\
+        "frame": {"x":0,"y":721,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret21.png":\
+    {\
+        "frame": {"x":160,"y":721,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret22.png":\
+    {\
+        "frame": {"x":320,"y":721,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret23.png":\
+    {\
+        "frame": {"x":480,"y":721,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret24.png":\
+    {\
+        "frame": {"x":640,"y":721,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret25.png":\
+    {\
+        "frame": {"x":800,"y":721,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret26.png":\
+    {\
+        "frame": {"x":0,"y":833,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret27.png":\
+    {\
+        "frame": {"x":160,"y":833,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret28.png":\
+    {\
+        "frame": {"x":320,"y":833,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret29.png":\
+    {\
+        "frame": {"x":480,"y":833,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret30.png":\
+    {\
+        "frame": {"x":640,"y":833,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
+    },\
+    "turret31.png":\
+    {\
+        "frame": {"x":800,"y":833,"w":160,"h":112},\
+        "rotated": false,\
+        "trimmed": false,\
+        "spriteSourceSize": {"x":0,"y":0,"w":160,"h":112},\
+        "sourceSize": {"w":160,"h":112}\
     }},\
     "meta": {\
         "app": "http://www.texturepacker.com",\
         "version": "1.0",\
         "image": "tanks.png",\
         "format": "RGBA8888",\
-        "size": {"w":512,"h":1024},\
+        "size": {"w":1024,"h":1024},\
         "scale": "1",\
-        "smartupdate": "$TexturePacker:SmartUpdate:c68c078830d72e022af15fa220790bb3$"\
+        "smartupdate": "$TexturePacker:SmartUpdate:65b4a2cf8d3e50c744aedc849697b623$"\
     }\
-    }';
+}';
 
 var gSprites = {}; // nehodit do this.sprites?
 

@@ -210,9 +210,10 @@ var IsofiedContext = function(context) {
     this.__defineGetter__("fillStyle", function() { return this.context.fillStyle; });
     this.__defineSetter__("fillStyle", function(style) { this.context.fillStyle = style; });
     this.fill = function() {this.context.fill();};
-    this.drawImageEx = function(img, imgX, imgY, imgW, imgH, x, y, w, h) {
+    this.drawImageEx = function(img, imgX, imgY, imgW, imgH, x, y, w, h, yOffset) {
+        yOffset = typeof yOffset !== 'undefined' ? yOffset : 0;
         var pos = isoUnit.toIso(x, y); 
-        this.context.drawImage(img, imgX, imgY, imgW, imgH, pos.x - w/2, pos.y - h/2, w, h);
+        this.context.drawImage(img, imgX, imgY, imgW, imgH, pos.x - w/2, pos.y - h/2 + yOffset, w, h);
     };
     this.arc = function(x, y, r, sa, ea, ccw) {
         var pos = isoUnit.toIso(x, y); 
@@ -447,7 +448,7 @@ function browserInit() {
     }
 
     BaseAsset.prototype.atlas_data = SpriteSheetClass.parseAtlasDefinition(sprite_data);
-    spritesImage = loadImage("img/tanks.png");
+    spritesImage = loadImage("img/tanks.v2.png");
     
     function loadImage(url) {
         image = new Image();

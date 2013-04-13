@@ -1,6 +1,8 @@
-allAssets do slovniku
-prepocitani cesty v pripade obsazeny bunky
-pro pohyb nekolika jednoted na jedno misto naplanovat okolni cile
+scaling veze stejne s podvozkem
+vyladit offset pro vez
+skript pro preklad s \
+fixnout cestu pri kliku na zed
+ctrl + deselect unit
 gSprites - udelat objektovy
 z-index vykreslovani pro vic jednotek
 obnovit yOffset
@@ -20,6 +22,7 @@ kontrola vykreslovani na int,int souradnice
 vez
 
 timeout pri presunu na obsazenou bunku v prubehu
+pro pohyb nekolika jednoted na jedno misto naplanovat okolni cile
 zrusit scaling
 zmensit testovaci canvas na 1x1
 this._context = new webkitAudioContext();
