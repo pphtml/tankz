@@ -1,8 +1,7 @@
-vyladit velikost gridu a tanku
 pri preplanovani cesty ignorovat obsazenost vlastni jednotkou
-kolecko pro vybranou jednotku misto obdelniku
+predelat ellipse na http://www.williammalone.com/briefs/how-to-draw-ellipse-html5-canvas/
+otaceni veze vybranych jednotek na kurzor
 skript pro preklad s \
-fixnout cestu pri kliku na zed
 ctrl + deselect unit
 gSprites - udelat objektovy
 z-index vykreslovani pro vic jednotek
@@ -13,7 +12,6 @@ text - instrukce do bubliny
 antialiasing
 vykreslit life bar
 vlastni grafika z blenderu
-odladeni 3d jednotek v isu
 vyber vice jednotek
 ovladani WASD
 strelba
