@@ -4,6 +4,8 @@ var BaseAsset = function() {
 //BaseAsset.prototype.atlas_data = data;
 //BaseAsset.prototype.atlas_image = spritesImage;
 
+BaseAsset.prototype.drawSelectionRect = true;
+
 BaseAsset.prototype.onMouseDown = function(e, pixelCoords, unit, dctx) {
     //console.info(pixelCoords);
     var img = this.getSpriteImage(unit);
@@ -54,7 +56,7 @@ BaseAsset.prototype.draw = function(dctx, unit) {
 //    dctx.ctx.drawImage(this.atlas_image, img.x, img.y, img.w, img.h,
 //        pos.x, pos.y, pos.w, pos.h);
     
-    if (unit.selected) {
+    if (unit.selected && this.drawSelectionRect) {
         this.drawSelection(dctx, this.computePosRectDraw(unit, img));
     }
     
@@ -111,22 +113,9 @@ BaseAsset.prototype.drawSelection = function(dctx, rect){
     context.stroke();
 };
 
-var TurretAsset = function() {
-    this.yOffset = -6;
-    var sc = 1.4; //0.7;
-    this.scaleW = sc * 0.6;
-    this.scaleH = sc * 0.45;
-    
-    this.getSpriteImage = function(unit) {
-        return this.getIndexedImage('turret', unit.spriteIndex());
-    };
-};
-TurretAsset.prototype = new BaseAsset();
-var turretAsset = new TurretAsset();
-
 var TankAsset = function() {
-    //this.yOffset = -6;
-    var sc = 1.4; //0.7;
+    this.yOffset = -3;
+    var sc = 0.7;
     this.scaleW = sc * 0.6;
     this.scaleH = sc * 0.45;
     
@@ -136,6 +125,19 @@ var TankAsset = function() {
 };
 TankAsset.prototype = new BaseAsset();
 var tankAsset = new TankAsset();
+
+var TurretAsset = function() {
+    this.yOffset = -6;
+    this.scaleW = tankAsset.scaleW;
+    this.scaleH = tankAsset.scaleH;
+    this.drawSelectionRect = false;
+    
+    this.getSpriteImage = function(unit) {
+        return this.getIndexedImage('turret', unit.spriteIndex());
+    };
+};
+TurretAsset.prototype = new BaseAsset();
+var turretAsset = new TurretAsset();
 
 var GenericUnit = function() {
 };

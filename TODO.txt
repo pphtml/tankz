@@ -1,11 +1,10 @@
-scaling veze stejne s podvozkem
-vyladit offset pro vez
+vyladit velikost gridu a tanku
+kolecko pro vybranou jednotku misto obdelniku
 skript pro preklad s \
 fixnout cestu pri kliku na zed
 ctrl + deselect unit
 gSprites - udelat objektovy
 z-index vykreslovani pro vic jednotek
-obnovit yOffset
 vycentrovani gridu na stred
 panning gridu
 zrusit GraphNodeType z graph.js
