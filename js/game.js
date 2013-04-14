@@ -44,10 +44,10 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY, allAssets) {
         }
         
         for (var i = 16; i < 36; i++) {
-            cells[12][i] = GraphNodeType.WALL;
-            cells[49-12][35-i] = GraphNodeType.WALL;
+            cells[7][i] = GraphNodeType.WALL;
+            cells[49-7][35-i] = GraphNodeType.WALL;
         }
-        for (var i = 4; i < 30; i++) {
+        for (var i = 4; i < 20; i++) {
             cells[i][7] = GraphNodeType.WALL;
             cells[49-i][35-7] = GraphNodeType.WALL;
         }
@@ -219,6 +219,46 @@ var IsofiedContext = function(context) {
         var pos = isoUnit.toIso(x, y); 
         this.context.arc(pos.x, pos.y, r, sa, ea, ccw);
     };
+//    this.drawEllipse = function(x, y, radius) {
+//        this.context.save();
+//        var pos = isoUnit.toIso(x, y);
+//        this.context.translate(pos.y, pos.y);
+//        this.context.scale(1.0, 1.0);
+//        this.context.beginPath();
+//        //this.context.arc(pos.x, pos.y, radius, 0, 2 * Math.PI, false);
+//        this.context.arc(0, 0, radius, 0, 2 * Math.PI, false);
+//        this.context.restore();        
+//        this.context.fillStyle = "rgba(0, 255, 0, 0.1)";
+//        this.context.fill();
+//        this.context.lineWidth = 1;
+//        this.context.strokeStyle = 'green';
+//        this.context.stroke();
+//    };
+    this.drawEllipse = function(x, y, w, h) {
+        var pos = isoUnit.toIso(x, y);
+        x = pos.x - w / 2;
+        y = pos.y - h / 2;
+        var kappa = .5522848,
+            ox = (w / 2) * kappa, // control point offset horizontal
+            oy = (h / 2) * kappa, // control point offset vertical
+            xe = x + w,           // x-end
+            ye = y + h,           // y-end
+            xm = x + w / 2,       // x-middle
+            ym = y + h / 2;       // y-middle
+    
+        this.context.beginPath();
+        this.context.moveTo(x, ym);
+        this.context.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
+        this.context.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
+        this.context.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
+        this.context.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+        this.context.fillStyle = "rgba(0, 255, 0, 0.1)";
+        this.context.fill();
+        this.context.lineWidth = 1;
+        this.context.strokeStyle = 'green';
+        this.context.closePath();
+        this.context.stroke();
+    };
 };
 
 var Game = function() {
@@ -227,8 +267,8 @@ var Game = function() {
     var canvas = null;
     var context = null;
     var grid = null;
-    var pixelsPerTileX = 20;
-    var pixelsPerTileY = 20;
+    var pixelsPerTileX = 30;
+    var pixelsPerTileY = 30;
     var dctx = null;
     var dirty = false;
     
@@ -332,15 +372,15 @@ var Game = function() {
         myTank.rotation = 45;
         this.addUnit(myTank);
         
-        myTank = grid.spawn(30, 2, new Tank());
-        myTank.rotation = 45;
-        this.addUnit(myTank);
-
-        myTank = grid.spawn(20, 15, new Tank());
+        myTank = grid.spawn(10, 2, new Tank());
         myTank.rotation = 0;
         this.addUnit(myTank);
 
-        myTank = grid.spawn(30, 15, new Tank());
+        myTank = grid.spawn(10, 8, new Tank());
+        myTank.rotation = 0;
+        this.addUnit(myTank);
+
+        myTank = grid.spawn(10, 15, new Tank());
         myTank.rotation = 225;
         this.addUnit(myTank);
     };

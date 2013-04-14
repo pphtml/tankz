@@ -57,7 +57,8 @@ BaseAsset.prototype.draw = function(dctx, unit) {
 //        pos.x, pos.y, pos.w, pos.h);
     
     if (unit.selected && this.drawSelectionRect) {
-        this.drawSelection(dctx, this.computePosRectDraw(unit, img));
+        //this.drawSelection(dctx, this.computePosRectDraw(unit, img));
+        this.drawSelection(dctx, {x: unit.x, y: unit.y});
     }
     
     if (typeof unit.path != 'undefined') {
@@ -98,26 +99,34 @@ BaseAsset.prototype.getIndexedImage = function(spriteName, spriteIndex) {
 
 BaseAsset.prototype.drawSelection = function(dctx, rect){
     var context = dctx.ctx;
-    context.beginPath();
-//    var x = 0.5 + parseInt(rect.x);
-//    var y = 0.5 + parseInt(rect.y);
-    var x = parseInt(rect.x);
-    var y = parseInt(rect.y);
-    var w = parseInt(rect.w);
-    var h = parseInt(rect.h);
-    context.rect(x, y, w, h);
-    context.fillStyle = "rgba(0, 255, 0, 0.1)";
-    context.fill();
-    context.lineWidth = 2;
-    context.strokeStyle = 'green';
-    context.stroke();
+    
+    context.drawEllipse(rect.x, rect.y, 60.0, 30.0);
+//    context.save();
+//    context.scale(0.5, 1.0);
+//    context.beginPath();
+////    var x = parseInt(rect.x);
+////    var y = parseInt(rect.y);
+////    var w = parseInt(rect.w);
+////    var h = parseInt(rect.h);
+////    context.rect(x, y, w, h);
+//    
+//    context.beginPath();
+//    context.arc(rect.x, rect.y, 25.0, 0, 2 * Math.PI, false);
+//    
+//    context.fillStyle = "rgba(0, 255, 0, 0.1)";
+//    context.fill();
+//    context.lineWidth = 2;
+//    context.strokeStyle = 'green';
+//    context.stroke();
+//    context.restore();
 };
 
 var TankAsset = function() {
-    this.yOffset = -3;
+    this.yOffset = -2;
     var sc = 0.7;
     this.scaleW = sc * 0.6;
-    this.scaleH = sc * 0.45;
+    this.scaleH = sc * 0.4;
+    this.defaultSpeed = 3.0;
     
     this.getSpriteImage = function(unit) {
         return this.getIndexedImage('tank', unit.spriteIndex());
@@ -127,7 +136,7 @@ TankAsset.prototype = new BaseAsset();
 var tankAsset = new TankAsset();
 
 var TurretAsset = function() {
-    this.yOffset = -6;
+    this.yOffset = -5;
     this.scaleW = tankAsset.scaleW;
     this.scaleH = tankAsset.scaleH;
     this.drawSelectionRect = false;
@@ -146,12 +155,11 @@ GenericUnit.prototype.moveTo = function(gridX, gridY, graph) {
     var start = graph.nodes[this.gridX][this.gridY];
     var end = graph.nodes[gridX][gridY];
     var path = astar.search(graph.nodes, start, end, true);
-    delete this.movegrid;
-    delete this.path;
     if (path != null) {
+        delete this.movegrid;
         this.path = path;
     } else {
-        //console.info("Path not found. Giving up.");
+        delete this.path;
     }
 };
 
@@ -311,7 +319,7 @@ GenericUnit.prototype.directions = {
 var Tank = function() {
     this.asset = tankAsset;
     this.turretAsset = turretAsset;
-    this.gridSpeed = 5.0; // grid/s
+    this.gridSpeed = this.asset.defaultSpeed; // grid/s
     
     this.spriteIndex = function() {
         var result = Math.floor((45.0 + this.rotation + 5.625) / 11.25);

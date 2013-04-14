@@ -1,4 +1,5 @@
 vyladit velikost gridu a tanku
+pri preplanovani cesty ignorovat obsazenost vlastni jednotkou
 kolecko pro vybranou jednotku misto obdelniku
 skript pro preklad s \
 fixnout cestu pri kliku na zed
