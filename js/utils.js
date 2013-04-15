@@ -53,10 +53,12 @@ var BiDiMap = function() {
     };
     
     this.getValueForKey = function(key) {
-        return this.keys[key];
+        var result = this.keys[key];
+        return result || null;
     };
     
     this.getKeyForValue = function(value) {
-        return this.values[value];
+        var result = this.values[value];
+        return result || null;
     };
 };

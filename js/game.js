@@ -157,6 +157,10 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY, allAssets) {
         return !dictCellToUnit.containsKey(this.cellKey(x, y));
     };
     
+//    this.findUnitIdFromCell = function(x, y) {
+//        return dictCellToUnit.getValueForKey(this.cellKey(x, y));
+//    };
+    
     this.hasMovingUnit = function(x, y) {
         var movingUnitId = dictCellToUnit.getValueForKey(this.cellKey(x, y));
         var unit = allAssets[movingUnitId];
@@ -259,6 +263,28 @@ var IsofiedContext = function(context) {
         this.context.closePath();
         this.context.stroke();
     };
+
+//   this.drawEllipse = function(centerX, centerY, width, height) {
+//       var pos = isoUnit.toIso(centerX, centerY);
+//       centerX = pos.x;
+//       centerY = pos.y;
+//       context.beginPath();
+//       context.moveTo(centerX, centerY - height/2); // A1
+//       context.bezierCurveTo(
+//         centerX + width/2, centerY - height/2, // C1
+//         centerX + width/2, centerY + height/2, // C2
+//         centerX, centerY + height/2); // A2
+//       context.bezierCurveTo(
+//         centerX - width/2, centerY + height/2, // C3
+//         centerX - width/2, centerY - height/2, // C4
+//         centerX, centerY - height/2); // A1
+//       this.context.fillStyle = "rgba(0, 255, 0, 0.1)";
+//       //context.fillStyle = "red";
+//       this.context.lineWidth = 1;
+//       this.context.strokeStyle = 'green';
+//       context.fill();
+//       context.closePath();  
+//   };
 };
 
 var Game = function() {
@@ -360,6 +386,10 @@ var Game = function() {
                 var gridCoords = grid.locateGridCoords(coords.x, coords.y);
                 for (var id in selectedAssets) {
                     var unit = selectedAssets[id];
+//                    astar.occupiedByUnit = function(x, y) {
+//                        var unitIdFromPos = grid.findUnitIdFromCell(x, y);
+//                        return unitIdFromPos != null && unit.id != unitIdFromPos;
+//                    };
                     unit.moveTo(gridCoords.x, gridCoords.y, grid.graph);
                 } 
                 break;

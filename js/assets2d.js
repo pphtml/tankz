@@ -186,6 +186,7 @@ GenericUnit.prototype.tick = function(timeDelta, dctx) { // todo premistit do ge
     var moved = false;
     
     while (timeDelta > 0.0) {
+        // if there is a path remaining and move between grid is finished or has not started yet
         if (typeof this.movegrid == 'undefined' && this.isMoving()) {
             var node = this.path[0];
             var pixelCoords = dctx.grid.locatePixelCoords(node.x, node.y);

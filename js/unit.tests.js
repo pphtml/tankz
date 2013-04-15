@@ -16,6 +16,13 @@ test("Isometric translations", function() {
 
 test("BiDiMap", function() {
     var map = new BiDiMap();
+    
+    var notFoundValue = map.getValueForKey("nonexisting");
+    deepEqual(notFoundValue, null);
+
+    notFoundValue = map.getKeyForValue("nonexisting");
+    deepEqual(notFoundValue, null);
+
     map.putKeyValue(1, '2,3'); 
     equal(map.containsKey(0), false);
     equal(map.containsKey(1), true);
