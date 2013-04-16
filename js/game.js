@@ -534,7 +534,7 @@ function browserInit() {
     }
 
     BaseAsset.prototype.atlas_data = SpriteSheetClass.parseAtlasDefinition(sprite_data);
-    spritesImage = loadImage("img/tanks.v2.png");
+    spritesImage = loadImage("img/tanks-green.v2.png");
     
     function loadImage(url) {
         image = new Image();
