@@ -368,7 +368,9 @@ var Tank = function() {
     
     this.tick =  function(dctx, timeDelta) {
         var dirty = GenericUnit.prototype.tick.call(this, dctx, timeDelta);
-        dirty = this.aimAt(dctx) || dirty;
+        if (this.selected) {
+            dirty = this.aimAt(dctx) || dirty;
+        }
         return dirty;
         //return GenericUnit.prototype.tick(dctx, timeDelta);
         //this.parent.tick(timeDelta, dctx);
