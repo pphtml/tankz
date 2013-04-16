@@ -157,9 +157,9 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY, allAssets) {
         return !dictCellToUnit.containsKey(this.cellKey(x, y));
     };
     
-//    this.findUnitIdFromCell = function(x, y) {
-//        return dictCellToUnit.getValueForKey(this.cellKey(x, y));
-//    };
+    this.findUnitIdFromCell = function(x, y) {
+        return dictCellToUnit.getValueForKey(this.cellKey(x, y));
+    };
     
     this.hasMovingUnit = function(x, y) {
         var movingUnitId = dictCellToUnit.getValueForKey(this.cellKey(x, y));
@@ -343,6 +343,20 @@ var Game = function() {
         RIGHT: 2
     };
     
+    var onMouseMove = function(e) {
+        var coords = getMousePos(e);
+        coords = isoUnit.fromIso(coords.x, coords.y);
+        dctx.mouse = coords;
+
+        for (var id in selectedAssets) {
+            var unit = selectedAssets[id];
+            var changed = unit.aimAt(dctx);
+            if (changed) {
+                dirty = true;
+            }
+        } 
+    };
+    
     var onMouseDown = function(e) {
         var coords = getMousePos(e);
         coords = isoUnit.fromIso(coords.x, coords.y);
@@ -416,9 +430,10 @@ var Game = function() {
     };
     
     this.init = function() {
-        canvas = document.getElementById("canvasArea");
-        context = canvas.getContext("2d");
-        canvas.addEventListener("mousedown", onMouseDown, false);  
+        canvas = document.getElementById('canvasArea');
+        context = canvas.getContext('2d');
+        canvas.addEventListener('mousedown', onMouseDown, false);
+        canvas.addEventListener('mousemove', onMouseMove, false);
         
         grid = new Grid(50, 36, pixelsPerTileX, pixelsPerTileY, allAssets); // todo dat jenom na jedno misto
         var height = grid.computeGridHeight() + 1;
@@ -454,7 +469,8 @@ var Game = function() {
 //        })();
 
         dctx = {ctx: new IsofiedContext(context), grid: grid, angle: angleUnit,
-                /*imageAlphaTester: imageAlphaTester,*/ iso: isoUnit};
+                /*imageAlphaTester: imageAlphaTester,*/ iso: isoUnit,
+                mouse: {x: null, y: null}};
         
         astar.occupiedByUnit = function(x, y) {
             return !grid.isCellFree(x, y);
@@ -498,7 +514,7 @@ var Game = function() {
         var moved = false;
         
         for(var id in allAssets) {
-            moved = moved | allAssets[id].tick(timeDelta, dctx);
+            moved = moved | allAssets[id].tick(dctx, timeDelta);
         }
         
         return moved;

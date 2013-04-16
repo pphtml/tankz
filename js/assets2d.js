@@ -142,7 +142,7 @@ var TurretAsset = function() {
     this.drawSelectionRect = false;
     
     this.getSpriteImage = function(unit) {
-        return this.getIndexedImage('turret', unit.spriteIndex());
+        return this.getIndexedImage('turret', unit.spriteIndexTurret());
     };
 };
 TurretAsset.prototype = new BaseAsset();
@@ -161,6 +161,9 @@ GenericUnit.prototype.moveTo = function(gridX, gridY, graph) {
     } else {
         delete this.path;
     }
+};
+
+GenericUnit.prototype.aimAt = function(dctx) {
 };
 
 GenericUnit.prototype.onMouseDown = function(e, pixelCoords, dctx) {
@@ -182,7 +185,7 @@ GenericUnit.prototype.getMoveDestination = function() {
     return result;
 };
 
-GenericUnit.prototype.tick = function(timeDelta, dctx) { // todo premistit do generic unit
+GenericUnit.prototype.tick = function(dctx, timeDelta) {
     var moved = false;
     
     while (timeDelta > 0.0) {
@@ -234,7 +237,9 @@ GenericUnit.prototype.tick = function(timeDelta, dctx) { // todo premistit do ge
                         return result;
                     },
                     targetX: pixelCoords.x,
-                    targetY: pixelCoords.y
+                    targetY: pixelCoords.y,
+                    targetGridX: node.x,
+                    targetGridY: node.y
                 };
             }
         }
@@ -320,7 +325,9 @@ GenericUnit.prototype.directions = {
 var Tank = function() {
     this.asset = tankAsset;
     this.turretAsset = turretAsset;
+    this.turretRotation = null; // same as tanks rotation
     this.gridSpeed = this.asset.defaultSpeed; // grid/s
+    this.aimingMaxDist= Math.pow(300, 2); // comparing power of 2 later
     
     this.spriteIndex = function() {
         var result = Math.floor((45.0 + this.rotation + 5.625) / 11.25);
@@ -328,9 +335,43 @@ var Tank = function() {
         return result;
     };
     
+    this.spriteIndexTurret = function() {
+        var result = Math.floor((45.0 + this.turretRotation + 5.625) / 11.25);
+        result = result % 32;
+        return result;
+    };
+    
     this.draw = function(dctx) { 
         this.asset.draw(dctx, this);
         this.turretAsset.draw(dctx, this);
+    };
+    
+    this.aimAt = function(dctx) {
+        return this.adjustTurret(dctx);
+    };
+    
+    this.adjustTurret = function(dctx) {
+        var changed = false;
+        var dx = dctx.mouse.x - this.x;
+        var dy = dctx.mouse.y - this.y;
+        var d = dx * dx + dy * dy;
+        if (d <= this.aimingMaxDist) {
+            var angle = dctx.angle.compute(dctx.mouse.x - this.x, this.y - dctx.mouse.y);
+            if (this.turretRotation != angle) {
+                changed = true;
+            }
+            this.turretRotation = angle;
+            //console.info('dist2=' + d + ', angle=' + angle);
+        }
+        return changed;
+    };
+    
+    this.tick =  function(dctx, timeDelta) {
+        var dirty = GenericUnit.prototype.tick.call(this, dctx, timeDelta);
+        dirty = this.aimAt(dctx) || dirty;
+        return dirty;
+        //return GenericUnit.prototype.tick(dctx, timeDelta);
+        //this.parent.tick(timeDelta, dctx);
     };
 };
 Tank.prototype = new GenericUnit();
