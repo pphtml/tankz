@@ -18,6 +18,7 @@ loader obrazku - zizala
 kontrola vykreslovani na int,int souradnice
 vez
 
+barvy 182,50,
 pri preplanovani cesty ignorovat obsazenost vlastni jednotkou
 timeout pri presunu na obsazenou bunku v prubehu
 pro pohyb nekolika jednoted na jedno misto naplanovat okolni cile

@@ -336,8 +336,13 @@ var Tank = function() {
     };
     
     this.spriteIndexTurret = function() {
-        var result = Math.floor((45.0 + this.turretRotation + 5.625) / 11.25);
-        result = result % 32;
+        var result;
+        if (this.turretRotation != null) {
+            result = Math.floor((45.0 + this.turretRotation + 5.625) / 11.25);
+            result = result % 32;
+        } else {
+            result = this.spriteIndex();
+        }
         return result;
     };
     
@@ -362,6 +367,9 @@ var Tank = function() {
             }
             this.turretRotation = angle;
             //console.info('dist2=' + d + ', angle=' + angle);
+        } else {
+            changed = this.turretRotation != null;
+            this.turretRotation = null;
         }
         return changed;
     };
