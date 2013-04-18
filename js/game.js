@@ -365,7 +365,6 @@ var Game = function() {
             // deselect all units
             for (var id in selectedAssets) {
                 var unit = selectedAssets[id];
-                unit.selected = false;
                 unit.onDeselect();
             }
             selectedAssets = {};

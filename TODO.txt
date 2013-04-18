@@ -1,5 +1,4 @@
 vykreslovat selekci tanku az po vykresleni veze
-otaceni veze - vraceni zpet
 skript pro preklad s \
 ctrl + deselect unit
 gSprites - udelat objektovy

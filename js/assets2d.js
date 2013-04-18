@@ -308,6 +308,7 @@ GenericUnit.prototype.draw = function(dctx) {
 };
 
 GenericUnit.prototype.onDeselect = function() {
+    this.selected = false;
 };
 
 var ZERO = 0.0;
@@ -388,6 +389,7 @@ var Tank = function() {
     };
     
     this.onDeselect = function() {
+        GenericUnit.prototype.onDeselect.call(this);
         this.turretRotation = null;
     };
 };
