@@ -362,6 +362,12 @@ var Game = function() {
         coords = isoUnit.fromIso(coords.x, coords.y);
 
         if (e.button === ButtonEnum.LEFT && !e.ctrlKey) {
+            // deselect all units
+            for (var id in selectedAssets) {
+                var unit = selectedAssets[id];
+                unit.selected = false;
+                unit.onDeselect();
+            }
             selectedAssets = {};
             dirty = true;
         }

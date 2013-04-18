@@ -307,6 +307,9 @@ GenericUnit.prototype.draw = function(dctx) {
     this.asset.draw(dctx, this);
 };
 
+GenericUnit.prototype.onDeselect = function() {
+};
+
 var ZERO = 0.0;
 var DIAG = 1.0 / Math.sqrt(2);
 var FULL = 1.0;
@@ -374,7 +377,7 @@ var Tank = function() {
         return changed;
     };
     
-    this.tick =  function(dctx, timeDelta) {
+    this.tick = function(dctx, timeDelta) {
         var dirty = GenericUnit.prototype.tick.call(this, dctx, timeDelta);
         if (this.selected) {
             dirty = this.aimAt(dctx) || dirty;
@@ -382,6 +385,10 @@ var Tank = function() {
         return dirty;
         //return GenericUnit.prototype.tick(dctx, timeDelta);
         //this.parent.tick(timeDelta, dctx);
+    };
+    
+    this.onDeselect = function() {
+        this.turretRotation = null;
     };
 };
 Tank.prototype = new GenericUnit();
