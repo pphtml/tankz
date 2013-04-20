@@ -1,4 +1,6 @@
 vykreslovat selekci tanku az po vykresleni veze
+text select vypnout
+roztahnout canvas na celou obrazovku
 skript pro preklad s \
 ctrl + deselect unit
 gSprites - udelat objektovy

@@ -297,14 +297,21 @@ var Game = function() {
     var pixelsPerTileY = 30;
     var dctx = null;
     var dirty = false;
+    var panningDir = null;
+    var panningPixelsPerSec = 250;
+    
+    this.setPanningDir = function(panning) {
+        panningDir = panning;
+    };
     
     this.addUnit = function(unit) {
         allAssets[unit.id] = unit;
     };
     
-    var initializeStaticCanvas = function() {
+    this.drawStaticCanvas = function() {
         staticCanvas = document.getElementById("canvasStatic");
         var context = staticCanvas.getContext("2d");
+        staticCanvas.width = staticCanvas.width;
         //applyIsofication(context, staticCanvas);
         var sceneContext = {width: staticCanvas.width, height: staticCanvas.height};
         var isoContext = new IsofiedContext(context);
@@ -433,18 +440,49 @@ var Game = function() {
         myTank.rotation = 225;
         this.addUnit(myTank);
     };
+
+    var panningDirs = {'Left': {x:1, y:0}, 'Right': {x:-1, y:0}, 'Up': {x:0, y:1}, 'Down': {x:0, y:-1}};
+    var onPanning = function(e) {
+        //console.info(e);
+        if (e.type === 'mouseover') {
+            this.style.backgroundColor = 'green';
+        } else if (e.type === 'mouseout') {
+            this.style.backgroundColor = '';
+        }
+        
+        if (e.button === ButtonEnum.LEFT) {
+            var direction = this.id.substring(7);
+            var panning = null;
+            if (e.type === 'mousedown') {
+                panning = panningDirs[direction];
+            }
+            outer.setPanningDir.call(outer, panning);
+        }  
+    };
     
     this.init = function() {
         canvas = document.getElementById('canvasArea');
+        //canvas.style.cursor = "n-resize";
         context = canvas.getContext('2d');
         canvas.addEventListener('mousedown', onMouseDown, false);
         canvas.addEventListener('mousemove', onMouseMove, false);
         
         grid = new Grid(50, 36, pixelsPerTileX, pixelsPerTileY, allAssets); // todo dat jenom na jedno misto
-        var height = grid.computeGridHeight() + 1;
-        canvas.height = height;
-        document.getElementById("canvasStatic").height = height;
-        document.getElementById("container").style.height = height + "px";
+        //var height = grid.computeGridHeight() + 1;
+        //canvas.height = height;
+        //document.getElementById("canvasStatic").height = height;
+        //document.getElementById("container").style.height = height + "px";
+        
+        var nodeList = document.querySelectorAll(".panningBorder");
+        for (var i = 0, length = nodeList.length; i < length; i++) {
+           var node = nodeList[i];
+           node.addEventListener('mousedown', onPanning, false);
+           node.addEventListener('mouseup', onPanning, false);
+           node.addEventListener('mouseout', onPanning, false);
+           node.addEventListener('mouseover', onPanning, false);
+           //console.info(node);
+        }
+        
 //        var imageAlphaTester = new (function() {
 //            var staticCanvas = document.getElementById("canvasTest");
 //            var context = staticCanvas.getContext("2d");
@@ -481,7 +519,7 @@ var Game = function() {
             return !grid.isCellFree(x, y);
         };
         this.spawnUnits();
-        initializeStaticCanvas();
+        this.drawStaticCanvas();
         this.drawScene();
         
         requestAnimFrame(function() {
@@ -520,6 +558,13 @@ var Game = function() {
         
         for(var id in allAssets) {
             moved = moved | allAssets[id].tick(dctx, timeDelta);
+        }
+        
+        if (panningDir != null) {
+            dispCtx.tx += panningDir.x * panningPixelsPerSec * timeDelta;
+            dispCtx.ty += panningDir.y * panningPixelsPerSec * timeDelta;
+            moved = true;
+            this.drawStaticCanvas();
         }
         
         return moved;

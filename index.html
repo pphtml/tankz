@@ -18,11 +18,15 @@
 </head>
 <body>
 	<div id="container"
-		style="width: 1001px; height: 721px; margin: 0 auto; padding: 0px; background-color: #f0f0f0;">
+		style="width: 1001px; height: 721px; margin: 0 auto; padding: 0px; background-color: #f0f0f0; position: relative; -moz-user-select: none;-webkit-user-select: none;" onselectstart='return false;'>
 		<canvas id="canvasArea" width="1001" height="721" style="position: absolute; z-index: 2;">Your browser doesn't support HTML5 Canvas :(</canvas>
 		<canvas id="canvasStatic" width="1001" height="721" style="position: absolute; z-index: 1;"></canvas>
         <canvas id="canvasTest" width="160" height="160" style="position: absolute; z-index: -100;"></canvas>
-        <div style="position: absolute;">Left mouse picks a unit<br/>CTRL + Left mouse picks additional unit<br/>Right mouse moves a unit</div>
+<!--         <div style="position: absolute;">Left mouse picks a unit<br/>CTRL + Left mouse picks additional unit<br/>Right mouse moves a unit</div> -->
+        <div class="panningBorder" id="panningUp" style="position: absolute; height: 50px; width: 100%; top: 0; opacity:0.1; cursor: n-resize; z-index: 100"></div>
+        <div class="panningBorder" id="panningDown" style="position: absolute; height: 50px; width: 100%; bottom: 0; opacity:0.1; cursor: s-resize; z-index: 100"></div>
+        <div class="panningBorder" id="panningLeft" style="position: absolute; width: 50px; top: 0; bottom: 0; opacity:0.1; cursor: w-resize; z-index: 100"></div>
+        <div class="panningBorder" id="panningRight" style="position: absolute; width: 50px; height: 100%; right: 0; opacity:0.1; cursor: e-resize; z-index: 100"></div>
 	</div>
 </body>
 </html>
