@@ -74,21 +74,17 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY, allAssets) {
     };
 
     this.draw = function(ctx, sceneContext) {
-//        ctx.translate(0, canvas.height / 2);
-//        ctx.scale(1, 0.5);
-//        ctx.rotate(-Math.PI / 4);
-//        
         var height = sceneContext.height;
         var width = sceneContext.width;
 
-        for ( var x = 0; x <= this.width; x++) {
+        for (var x = 0; x <= this.width; x++) {
             var cx = 0.5 + x * this.pixelsPerTileX;
             ctx.moveTo(cx, 0);
             ctx.lineTo(cx, height);
             ctx.stroke();
         }
 
-        for ( var y = 0; y <= this.height; y++) {
+        for (var y = 0; y <= this.height; y++) {
             var cy = 0.5 + y * this.pixelsPerTileY;
             ctx.moveTo(0, cy);
             ctx.lineTo(width, cy);
@@ -313,7 +309,8 @@ var Game = function() {
         var context = staticCanvas.getContext("2d");
         staticCanvas.width = staticCanvas.width;
         //applyIsofication(context, staticCanvas);
-        var sceneContext = {width: staticCanvas.width, height: staticCanvas.height};
+        //var sceneContext = {width: staticCanvas.width, height: staticCanvas.height};
+        var sceneContext = {width: grid.width * grid.pixelsPerTileX, height: grid.height * grid.pixelsPerTileY};
         var isoContext = new IsofiedContext(context);
         grid.draw(isoContext, sceneContext);
     };
