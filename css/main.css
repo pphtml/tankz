@@ -1,9 +1,15 @@
 @import url(http://fonts.googleapis.com/css?family=Jura);
 @import url(http://fonts.googleapis.com/css?family=Russo+One|Jura|Audiowide|Prosto+One);
 
+html {
+	min-height: 100%;
+	position: relative;
+}
+
 body {
 /* 	font-family: 'Russo One', sans-serif; */
 /* 	font-family: 'Jura', sans-serif; */
 /* 	font-family: 'Audiowide', cursive; */
 	font-family: 'Prosto One', cursive;
+	height: 100%
 }

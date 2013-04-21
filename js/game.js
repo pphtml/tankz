@@ -6,14 +6,13 @@ var angleUnit = new (function() {
         } else {
             var tanx = parseFloat(dy) / dx;
             var atanx = Math.atan(tanx); 
-            var angle = atanx * 180.0 / Math.PI;
+            angle = atanx * 180.0 / Math.PI;
             if (dx < 0.0) {
                 angle = 180.0 + angle;
             } else if (dy < 0) {
                 angle = 360.0 + angle;
             }
         }
-        //angle += 45; // because of isometric projection
         return angle % 360;
     };
 })();
@@ -570,6 +569,12 @@ var Game = function() {
 var game = new Game();
 
 function browserInit() {
+    var canvas = document.getElementById('canvasArea');
+    var canvasStatic = document.getElementById('canvasStatic');
+    var container = document.getElementById('container');
+    canvas.width = container.offsetWidth; canvas.height = container.offsetHeight;
+    canvasStatic.width = container.offsetWidth; canvasStatic.height = container.offsetHeight;
+    
     if (document.addEventListener) {
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
