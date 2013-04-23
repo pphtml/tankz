@@ -318,9 +318,9 @@ var Game = function() {
     var outer = this;
 
     window.requestAnimFrame = (function(callback) {
-        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+        // window.mozRequestAnimationFrame - it seems to be dropping frames, since it's behaving this way, falling back to setTimeout
+        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
         function(callback) {
-          console.info("setting callback");
           window.setTimeout(callback, 1000 / 60);
         };
       })();

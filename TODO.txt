@@ -1,4 +1,5 @@
 vykreslovat selekci tanku az po vykresleni veze
+aktualizace rozmeru pri resize prohlizece
 vykonnost pro firefox - this.beginPath = function() {this.context.beginPath();};
 skript pro preklad s \
 ctrl + deselect unit
