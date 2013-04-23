@@ -62,3 +62,25 @@ var BiDiMap = function() {
         return result || null;
     };
 };
+
+var FPS = function() {
+    var avgCalls = 0;
+    var calls = 0;
+    var processedSecond = null;
+    
+    this.countSceneDrawn = function() {
+        var now = new Date().getTime();
+        var currProcessedSecond = parseInt(now/1000);
+        if (currProcessedSecond === processedSecond) {
+            calls += 1;
+        } else {
+            avgCalls = calls;
+            calls = 1;
+            processedSecond = currProcessedSecond;
+        }
+    };
+    
+    this.getFPS = function() {
+        return avgCalls;
+    };
+};

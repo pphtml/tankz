@@ -294,6 +294,7 @@ var Game = function() {
     var dirty = false;
     var panningDir = null;
     var panningPixelsPerSec = 250;
+    this.fps = new FPS();
     
     this.setPanningDir = function(panning) {
         panningDir = panning;
@@ -325,6 +326,7 @@ var Game = function() {
       })();
 
     this.animate = function() {
+        this.fps.countSceneDrawn();
         if (this.tick() || dirty) {
             // redraw only when at least something moved
             this.drawScene();
@@ -333,6 +335,7 @@ var Game = function() {
         requestAnimFrame(function() {
             outer.animate();
         });
+        this.fpsInfoElement.innerHTML = 'FPS: ' + this.fps.getFPS();
     };
     
     var getMousePos = function (evt) {
@@ -457,6 +460,7 @@ var Game = function() {
     };
     
     this.init = function() {
+        this.fpsInfoElement = document.getElementById('fpsInfo');
         canvas = document.getElementById('canvasArea');
         //canvas.style.cursor = "n-resize";
         context = canvas.getContext('2d');

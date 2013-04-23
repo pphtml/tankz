@@ -1,5 +1,5 @@
 vykreslovat selekci tanku az po vykresleni veze
-vykonnost pro firefox
+vykonnost pro firefox - this.beginPath = function() {this.context.beginPath();};
 skript pro preklad s \
 ctrl + deselect unit
 gSprites - udelat objektovy

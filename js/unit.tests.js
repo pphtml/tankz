@@ -1,11 +1,11 @@
 test("Isometric translations", function() {
     var isoCoords = isoUnit.toIso(0, 0);
-    console.info(isoCoords);
+    //console.info(isoCoords);
     equal(isoCoords.x, 0, "X Passed!");
     equal(isoCoords.y, 360, "Y Passed!");
 
     isoCoords = isoUnit.toIso(500, 100);
-    console.info(isoCoords);
+    //console.info(isoCoords);
     equal(isoCoords.x, 600, "X Passed!");
     equal(isoCoords.y, 160, "Y Passed!");
 
@@ -42,7 +42,7 @@ test("BiDiMap", function() {
     
     map.putKeyValue(2, '7,8');
     var cntValues = Object.keys(map.values).length;
-    console.info(cntValues);
+    //console.info(cntValues);
     map.putKeyValue(2, '7,8');
     equal(Object.keys(map.values).length, cntValues);
     map.putKeyValue(2, '9,10');
@@ -50,9 +50,17 @@ test("BiDiMap", function() {
     
     map.putKeyValue(5, '99,0');
     var cntKeys = Object.keys(map.keys).length;
-    console.info(cntKeys);
+    //console.info(cntKeys);
     map.putKeyValue(5, '99,0');
     equal(Object.keys(map.keys).length, cntKeys);
     map.putKeyValue(6, '99,0');
     equal(Object.keys(map.keys).length, cntKeys);
 });
+
+//test("FPS", function() {
+//    var fps = new FPS();
+//    fps.countSceneDrawn();
+//    equal(fps.getFPS(), 1);
+//    fps.countSceneDrawn();
+//    equal(fps.getFPS(), 2);
+//});
