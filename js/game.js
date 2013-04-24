@@ -287,6 +287,7 @@ var Game = function() {
     var selectedAssets = {};
     var canvas = null;
     var context = null;
+    var gameContainer = null;
     var grid = null;
     var pixelsPerTileX = 30;
     var pixelsPerTileY = 30;
@@ -328,6 +329,12 @@ var Game = function() {
 
     this.animate = function() {
         this.fps.countSceneDrawn();
+        
+        if (canvas.width !== gameContainer.offsetWidth ||
+                canvas.height !== gameContainer.offsetHeight) {
+            this.resizeWindow();
+        }
+        
         if (this.tick() || dirty) {
             // redraw only when at least something moved
             this.drawScene();
@@ -467,11 +474,12 @@ var Game = function() {
     };
     
     this.init = function() {
+        gameContainer = document.getElementById('container');
+        canvas = document.getElementById('canvasArea');
+
         this.resizeWindow();
-        window.onresize = this.resizeWindow;
         
         this.fpsInfoElement = document.getElementById('fpsInfo');
-        canvas = document.getElementById('canvasArea');
         //canvas.style.cursor = "n-resize";
         context = canvas.getContext('2d');
         canvas.addEventListener('mousedown', onMouseDown, false);
@@ -581,11 +589,9 @@ var Game = function() {
     };
     
     this.resizeWindow = function() {
-        var canvas = document.getElementById('canvasArea');
         var canvasStatic = document.getElementById('canvasStatic');
-        var container = document.getElementById('container');
-        canvas.width = container.offsetWidth; canvas.height = container.offsetHeight;
-        canvasStatic.width = container.offsetWidth; canvasStatic.height = container.offsetHeight;
+        canvas.width = gameContainer.offsetWidth; canvas.height = gameContainer.offsetHeight;
+        canvasStatic.width = gameContainer.offsetWidth; canvasStatic.height = gameContainer.offsetHeight;
         //console.info('resizing');
         dirty = true;
         dirtyStatic = true;
