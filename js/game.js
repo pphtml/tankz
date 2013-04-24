@@ -292,6 +292,7 @@ var Game = function() {
     var pixelsPerTileY = 30;
     var dctx = null;
     var dirty = false;
+    var dirtyStatic = false;
     var panningDir = null;
     var panningPixelsPerSec = 250;
     this.fps = new FPS();
@@ -332,6 +333,12 @@ var Game = function() {
             this.drawScene();
         }
         dirty = false;
+        
+        if (dirtyStatic) {
+            this.drawStaticCanvas();
+        }
+        dirtyStatic = false;
+        
         requestAnimFrame(function() {
             outer.animate();
         });
@@ -460,6 +467,9 @@ var Game = function() {
     };
     
     this.init = function() {
+        this.resizeWindow();
+        window.onresize = this.resizeWindow;
+        
         this.fpsInfoElement = document.getElementById('fpsInfo');
         canvas = document.getElementById('canvasArea');
         //canvas.style.cursor = "n-resize";
@@ -564,21 +574,27 @@ var Game = function() {
             dispCtx.tx += panningDir.x * panningPixelsPerSec * timeDelta;
             dispCtx.ty += panningDir.y * panningPixelsPerSec * timeDelta;
             moved = true;
-            this.drawStaticCanvas();
+            dirtyStatic = true;
         }
         
         return moved;
     };
+    
+    this.resizeWindow = function() {
+        var canvas = document.getElementById('canvasArea');
+        var canvasStatic = document.getElementById('canvasStatic');
+        var container = document.getElementById('container');
+        canvas.width = container.offsetWidth; canvas.height = container.offsetHeight;
+        canvasStatic.width = container.offsetWidth; canvasStatic.height = container.offsetHeight;
+        //console.info('resizing');
+        dirty = true;
+        dirtyStatic = true;
+    };
 };
+
 var game = new Game();
 
 function browserInit() {
-    var canvas = document.getElementById('canvasArea');
-    var canvasStatic = document.getElementById('canvasStatic');
-    var container = document.getElementById('container');
-    canvas.width = container.offsetWidth; canvas.height = container.offsetHeight;
-    canvasStatic.width = container.offsetWidth; canvasStatic.height = container.offsetHeight;
-    
     if (document.addEventListener) {
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
