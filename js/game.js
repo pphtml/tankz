@@ -17,11 +17,13 @@ var angleUnit = new (function() {
     };
 })();
 
-var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY, allAssets) {
+var Grid = function(data, pixelsPerTileX, pixelsPerTileY, allAssets) {
     var spawnUnitId = 1;
     var dictCellToUnit = new BiDiMap();
-    this.width = width;
-    this.height = height;
+    this.width = data[0].length;
+    var width = this.width;
+    this.height = data.length;
+    var height = this.height;
     this.pixelsPerTileX = pixelsPerTileX;
     this.pixelsPerTileY = pixelsPerTileY;
     this.graph = (function() {
@@ -37,20 +39,12 @@ var Grid = function(width, height, pixelsPerTileX, pixelsPerTileY, allAssets) {
         for (var x = 0; x < width; x++) {
             var row = new Array();
             for (var y = 0; y < height; y++) {
-                row.push(GraphNodeType.OPEN); // 1 pruchozi
+                var char = data[y][x];
+                var type = char === '.' ? GraphNodeType.OPEN : GraphNodeType.WALL;
+                row.push(type);
             }
             cells.push(row);
         }
-        
-        for (var i = 16; i < 36; i++) {
-            cells[7][i] = GraphNodeType.WALL;
-            cells[49-7][35-i] = GraphNodeType.WALL;
-        }
-        for (var i = 4; i < 20; i++) {
-            cells[i][7] = GraphNodeType.WALL;
-            cells[49-i][35-7] = GraphNodeType.WALL;
-        }
-
         return new Graph(cells);
     })();
     
@@ -218,21 +212,6 @@ var IsofiedContext = function(context) {
         var pos = isoUnit.toIso(x, y); 
         this.context.arc(pos.x, pos.y, r, sa, ea, ccw);
     };
-//    this.drawEllipse = function(x, y, radius) {
-//        this.context.save();
-//        var pos = isoUnit.toIso(x, y);
-//        this.context.translate(pos.y, pos.y);
-//        this.context.scale(1.0, 1.0);
-//        this.context.beginPath();
-//        //this.context.arc(pos.x, pos.y, radius, 0, 2 * Math.PI, false);
-//        this.context.arc(0, 0, radius, 0, 2 * Math.PI, false);
-//        this.context.restore();        
-//        this.context.fillStyle = "rgba(0, 255, 0, 0.1)";
-//        this.context.fill();
-//        this.context.lineWidth = 1;
-//        this.context.strokeStyle = 'green';
-//        this.context.stroke();
-//    };
     this.drawEllipse = function(x, y, w, h) {
         var pos = isoUnit.toIso(x, y);
         x = pos.x - w / 2;
@@ -258,28 +237,6 @@ var IsofiedContext = function(context) {
         this.context.closePath();
         this.context.stroke();
     };
-
-//   this.drawEllipse = function(centerX, centerY, width, height) {
-//       var pos = isoUnit.toIso(centerX, centerY);
-//       centerX = pos.x;
-//       centerY = pos.y;
-//       context.beginPath();
-//       context.moveTo(centerX, centerY - height/2); // A1
-//       context.bezierCurveTo(
-//         centerX + width/2, centerY - height/2, // C1
-//         centerX + width/2, centerY + height/2, // C2
-//         centerX, centerY + height/2); // A2
-//       context.bezierCurveTo(
-//         centerX - width/2, centerY + height/2, // C3
-//         centerX - width/2, centerY - height/2, // C4
-//         centerX, centerY - height/2); // A1
-//       this.context.fillStyle = "rgba(0, 255, 0, 0.1)";
-//       //context.fillStyle = "red";
-//       this.context.lineWidth = 1;
-//       this.context.strokeStyle = 'green';
-//       context.fill();
-//       context.closePath();  
-//   };
 };
 
 var Game = function() {
@@ -296,6 +253,7 @@ var Game = function() {
     var dirtyStatic = false;
     var panningDir = null;
     var panningPixelsPerSec = 250;
+            
     this.fps = new FPS();
     
     this.setPanningDir = function(panning) {
@@ -437,7 +395,7 @@ var Game = function() {
     };
     
     this.spawnUnits = function() {
-        var myTank = grid.spawn(20, 2, new Tank());
+        var myTank = grid.spawn(18, 6, new Tank());
         myTank.rotation = 45;
         this.addUnit(myTank);
         
@@ -449,7 +407,7 @@ var Game = function() {
         myTank.rotation = 0;
         this.addUnit(myTank);
 
-        myTank = grid.spawn(10, 15, new Tank());
+        myTank = grid.spawn(10, 13, new Tank());
         myTank.rotation = 225;
         this.addUnit(myTank);
     };
@@ -473,6 +431,13 @@ var Game = function() {
         }  
     };
     
+    this.msgJoin = function(msg) {
+        console.info('processing data inside msgJoin: ' + msg.grid.data);
+        grid = new Grid(msg.grid.data, pixelsPerTileX, pixelsPerTileY, allAssets);
+        dirty = true;
+        dirtyStatic = true;
+    };
+    
     this.init = function() {
         gameContainer = document.getElementById('container');
         canvas = document.getElementById('canvasArea');
@@ -485,11 +450,8 @@ var Game = function() {
         canvas.addEventListener('mousedown', onMouseDown, false);
         canvas.addEventListener('mousemove', onMouseMove, false);
         
-        grid = new Grid(50, 36, pixelsPerTileX, pixelsPerTileY, allAssets); // todo dat jenom na jedno misto
-        //var height = grid.computeGridHeight() + 1;
-        //canvas.height = height;
-        //document.getElementById("canvasStatic").height = height;
-        //document.getElementById("container").style.height = height + "px";
+        //grid = new Grid(50, 36, pixelsPerTileX, pixelsPerTileY, allAssets); // todo dat jenom na jedno misto
+        grid = new Grid(["....................",".XXXXXXXXXXXXXXXXXX.","....................","....................",".....X..............",".....X...X..........",".....X....X.........",".....X.....X........",".....X......X..X....","...............X....","...............X....","...............X....","..XXXXXXXXXXXXXX....","....................","...................."], pixelsPerTileX, pixelsPerTileY, allAssets);
         
         var nodeList = document.querySelectorAll(".panningBorder");
         for (var i = 0, length = nodeList.length; i < length; i++) {
@@ -498,7 +460,6 @@ var Game = function() {
            node.addEventListener('mouseup', onPanning, false);
            node.addEventListener('mouseout', onPanning, false);
            node.addEventListener('mouseover', onPanning, false);
-           //console.info(node);
         }
         
 //        var imageAlphaTester = new (function() {
@@ -536,6 +497,11 @@ var Game = function() {
         astar.occupiedByUnit = function(x, y) {
             return !grid.isCellFree(x, y);
         };
+        
+        $('#ldCornerBtn').click(function(){comm.connect('jozo');});
+        
+        comm.registerRoute('JOIN', this, this.msgJoin);
+        
         this.spawnUnits();
         this.drawStaticCanvas();
         this.drawScene();

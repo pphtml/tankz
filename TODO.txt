@@ -1,3 +1,8 @@
+implementovat Battlefield data v jave staticky
+  serializace do JSONu
+  deserializace
+  reinicializace
+  battlefield data - identifikace mapy
 vykreslovat selekci tanku az po vykresleni veze
 aktualizace rozmeru pri resize prohlizece
 vykonnost pro firefox - this.beginPath = function() {this.context.beginPath();};
@@ -18,6 +23,10 @@ strelba
 loader obrazku - zizala
 kontrola vykreslovani na int,int souradnice
 vez
+
+http://jsfiddle.net/ZMhrC/
+Object.defineProperty() - IE
+
 
 barvy 182,50,
 pri preplanovani cesty ignorovat obsazenost vlastni jednotkou
