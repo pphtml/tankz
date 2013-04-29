@@ -3,7 +3,9 @@ implementovat Battlefield data v jave staticky
   deserializace
   reinicializace
   battlefield data - identifikace mapy
+  okno pro zadani: serveru, idcka, mapy
 vykreslovat selekci tanku az po vykresleni veze
+vyladeni cesty 2 tanku z uzky ulicky
 aktualizace rozmeru pri resize prohlizece
 vykonnost pro firefox - this.beginPath = function() {this.context.beginPath();};
 skript pro preklad s \
@@ -53,3 +55,5 @@ Black Ops One
 Gruppo
 Megrim - x
 * Prosto One
+
+http://wiki.cloudbees.com/bin/view/RUN/BeesSDK
