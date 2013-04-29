@@ -13,7 +13,17 @@ var GraphNodeType = {
 // Creates a Graph class used in the astar search algorithm.
 function Graph(grid) {
     var nodes = [];
+    this.width = grid[0].length;
+    this.height = grid.length;
 
+    this.isInsideGraph = function(x, y) {
+        return x >= 0 && x < this.width && y >= 0 && y < this.height; 
+    };
+    
+    this.verifyAndGetNode = function(x, y) {
+        return this.nodes[x][y];
+    };
+    
     for (var x = 0; x < grid.length; x++) {
         nodes[x] = [];
         

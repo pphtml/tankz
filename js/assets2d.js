@@ -153,13 +153,15 @@ var GenericUnit = function() {
 
 GenericUnit.prototype.moveTo = function(gridX, gridY, graph) {
     var start = graph.nodes[this.gridX][this.gridY];
-    var end = graph.nodes[gridX][gridY];
-    var path = astar.search(graph.nodes, start, end, true);
-    if (path != null) {
-        delete this.movegrid;
-        this.path = path;
-    } else {
-        delete this.path;
+    var end = graph.verifyAndGetNode(gridX, gridY);
+    if (end != null) {
+        var path = astar.search(graph.nodes, start, end, true);
+        if (path != null) {
+            delete this.movegrid;
+            this.path = path;
+        } else {
+            delete this.path;
+        }
     }
 };
 

@@ -32,6 +32,9 @@ var astar = {
         return m === 2 ? 1.41 : m;
     },
     search: function(grid, start, end, diagonal, heuristic) {
+        if (end == null) {
+            return null;
+        }
         astar.init(grid);
         heuristic = heuristic || astar.manhattan;
         diagonal = !!diagonal;
