@@ -1,3 +1,4 @@
+favicona
 implementovat Battlefield data v jave staticky
   serializace do JSONu
   deserializace
