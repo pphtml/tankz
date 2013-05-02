@@ -25,11 +25,29 @@ var comm = new (function() {
             }
         }
     };
+    
+    var onClose = function(event) {
+        console.info('onClose ' + event);
+    };
 
-    this.connect = function(id) {
-        gameSocket = new WS("ws://battlefield.show.cloudbees.net/battlefield/comm?userId=" + id);
+    var onOpen = function(event) {
+        console.info('onOpen ' + event);
+    };
+
+    var onError = function(event) {
+        console.info('onError ' + event);
+    };
+
+    this.connect = function(userId, gameServer) {
+        console.info(userId + '@' + gameServer);
+
+        gameSocket = new WS('ws://' + gameServer + '/battlefield/comm?userId=' + userId);
         //gameSocket = new WS("ws://localhost:9000/battlefield/comm?userId=" + id);
         gameSocket.onmessage = receiveEvent;
+        
+        gameSocket.onopen = onOpen;
+        gameSocket.onclose = onClose;
+        gameSocket.onerror = onError;
     };
     
     this.sendMessage = function() {
@@ -39,6 +57,30 @@ var comm = new (function() {
         $("#talk").val('');
     };
     
+    this.initDialogs = function() {
+        var list = ['battlefield.show.cloudbees.net', 'localhost:9000'];
+        var options = $('#gameServer');
+        $.each(list, function() {
+            options.append($('<option/>').val(this).text(this));
+        });
+        
+        var connectHandler = function() {
+            var userId = $('#userId').val();
+            var gameServer = $('#gameServer').val();
+            if (userId.length > 0) {
+                comm.connect(userId, gameServer);
+                $('#dlgConnect').hide();
+            }
+        };
+        
+        $('#dlgConnectBtnOK').click(connectHandler);
+        
+        $('#dlgConnect').keypress(function(e) {
+            if(e.which == 13) {
+                connectHandler.call(this, []);
+            }
+        });
+    };
 })();
 
 //console.info(comm);

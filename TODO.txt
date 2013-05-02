@@ -1,3 +1,10 @@
+select + input
+vetsi tlacitka Connect a Cancel
+chybova hlaska pri neuspesnem pripojeni k serveru
+obrazovka vyberu z existujicich roomu + zakladani roomu
+sekce chatu
+zapamatovani si serveru a uzivatele v sql browseru
+
 favicona
 implementovat Battlefield data v jave staticky
   serializace do JSONu

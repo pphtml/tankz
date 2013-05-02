@@ -31,21 +31,17 @@
         <div class="panningBorder" id="panningLeft" style="position: absolute; width: 50px; top: 0; bottom: 0; opacity:0.1; cursor: w-resize; z-index: 100"></div>
         <div class="panningBorder" id="panningRight" style="position: absolute; width: 50px; height: 100%; right: 0; opacity:0.1; cursor: e-resize; z-index: 100"></div>
         <div id="fpsInfo">FPS: ?</div>
-        <div id="ldCorner" style="z-index: 200; position: absolute; bottom: 0"><button id="ldCornerBtn">Connect to multiplayer server</button></div>
+<!--         <div id="ldCorner" style="z-index: 200; position: absolute; bottom: 0"><button id="ldCornerBtn">Connect to multiplayer server</button></div> -->
 		<div id="dlgConnect">
 			<div class="header">Connect to Game Server</div>
 			<hr/>
 			<table>
 			<tr><td>User Id:</td><td><input type="text" id="userId" name="userId"></td></tr>
-            <tr><td>Game Server:</td><td><select>
-                            <option value="srv2">battlefield.show.cloudbees.net</option>
-                            <option value="srv1">localhost:9000</option>
-                    </select></td>
-			</tr>
+            <tr><td>Game Server:</td><td><select id="gameServer"></select></td></tr>
 			</table>
 			<div class="buttons">
-                <span class="btn btn-primary badge"><i class="icon-remove icon-white"></i>Cancel</span>
-                <span class="btn btn-primary badge"><i class="icon-ok icon-white"></i>Connect</span>
+                <span class="btn btn-primary badge" id="dlgConnectBtnCancel"><i class="icon-remove icon-white"></i>Cancel</span>
+                <span class="btn btn-primary badge" id="dlgConnectBtnOK"><i class="icon-ok icon-white"></i>Connect</span>
 			</div>
 		</div>
 	</div>

@@ -444,6 +444,8 @@ var Game = function() {
         gameContainer = document.getElementById('container');
         canvas = document.getElementById('canvasArea');
 
+        comm.initDialogs();
+        $('#userId').focus();
         this.resizeWindow();
         
         this.fpsInfoElement = document.getElementById('fpsInfo');
@@ -499,8 +501,6 @@ var Game = function() {
         astar.occupiedByUnit = function(x, y) {
             return !outer.grid.isCellFree(x, y);
         };
-        
-        $('#ldCornerBtn').click(function(){comm.connect('jozo');});
         
         comm.registerRoute('JOIN', this, this.msgJoin);
         
