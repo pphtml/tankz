@@ -27,6 +27,13 @@ var comm = new (function() {
     };
     
     var onClose = function(event) {
+        comm.displayError('Connection failed',
+                'Connection to server <strong>' + comm.gameServer + '</strong> has failed.',
+                function(){
+                    $('#dlgError').hide();
+                    $('#dlgConnect').show();
+        });
+
         console.info('onClose ' + event);
     };
 
@@ -35,6 +42,9 @@ var comm = new (function() {
     };
 
     var onError = function(event) {
+        comm.displayError('Connection failed',
+                'Connection to server <strong>' + comm.gameServer + '</strong> has failed.');
+
         console.info('onError ' + event);
     };
 
@@ -57,6 +67,26 @@ var comm = new (function() {
         $("#talk").val('');
     };
     
+    this.displayError = function(title, text, okHandler) {
+        $('#dlgError .header').html(title);
+        $('#dlgError .text').html(text);
+        $('#dlgError').show();
+        if (okHandler) {
+            $('#dlgErrorBtnOK').focus().click(function(){
+                okHandler.call(okHandler);
+            });
+            
+            
+            
+//            $('document').keypress(function(e) {
+//                if(e.which == 13) {
+//                    console.info('enter');
+//                    okHandler.call(okHandler);
+//                }
+//            });
+        }
+    };
+    
     this.initDialogs = function() {
         var list = ['battlefield.show.cloudbees.net', 'localhost:9000'];
         var options = $('#gameServer');
@@ -65,10 +95,10 @@ var comm = new (function() {
         });
         
         var connectHandler = function() {
-            var userId = $('#userId').val();
-            var gameServer = $('#gameServer').val();
-            if (userId.length > 0) {
-                comm.connect(userId, gameServer);
+            comm.userId = $('#userId').val();
+            comm.gameServer = $('#gameServer').val();
+            if (comm.userId.length > 0) {
+                comm.connect(comm.userId, comm.gameServer);
                 $('#dlgConnect').hide();
             }
         };
@@ -80,6 +110,9 @@ var comm = new (function() {
                 connectHandler.call(this, []);
             }
         });
+        
+//        this.displayError('Connection failed',
+//                'abc');
     };
 })();
 

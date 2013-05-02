@@ -32,7 +32,7 @@
         <div class="panningBorder" id="panningRight" style="position: absolute; width: 50px; height: 100%; right: 0; opacity:0.1; cursor: e-resize; z-index: 100"></div>
         <div id="fpsInfo">FPS: ?</div>
 <!--         <div id="ldCorner" style="z-index: 200; position: absolute; bottom: 0"><button id="ldCornerBtn">Connect to multiplayer server</button></div> -->
-		<div id="dlgConnect">
+		<div id="dlgConnect" class="dlgGame">
 			<div class="header">Connect to Game Server</div>
 			<hr/>
 			<table>
@@ -43,6 +43,15 @@
                 <span class="btn btn-primary badge" id="dlgConnectBtnCancel"><i class="icon-remove icon-white"></i>Cancel</span>
                 <span class="btn btn-primary badge" id="dlgConnectBtnOK"><i class="icon-ok icon-white"></i>Connect</span>
 			</div>
+		</div>
+		<div id="dlgError" class="dlgGame">
+            <div class="header">Connection failed</div>
+            <hr/>
+            <div class="text">Connection to server <strong>roweuifds</strong> has failed.</div>
+            <div class="buttons">
+<!--                 <span class="btn btn-primary badge" id="dlgConnectBtnCancel"><i class="icon-remove icon-white"></i>Cancel</span> -->
+                <span class="btn btn-primary badge" id="dlgErrorBtnOK"><i class="icon-ok icon-white"></i>OK</span>
+            </div>
 		</div>
 	</div>
 </body>

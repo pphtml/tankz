@@ -14,12 +14,12 @@ body {
 	height: 100%
 }
 
+/* strong { */
+/* 	font-weight: 900; */
+/* } */
 
-
-#dlgConnect {
-    display: block;
+.dlgGame {
     color: white;
-    background-color: green;
     padding: 10px;  
     width: 410px;
     height: 200px;
@@ -35,6 +35,16 @@ body {
     z-index: 999;
 }
 
+#dlgError {
+    display: none;
+    background-color: DarkRed;
+}
+
+#dlgConnect {
+    display: block;
+    background-color: green;
+}
+
 #dlgConnect table td {
 	padding-left: 20px;
 }
@@ -43,12 +53,12 @@ body {
     text-align: right;
 }
 
-#dlgConnect .header {
+.dlgGame .header {
     font-size: 27px;
     text-align: center;
 }
 
-#dlgConnect .buttons {
+.dlgGame .buttons {
     margin-top: 20px;
     text-align: center;
 }
