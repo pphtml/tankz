@@ -41,7 +41,7 @@ body {
 }
 
 #dlgConnect {
-    display: block;
+    display: none;
     background-color: green;
 }
 

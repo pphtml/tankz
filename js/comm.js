@@ -28,10 +28,10 @@ var comm = new (function() {
     
     var onClose = function(event) {
         comm.displayError('Connection failed',
-                'Connection to server <strong>' + comm.gameServer + '</strong> has failed.',
+                'Connection to server <strong>' + comm.gameServer + '</strong> has failed. Server is not responding.',
                 function(){
                     $('#dlgError').hide();
-                    $('#dlgConnect').show();
+                    comm.displayConnectDlg();
         });
 
         console.info('onClose ' + event);
@@ -42,8 +42,8 @@ var comm = new (function() {
     };
 
     var onError = function(event) {
-        comm.displayError('Connection failed',
-                'Connection to server <strong>' + comm.gameServer + '</strong> has failed.');
+//        comm.displayError('Connection failed',
+//                'Connection to server <strong>' + comm.gameServer + '</strong> has failed.');
 
         console.info('onError ' + event);
     };
@@ -65,6 +65,12 @@ var comm = new (function() {
             {text: $("#talk").val()}
         ));
         $("#talk").val('');
+    };
+    
+    this.displayConnectDlg = function() {
+        $('#dlgConnect').show();
+        $('#userId').focus();
+
     };
     
     this.displayError = function(title, text, okHandler) {
@@ -110,6 +116,8 @@ var comm = new (function() {
                 connectHandler.call(this, []);
             }
         });
+        
+        this.displayConnectDlg();
         
 //        this.displayError('Connection failed',
 //                'abc');

@@ -1,8 +1,4 @@
 select + input
-vetsi tlacitka Connect a Cancel
-barva tlacitek
-focus / unfocus
-chybova hlaska pri neuspesnem pripojeni k serveru
 obrazovka vyberu z existujicich roomu + zakladani roomu
 sekce chatu
 zapamatovani si serveru a uzivatele v sql browseru

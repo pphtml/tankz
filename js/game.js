@@ -445,7 +445,6 @@ var Game = function() {
         canvas = document.getElementById('canvasArea');
 
         comm.initDialogs();
-        $('#userId').focus();
         this.resizeWindow();
         
         this.fpsInfoElement = document.getElementById('fpsInfo');
