@@ -45,6 +45,28 @@ body {
     background-color: green;
 }
 
+#dlgRooms {
+    display: none;
+    background-color: Navy;
+    height: 300px;
+}
+
+#dlgRooms .content ul {
+    list-style: none;
+    margin: 0;
+}
+
+#dlgRooms .content ul li {
+    border: 1px solid white;
+    margin-top: 10px;
+}
+
+#dlgRooms .content ul li ul li{
+	border: 0;
+    padding: 2px;
+	display: inline;
+}
+
 #dlgConnect table td {
 	padding-left: 20px;
 }
@@ -63,3 +85,19 @@ body {
     text-align: center;
 }
 
+.team-red {
+	background-color: red;
+}
+
+.team-yellow {
+    background-color: yellow;
+    color: black;
+}
+
+.team-blue {
+    background-color: blue;
+}
+
+.team-green {
+    background-color: green;
+}

@@ -84,3 +84,12 @@ var FPS = function() {
         return avgCalls;
     };
 };
+
+var db = null;
+function html5_storage_support() {
+    try {
+        return 'localStorage' in window && window['localStorage'] !== null;
+    } catch (e) {
+        return false;
+    }
+}
