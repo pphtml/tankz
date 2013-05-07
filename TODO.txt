@@ -1,4 +1,5 @@
 pridavani roomu
+websocket odpojovani vyzkoumat
 pridavani uzivatelu
 odebirani uzivatelu
 timeout spousteni roomu

@@ -75,6 +75,7 @@ var comm = new (function() {
     
     this.displayRoomsDlg = function(data) {
         var rooms = data.rooms;
+        $('#dlgRoomsBtnNew')[0].teamColors = data.teamColors;
         console.info(rooms);
         $('#dlgRooms').show();
         
@@ -142,12 +143,35 @@ var comm = new (function() {
         };
         
         var newRoomHandler = function() {
-            $('#dlgRoomsBtnNew').hide();
+            $(this).hide();
             var ul = $('#dlgRooms > .content > ul');
-            var list = $('<li><input type="text" name="roomName" id="roomName"></input>' +
+            var list = $('<li id="room_newRoom"><input type="text" name="roomName" id="roomName"></input>' +
+                    '<select id="teamColor"></select>' +
                     '<button class="btn btn-inverse" id="dlgRoomsBtnNewOK">OK</button><button class="btn btn-inverse" id="dlgRoomsBtnNewCancel">Cancel</button></li>');
             ul.append(list);
+            var options = $('#teamColor');
+            //var teamColors = $('#dlgRoomsBtnNew')[0].teamColors;
+            var teamColors = this.teamColors;
+            $.each(teamColors, function() {
+                options.append($('<option/>').val(this).text(this));
+            });
             $('#roomName').focus();
+            $('#dlgRoomsBtnNewOK').click(function(){
+                var roomName = $('#roomName').val();
+                var teamColor = $('#teamColor').val();
+                var msg = JSON.stringify(
+                        {msgType: 'NEW_ROOM',
+                            roomName: roomName,
+                            teamColor: teamColor,
+                            userId: $('#userId').val()}
+                    );
+                console.info(msg);
+                gameSocket.send(msg);
+            });
+            $('#dlgRoomsBtnNewCancel').click(function(){
+                $('#room_newRoom').remove();
+                $('#dlgRoomsBtnNew').show();
+            });
         };
         
         $('#dlgConnectBtnOK').click(connectHandler);
