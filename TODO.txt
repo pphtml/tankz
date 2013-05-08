@@ -1,5 +1,6 @@
 pridavani roomu
 websocket odpojovani vyzkoumat
+websocket odpojovani uzivatelu - rusit seznam
 pridavani uzivatelu
 odebirani uzivatelu
 timeout spousteni roomu

@@ -568,11 +568,11 @@ var Game = function() {
 var game = new Game();
 
 function browserInit() {
-    if (!html5_storage_support) {
-        alert("This Might Be a Good Time to Upgrade Your Browser or Turn On Javascript");
-    } else {
-        db = openDatabase("Battlefield", "0.1", "Game Data", 100000);
-    }
+//    if (!html5_storage_support) {
+//        alert("This Might Be a Good Time to Upgrade Your Browser or Turn On Javascript");
+//    } else {
+//        db = openDatabase("Battlefield", "0.1", "Game Data", 100000);
+//    }
     
     if (document.addEventListener) {
         document.addEventListener('contextmenu', function(e) {

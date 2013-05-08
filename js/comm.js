@@ -1,4 +1,4 @@
-var comm = new (function() {
+var comm = function() {
     var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
     var gameSocket = null;
     var msgRouting = {};
@@ -14,10 +14,17 @@ var comm = new (function() {
         if(data.error) {
             gameSocket.close();
             console.error('gameSocket: ' + data.error);
+            comm.displayError('Error',
+                    data.error,
+                    function(){
+                        $('#dlgError').hide();
+                        comm.displayConnectDlg();
+            });
+
 //            $("#onError span").text(data.error);
 //            $("#onError").show();
         } else {
-            console.info('msgType: ' + data.msgType);
+            console.info(data);
             if (data.msgType in msgRouting) {
                 var route = msgRouting[data.msgType];
                 var handlerFc = route.handlerFc;
@@ -102,22 +109,27 @@ var comm = new (function() {
     };
     
     this.displayError = function(title, text, okHandler) {
-        $('#dlgError .header').html(title);
-        $('#dlgError .text').html(text);
-        $('#dlgError').show();
-        if (okHandler) {
-            $('#dlgErrorBtnOK').focus().click(function(){
-                okHandler.call(okHandler);
-            });
-            
-            
-            
+        var visible = $('#dlgError').is(":visible");
+        if (!visible) {
+            //console.info('visible: ' + visible);
+            var z = $('#dlgError .header');
+            z.html(title);
+            $('#dlgError .text').html(text);
+            $('#dlgError').show();
+            if (okHandler) {
+                $('#dlgErrorBtnOK').focus().click(function(){
+                    okHandler.call(okHandler);
+                });
+                
+                
+                
 //            $('document').keypress(function(e) {
 //                if(e.which == 13) {
 //                    console.info('enter');
 //                    okHandler.call(okHandler);
 //                }
 //            });
+            }
         }
     };
     
@@ -184,7 +196,9 @@ var comm = new (function() {
         });
         
         this.msgJoin = function(msg) {
-            this.displayRoomsDlg(msg);
+            if (msg.msgOriginator === comm.userId) {
+                this.displayRoomsDlg(msg);
+            }
         };
         
         this.registerRoute('JOIN', this, this.msgJoin);
@@ -195,6 +209,8 @@ var comm = new (function() {
 //        this.displayError('Connection failed',
 //                'abc');
     };
-})();
+};
+
+comm = new comm(); // not inlined because my IDE works better this way :D
 
 //console.info(comm);
