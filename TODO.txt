@@ -1,4 +1,6 @@
 pridavani roomu
+members.put(this.getUsername(), this.getWebSocketOut()); // TODO vyhodit z thisu, vzit z kontextu
+zbavit se room ownera
 websocket odpojovani vyzkoumat
 websocket odpojovani uzivatelu - rusit seznam
 pridavani uzivatelu
