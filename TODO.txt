@@ -1,13 +1,15 @@
-pridavani roomu
-members.put(this.getUsername(), this.getWebSocketOut()); // TODO vyhodit z thisu, vzit z kontextu
-zbavit se room ownera
+pridavani se do roomu
+prizpusobeni vysky conn dialogu poctu roomu
 websocket odpojovani vyzkoumat
+otestovat odpojovani pri zavreni okna
+otestovat odpojovani pri disconnectu
 websocket odpojovani uzivatelu - rusit seznam
 pridavani uzivatelu
 odebirani uzivatelu
 timeout spousteni roomu
 select + input
 implementovat cancel
+font pro firefox
 
 sekce chatu
 

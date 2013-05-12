@@ -110,3 +110,10 @@ body {
 .team-green {
     background-color: green;
 }
+.btn-join {
+    width: 40px;
+}
+
+ul.rooms button.btn {
+    margin-left: 20px;
+}

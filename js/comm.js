@@ -1,6 +1,6 @@
 var comm = function() {
     var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
-    var gameSocket = null;
+    this.gameSocket = null;
     var msgRouting = {};
     
     this.registerRoute = function(msgType, instance, handlerFc) {
@@ -12,7 +12,7 @@ var comm = function() {
         
         // Handle errors
         if(data.error) {
-            gameSocket.close();
+            comm.gameSocket.close();
             console.error('gameSocket: ' + data.error);
             comm.displayError('Error',
                     data.error,
@@ -34,14 +34,17 @@ var comm = function() {
     };
     
     var onClose = function(event) {
-        comm.displayError('Connection failed',
-                'Connection to server <strong>' + comm.gameServer + '</strong> has failed. Server is not responding.',
-                function(){
-                    $('#dlgError').hide();
-                    comm.displayConnectDlg();
-        });
+        if (comm.gameSocket) {
+            comm.displayError('Connection failed',
+                    'Connection to server <strong>' + comm.gameServer + '</strong> has failed. Server is not responding.',
+                    function(){
+                        $('#dlgError').hide();
+                        comm.displayConnectDlg();
+            });
+            delete comm.gameSocket;
+        }
 
-        console.info('onClose ' + event);
+        console.info('onClose ' + event + ' ' + comm.gameSocket);
     };
 
     var onOpen = function(event) {
@@ -58,16 +61,16 @@ var comm = function() {
     this.connect = function(userId, gameServer) {
         console.info('connecting to server ' + gameServer + ' as user ' + userId);
 
-        gameSocket = new WS('ws://' + gameServer + '/battlefield/comm?userId=' + userId);
-        gameSocket.onmessage = receiveEvent;
+        comm.gameSocket = new WS('ws://' + gameServer + '/battlefield/comm?userId=' + userId);
+        comm.gameSocket.onmessage = receiveEvent;
         
-        gameSocket.onopen = onOpen;
-        gameSocket.onclose = onClose;
-        gameSocket.onerror = onError;
+        comm.gameSocket.onopen = onOpen;
+        comm.gameSocket.onclose = onClose;
+        comm.gameSocket.onerror = onError;
     };
     
 //    this.sendMessage = function() {
-//        gameSocket.send(JSON.stringify(
+//        this.gameSocket.send(JSON.stringify(
 //            {text: $("#talk").val()}
 //        ));
 //        $("#talk").val('');
@@ -80,15 +83,31 @@ var comm = function() {
 
     };
     
+    var teamColorToBootstrapBtn = {
+        'GREEN': 'btn-success',
+        'BLUE': 'btn-primary',
+        'RED': 'btn-danger',
+        'YELLOW': 'btn-warning'
+    };
+    
     var htmlRoom = function(room) {
         var str = '';
-        for (var j = 0, lengthJ = room.users.length; j < lengthJ; j++) {
-            var user = room.users[j];
+        for (var i = 0, length = room.users.length; i < length; i++) {
+            var user = room.users[i];
             str += '<li><span class="label team-' + user.teamColor.toLowerCase() + '">' + user.username + '</span>' + '</li>\n';
 //            console.info(zzz);
         }
+
+        str += '<br/>join as';
         
-        var li = $('<li>' + room.roomName + '<ul>' + str + '</ul></li>');
+        for (var i = 0, length = room.unusedTeamColors.length; i < length; i++) {
+            var unusedColor = room.unusedTeamColors[i];
+            var id = 'room_' + room.roomName + '_team_' + unusedColor;
+            str += '<button class="btn btn-join ' + teamColorToBootstrapBtn[unusedColor] + '" id="' + id + '">&nbsp;</button>';
+            //console.info(unusedColor);
+        }
+        
+        var li = $('<li id="room_' + room.roomId + '">' + room.roomName + '<ul>' + str + '</ul></li>');
         return li;
     };
     
@@ -107,6 +126,23 @@ var comm = function() {
             //var zzz = $(list, 'li ul');
             ul.append(htmlRoom(room));
         }
+        
+        $('.btn-join').click(function(){
+            //console.info(this.id);
+            var ids = /room_(.+)_team_(\w+)/.exec(this.id);
+            var roomName = ids[1];
+            var teamColor = ids[2];
+            //console.info('' + roomName + ', ' + teamColor);
+            var msg = JSON.stringify(
+                    {msgType: 'JOIN_ROOM',
+                        roomName: roomName,
+                        teamColor: teamColor,
+                        msgOriginator: comm.userId
+                        } 
+                );
+            console.info(msg);
+            comm.gameSocket.send(msg);
+        });
         
 //        ul.append('<li><ul><li>blabol</li><li>kokoko</li></ul></li>');
         //$('#userId').focus();
@@ -179,7 +215,7 @@ var comm = function() {
                 var msg = JSON.stringify(
                         {msgType: 'NEW_ROOM',
                             room: {roomName: roomName,
-                                   users:[{username: comm.userId, teamColor:teamColor, roomOwner: true}]
+                                   users:[{username: comm.userId, teamColor:teamColor}]
                             },
 //                            roomName: roomName,
 //                            teamColor: teamColor,
@@ -188,7 +224,7 @@ var comm = function() {
                             } 
                     );
                 //console.info(msg);
-                gameSocket.send(msg);
+                comm.gameSocket.send(msg);
                 $('#room_newRoom').remove();
             });
             $('#dlgRoomsBtnNewCancel').click(function(){
@@ -205,7 +241,7 @@ var comm = function() {
                         msgOriginator: comm.userId}
                 );
             //console.info(msg);
-            gameSocket.send(msg);
+            comm.gameSocket.send(msg);
             comm.displayConnectDlg();
         });
         
@@ -223,12 +259,33 @@ var comm = function() {
         
         this.registerRoute('JOIN', this, this.msgJoin);
         this.registerRoute('NEW_ROOM', this, this.msgNewRoom);
+        this.registerRoute('QUIT', this, this.msgQuit);
+        this.registerRoute('JOIN_ROOM', this, this.msgJoinRoom);
         
         this.displayConnectDlg();
         
         
 //        this.displayError('Connection failed',
 //                'abc');
+    };
+    
+    this.msgJoinRoom = function(msg) {
+        var li = $('#room_' + msg.updatedRoom.roomId);
+        var html = htmlRoom(msg.updatedRoom);
+        console.info(li);
+        console.info(msg);
+        console.info(html);
+        li.replaceWith(html);
+        //li.hide();
+    };
+    
+    this.msgQuit = function(msg) {
+        if (this.userId === msg.msgOriginator) {
+            this.gameSocket.close();
+            this.gameSocket = null;
+        }
+        console.info("QUIT ");
+        console.info(msg);
     };
     
     this.msgNewRoom = function(msg) {
