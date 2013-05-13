@@ -1,6 +1,7 @@
 var comm = function() {
     var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket;
     this.gameSocket = null;
+    this.roomId = null;
     var msgRouting = {};
     
     this.registerRoute = function(msgType, instance, handlerFc) {
@@ -13,6 +14,7 @@ var comm = function() {
         // Handle errors
         if(data.error) {
             comm.gameSocket.close();
+            comm.roomId = null;
             console.error('gameSocket: ' + data.error);
             comm.displayError('Error',
                     data.error,
@@ -42,6 +44,7 @@ var comm = function() {
                         comm.displayConnectDlg();
             });
             delete comm.gameSocket;
+            comm.roomId = null;
         }
 
         console.info('onClose ' + event + ' ' + comm.gameSocket);
@@ -91,23 +94,28 @@ var comm = function() {
     };
     
     var htmlRoom = function(room) {
-        var str = '';
+        var str = '<div class="join-existing">';
         for (var i = 0, length = room.users.length; i < length; i++) {
             var user = room.users[i];
-            str += '<li><span class="label team-' + user.teamColor.toLowerCase() + '">' + user.username + '</span>' + '</li>\n';
+//            str += '<li><span class="label team-' + user.teamColor.toLowerCase() + '">' + user.username + '</span>' + '</li>\n';
+            str += '<button class="btn inactive ' + teamColorToBootstrapBtn[user.teamColor] + '" id="' + id + '">' + user.username + '</button>';
 //            console.info(zzz);
         }
-
-        str += '<br/>join as';
+        str += '</div>';
         
-        for (var i = 0, length = room.unusedTeamColors.length; i < length; i++) {
-            var unusedColor = room.unusedTeamColors[i];
-            var id = 'room_' + room.roomName + '_team_' + unusedColor;
-            str += '<button class="btn btn-join ' + teamColorToBootstrapBtn[unusedColor] + '" id="' + id + '">&nbsp;</button>';
-            //console.info(unusedColor);
+        if (!comm.roomId) {
+            str += '<div class="join-part">join as';
+            
+            for (var i = 0, length = room.unusedTeamColors.length; i < length; i++) {
+                var unusedColor = room.unusedTeamColors[i];
+                var id = 'room_' + room.roomName + '_team_' + unusedColor;
+                str += '<button class="btn btn-join ' + teamColorToBootstrapBtn[unusedColor] + '" id="' + id + '">&nbsp;</button>';
+                //console.info(unusedColor);
+            }
+            str += '</div>';
         }
         
-        var li = $('<li id="room_' + room.roomId + '">' + room.roomName + '<ul>' + str + '</ul></li>');
+        var li = $('<li id="room_' + room.roomId + '">' + room.roomName + '<br/>' + str + '</li>');
         return li;
     };
     
@@ -198,20 +206,27 @@ var comm = function() {
         var newRoomHandler = function() {
             $(this).hide();
             var ul = $('#dlgRooms > .content > ul');
-            var list = $('<li id="room_newRoom"><input type="text" name="roomName" id="roomName"></input>' +
-                    '<select id="teamColor"></select>' +
-                    '<button class="btn btn-inverse" id="dlgRoomsBtnNewOK">OK</button><button class="btn btn-inverse" id="dlgRoomsBtnNewCancel">Cancel</button></li>');
-            ul.append(list);
-            var options = $('#teamColor');
+            var str = '<li id="room_newRoom"><div>session name: <input type="text" name="roomName" id="roomName"></input></div><div class="team-color-selection">team color: ';
+            //<button class="btn btn-inverse" id="dlgRoomsBtnNewOK">OK</button>
+            //var options = $('#teamColor');
             //var teamColors = $('#dlgRoomsBtnNew')[0].teamColors;
+
             var teamColors = this.teamColors;
             $.each(teamColors, function() {
-                options.append($('<option/>').val(this).text(this));
+                //options.append($('<option/>').val(this).text(this));
+                str += '<button class="btn btn-new-room ' + teamColorToBootstrapBtn[this] + '" id="teamColor_' + this + '">&nbsp;</button>';
+
             });
+            str += '</div><div><button class="btn btn-inverse" id="dlgRoomsBtnNewCancel">Cancel</button></div></li>';
+            var list = $(str);
+            ul.append(list);
+
             $('#roomName').focus();
-            $('#dlgRoomsBtnNewOK').click(function(){
+            $('.btn-new-room').click(function(){
                 var roomName = $('#roomName').val();
-                var teamColor = $('#teamColor').val();
+                var teamColor = /teamColor_(\w+)/.exec(this.id);
+                teamColor = teamColor[1];
+                //var teamColor = $('#teamColor').val();
                 var msg = JSON.stringify(
                         {msgType: 'NEW_ROOM',
                             room: {roomName: roomName,
@@ -270,12 +285,16 @@ var comm = function() {
     };
     
     this.msgJoinRoom = function(msg) {
+        if (msg.msgOriginator === comm.userId) {
+            comm.roomId = msg.updatedRoom.roomId;
+        }
         var li = $('#room_' + msg.updatedRoom.roomId);
         var html = htmlRoom(msg.updatedRoom);
         console.info(li);
         console.info(msg);
         console.info(html);
         li.replaceWith(html);
+        $('.join-part').remove();
         //li.hide();
     };
     
@@ -283,6 +302,7 @@ var comm = function() {
         if (this.userId === msg.msgOriginator) {
             this.gameSocket.close();
             this.gameSocket = null;
+            this.roomId = null;
         }
         console.info("QUIT ");
         console.info(msg);
